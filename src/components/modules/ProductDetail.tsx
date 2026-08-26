@@ -1,0 +1,174 @@
+"use client";
+import { useState } from "react";
+import { Product, ShippingOption } from "@/types";
+import { formatCLP } from "@/lib/utils";
+import { shippingRegions } from "@/lib/mock-data";
+import { Star, ShieldCheck, Truck, FileDown, Minus, Plus, ShoppingCart, Heart, Share2, Award, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useCart } from "@/store/cart";
+import { toast } from "@/store/toast";
+
+export function ProductDetail({ product }: { product: Product }) {
+  const [qty, setQty] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [region, setRegion] = useState(shippingRegions[0].region);
+  const { addItem } = useCart();
+
+  const tierPrice = product.tierPrices?.find((t) => qty >= t.minQty && (t.maxQty === undefined || qty <= t.maxQty))?.price ?? product.price;
+  const shipping = shippingRegions.find((s) => s.region === region)!;
+  const total = tierPrice * qty;
+
+  return (
+    <div className="container mt-4 bg-white dark:bg-zinc-900 rounded-lg border overflow-hidden">
+      <div className="grid lg:grid-cols-2 gap-6 p-4 md:p-6">
+        {/* Gallery */}
+        <div className="space-y-3">
+          <div className="aspect-square bg-zinc-50 dark:bg-zinc-800 rounded-lg overflow-hidden border">
+            <img src={product.images[selectedImage]} alt={product.name} className="h-full w-full object-contain p-4" />
+          </div>
+          <div className="flex gap-2">
+            {product.images.map((img, i) => (
+              <button
+                key={i}
+                onClick={() => setSelectedImage(i)}
+                className={`h-16 w-16 rounded border-2 overflow-hidden ${selectedImage === i ? "border-[#FF3B30]" : "border-zinc-200"}`}
+              >
+                <img src={img} alt="" className="h-full w-full object-cover" />
+              </button>
+            ))}
+            <div className="h-16 w-16 rounded border border-dashed flex flex-col items-center justify-center text-[10px] text-zinc-500">
+              <FileDown className="h-4 w-4" /> Ficha PDF
+            </div>
+          </div>
+          <div className="flex gap-2 text-xs">
+            <span className="flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded">
+              <ShieldCheck className="h-3 w-3" /> Certificación SEC
+            </span>
+            <span className="flex items-center gap-1 bg-zinc-100 px-2 py-1 rounded">Garantía {product.warranty}</span>
+          </div>
+        </div>
+
+        {/* Info */}
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs text-zinc-500">
+              {product.brand} • SKU: {product.sku} • {product.subcategory}
+            </div>
+            <h1 className="text-xl md:text-2xl font-bold leading-tight mt-1">{product.name}</h1>
+            <div className="flex items-center gap-2 mt-2">
+              <div className="flex">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className={`h-4 w-4 ${i < Math.floor(product.rating) ? "fill-[#FFA41C] text-[#FFA41C]" : "text-zinc-300"}`} />
+                ))}
+              </div>
+              <span className="text-sm font-medium">{product.rating}</span>
+              <a href="#reviews" className="text-sm text-[#007185] hover:underline">
+                {product.reviewCount} calificaciones
+              </a>
+              <span className="text-zinc-300">|</span>
+              <span className="text-sm text-emerald-600 font-medium">Vendidos {product.soldCount}+</span>
+            </div>
+          </div>
+
+          <div className="border-y py-4 space-y-2">
+            <div className="flex items-baseline gap-3">
+              <span className="text-3xl font-black text-[#B12704]">{formatCLP(tierPrice)}</span>
+              {product.originalPrice && product.originalPrice !== tierPrice && (
+                <>
+                  <span className="line-through text-zinc-400">{formatCLP(product.originalPrice)}</span>
+                  <Badge variant="discount">-{product.discount}% OFF</Badge>
+                </>
+              )}
+            </div>
+            <div className="text-xs text-zinc-600">
+              Precio sin IVA: {formatCLP(Math.round(tierPrice / 1.19))} • IVA incluido • Factura B2B disponible
+            </div>
+            {product.tierPrices && (
+              <div className="mt-3">
+                <div className="text-xs font-bold flex items-center gap-1">
+                  <Award className="h-3 w-3 text-amber-600" /> Descuento por Volumen
+                </div>
+                <div className="grid grid-cols-3 gap-2 mt-2">
+                  {product.tierPrices.map((t) => (
+                    <div key={t.label} className={`border rounded p-2 text-center text-xs ${qty >= t.minQty && (t.maxQty === undefined || qty <= t.maxQty) ? "border-[#FF3B30] bg-amber-50" : "bg-zinc-50"}`}>
+                      <div className="font-bold">{t.label}</div>
+                      <div className="font-black text-[#B12704]">{formatCLP(t.price)}</div>
+                      {qty >= t.minQty && (t.maxQty === undefined || qty <= t.maxQty) && <div className="text-emerald-600 flex items-center justify-center gap-1"><Check className="h-3 w-3" /> Activo</div>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium">Cantidad:</span>
+              <div className="flex items-center border rounded-full">
+                <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 rounded-full">
+                  <Minus className="h-4 w-4" />
+                </button>
+                <span className="w-10 text-center font-bold">{qty}</span>
+                <button onClick={() => setQty(qty + 1)} className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 rounded-full">
+                  <Plus className="h-4 w-4" />
+                </button>
+              </div>
+              <span className="text-xs text-zinc-500">{product.stock} disponibles</span>
+            </div>
+
+            <div className="flex gap-2">
+              <Button size="lg" className="flex-1 bg-[#FFD814] hover:bg-[#F7CA00] text-black border border-[#F2C200] font-bold gap-2" onClick={() => { addItem(product, qty); toast(`${product.name} agregado al carrito`, { variant: "success", description: `Cantidad: ${qty}` }); }}>
+                <ShoppingCart className="h-5 w-5" /> Agregar al Carrito
+              </Button>
+              <Button size="lg" variant="outline" className="gap-2">
+                <Heart className="h-4 w-4" /> Guardar
+              </Button>
+              <Button size="icon" variant="ghost">
+                <Share2 className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="text-center text-sm font-bold text-[#B12704]">Subtotal ({qty}): {formatCLP(total)}</div>
+          </div>
+
+          <div className="border rounded-lg p-3 space-y-3 bg-zinc-50 dark:bg-zinc-800/50">
+            <div className="flex gap-2">
+              <Truck className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <div className="text-sm font-bold">Calcula tu envío</div>
+                <div className="flex gap-2 mt-2">
+                  <select value={region} onChange={(e) => setRegion(e.target.value)} className="flex-1 border rounded px-2 py-1.5 text-sm bg-white dark:bg-zinc-900">
+                    {shippingRegions.map((s) => (
+                      <option key={s.region} value={s.region}>
+                        {s.region}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="text-sm font-bold px-3 py-1.5 bg-white border rounded">
+                    {formatCLP(shipping.cost)} • {shipping.estimatedDays}
+                  </span>
+                </div>
+                <div className="text-xs text-emerald-600 mt-1">✓ Envío gratis RM sobre {formatCLP(49990)}</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-2 text-sm">
+            <h3 className="font-bold">Especificaciones</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {Object.entries(product.specs).map(([k, v]) => (
+                <div key={k} className="flex justify-between border-b py-1.5 text-xs">
+                  <span className="text-zinc-500">{k}</span>
+                  <span className="font-medium">{v}</span>
+                </div>
+              ))}
+            </div>
+            <a href="#" className="inline-flex items-center gap-1 text-[#007185] hover:underline text-xs">
+              <FileDown className="h-3 w-3" /> Descargar ficha técnica PDF
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

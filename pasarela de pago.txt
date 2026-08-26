@@ -1,0 +1,22 @@
+Hoy StarShop no tiene pasarela real — es mock.
+
+src/app/checkout/page.tsx guarda la orden en sessionStorage y redirige a /checkout/success + src/types/index.ts:96 PaymentMethod = "webpay" | "mercadopago" | "transferencia" solo cambia el label. No llama a ninguna API de pago.
+
+Cómo funciona una pasarela real
+No es parte del PaaS, es un servicio externo que procesa tarjetas. Tú no tocas la tarjeta (por PCI):
+
+Cliente paga $100.000 en tu checkout → tu servidor (API Route de Next) crea una transacción en la API de la pasarela (ej. Webpay Plus) con monto, ordenId, returnUrl.
+Rediriges al cliente a la URL de la pasarela (fuera de tu sitio).
+Cliente paga allí con tarjeta.
+Pasarela lo redirige de vuelta a tu /checkout/success?token=... y a la vez te avisa por webhook (llamada servidor a servidor) que el pago es válido. Solo el webhook es prueba real.
+Para Chile
+Webpay Plus (Transbank): estándar en Chile, necesitas contrato con Transbank → te dan commerceCode + apiKey. El más usado para CLP.
+MercadoPago / Flow: más simple de integrar, te dan access_token.
+En un PaaS (Vercel/Railway) esas claves van como variables de entorno (WEBPAY_API_KEY), nunca en el código. Next las lee en process.env dentro de app/api/webpay/route.ts.
+
+Para StarShop
+Tienes 2 flujos:
+
+B2C (tarjeta): Webpay/MercadoPago → flujo anterior.
+B2B (factura/transferencia): no usa pasarela, solo genera cotización/orden y pago por transferencia manual.
+Dime cuál quieres integrar primero (Webpay es el que usa el 90% en Chile) y te preparo el route.ts + webhook + redirecciones y las env vars para PaaS. Para probar usas las credenciales de integración de Transbank, luego cambias a producción.

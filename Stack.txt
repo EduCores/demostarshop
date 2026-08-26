@@ -1,0 +1,77 @@
+Agradeciendo de antemano su atención y tiempo, se despide atentamente,
+
+Eduardo José Navarro Cores
+
+
+Director Multimedia | Especialista en IA & E-Learning | Productor Musical
+
+
+Teléfono / WhatsApp: +56 9 37479835
+
+Email: eduardonavarrocores@gmail.com
+
+LinkedIn: linkedin.com/in/eduardo-navarro-cores-a468b2120
+
+
+Santiago, Chile
+
+--------------------------------------------------
+
+
+Stack instalado
+Next.js 14.2.35 + TypeScript + Tailwind + Zustand + TanStack Query + React Hook Form + Zod + Lucide + Framer Motion + next-themes
+
+
+falta: SSR para posicionamiento
+https://www.youtube.com/watch?v=tVBb79WLScc
+
+
+
+
+Todo el proyecto quedó listo para producción. Resumen de lo implementado:
+
+1. Nuevas rutas y vistas
+src/app/categoria/[slug]/page.tsx (server) + src/components/modules/CategoryView.tsx (client): catálogo 2 columnas (sidebar filtros desktop / drawer móvil con Framer Motion). Filtros: rango de precio, checkbox SEC, checkbox Descuento B2B/Tier, ordenamiento (precio ↑/↓, populares). Estado vacío con botón de reset.
+src/app/checkout/success/page.tsx: orden simulado #ORD-XXXXX, desglose recuperado vía sessionStorage, método de pago, dirección y entrega estimada, descarga de comprobante (Blob mock) y "Volver a la tienda". El checkout ahora guarda la orden, limpia el carrito y redirige.
+src/app/not-found.tsx y src/app/error.tsx (client con reset()).
+CategoryStrip ahora enlaza a /categoria/[slug].
+2. SEO
+src/app/sitemap.ts y src/app/robots.ts (bloquea /checkout).
+src/components/seo/JsonLd.tsx con Schema.org/Product + BreadcrumbList, inyectado en producto/[id].
+3. UI/UX
+Sistema de Toasts propio (src/store/toast.ts + src/components/ui/toast.tsx, Framer Motion, sin deps nuevas) con <Toaster/> en el layout y notificaciones al agregar al carrito en ProductCard y ProductDetail.
+src/hooks/use-is-mounted.ts usado en Header y CartDrawer para eliminar mismatches de hidratación del persist de Zustand.
+formatCLP ya usaba Intl.NumberFormat('es-CL', {maximumFractionDigits:0}) (sin decimales) — verificado.
+Nuevo tipo Order/PaymentMethod/OrderItem en types/index.ts.
+Build: npm run build ✓ — 39 páginas estáticas, incluidas las 8 categorías, 23 productos, checkout/success y sitemap/robots.
+
+Una nota: las imágenes siguen apuntando a Unsplash en mock-data para productos; el hero usa tus LED.png/hydraulic.jpg/b2b.jpg. Cuando conectes el CMS/API, solo reemplazas mock-data.ts manteniendo la misma forma de Product/SuperCategory.
+
+
+----------------------------------------------------------  
+
+
+
+
+
+
+src/app/layout.tsx (Header global + Providers + footer SEC)
+src/app/page.tsx (Home)
+src/app/checkout/page.tsx (Guest Checkout 1 paso, Zod)
+src/app/globals.css (+ dark/light CSS vars)
+src/app/providers.tsx
+src/types/index.ts (SuperCategory 8, Product, TierPrice, CartItem)
+src/lib/mock-data.ts (8 super-categorías, 16 productos reales, heroSlides, shippingRegions)
+src/lib/utils.ts (cn + formatCLP)
+src/store/cart.ts (Zustand persist, slide-over)
+src/hooks/use-countdown.ts
+src/components/ui/* (Button, Badge, Input, Card)
+src/components/modules/Header.tsx (Topbar CLP/B2B/WhatsApp + Main Header Logo/Searchbar autocomplete + Category Bar MegaMenu Amazon + Mobile drawer)
+src/components/modules/CartDrawer.tsx (progreso envío gratis $49.990)
+src/components/modules/HeroSection.tsx (Carousel 5s + Sidebar Cotizador/SEC/B2B)
+src/components/modules/FlashSale.tsx (Countdown live + barra stock %)
+src/components/modules/CategoryStrip.tsx (8 categorías)
+src/components/modules/B2BBanner.tsx (Mayorista contratistas)
+src/components/modules/ProductCard.tsx (AliExpress compact, badge %, hover swap, rating, TierPrice)
+src/components/modules/ProductGrid.tsx (Tabs Destacados/Nuevos/Populares)
+src/components/modules/ProductDetail.tsx (Galería thumbs, Tiered Pricing table, SEC badge, PDF, calculador región)
