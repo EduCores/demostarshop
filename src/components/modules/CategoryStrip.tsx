@@ -1,13 +1,13 @@
 import { superCategories } from "@/lib/mock-data";
 import Link from "next/link";
 import { Stagger, StaggerItem } from "@/components/ui/reveal";
-import { Lightbulb, Wrench, Gauge, FlaskConical, Zap, BatteryCharging, ShieldCheck, Cpu, LucideProps } from "lucide-react";
+import { Lightbulb, Wrench, Gauge, Zap, BatteryCharging, ShieldCheck, Cpu, LucideProps } from "lucide-react";
 
 const ICON_MAP: Record<string, React.ComponentType<LucideProps>> = {
   Lightbulb,
   Wrench,
   Gauge,
-  FlaskConical,
+  FlaskConical: Lightbulb,
   Zap,
   BatteryCharging,
   ShieldCheck,
