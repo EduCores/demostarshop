@@ -76,23 +76,23 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full">
-      {/* TOPBAR */}
-      <div className="bg-[#232F3E] text-white text-xs md:text-[13px] hidden md:block">
+      {/* TOPBAR - como en ux-ui.png: Cotizaciones B2B | Venta Mayorista */}
+      <div className="bg-[#232F3E] text-white text-xs md:text-[13px] block">
         <div className="container flex h-8 items-center justify-between">
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1.5">
+            <span className="hidden lg:flex items-center gap-1.5">
               <MapPin className="h-3.5 w-3.5 text-zinc-400" />
               Enviar a <strong>Chile</strong> • CLP $
             </span>
             <span className="hidden lg:inline text-zinc-400">|</span>
-            <Link href="#" className="hidden lg:flex items-center gap-1.5 hover:text-[#FFD814] transition-colors">
+            <Link href="#" className="flex items-center gap-1.5 hover:text-[#FFD814] transition-colors">
               <FileText className="h-3.5 w-3.5" /> Cotizaciones B2B
-            </Link>
-            <Link href="#" className="hidden lg:flex items-center gap-1.5 hover:text-[#FFD814] transition-colors">
-              <Package className="h-3.5 w-3.5" /> Venta Mayorista
             </Link>
           </div>
           <div className="flex items-center gap-2 lg:gap-3">
+            <Link href="#" className="flex items-center gap-1.5 hover:text-[#FFD814] transition-colors">
+              <Package className="h-3.5 w-3.5" /> Venta Mayorista
+            </Link>
             <motion.a
               href="mailto:ventas@starshop.cl"
               whileHover={{ scale: 1.05 }}
@@ -103,7 +103,7 @@ export function Header() {
             <a href="tel:+56226972072" className="hidden lg:flex items-center gap-1.5 hover:text-white">
               <Phone className="h-3.5 w-3.5" /> 22 697 2072
             </a>
-            <a href="https://wa.me/56993301557" target="_blank" className="flex items-center gap-1.5 bg-[#25D366] px-2 py-1 rounded-full text-white font-medium hover:bg-[#128C7E] transition-colors">
+            <a href="https://wa.me/56993301557" target="_blank" className="hidden lg:flex items-center gap-1.5 bg-[#25D366] px-2 py-1 rounded-full text-white font-medium hover:bg-[#128C7E] transition-colors">
               <MessageCircle className="h-3.5 w-3.5" /> +56 9 9330 1557
             </a>
             <a href="https://wa.me/56989005158" target="_blank" className="hidden md:flex items-center gap-1.5 bg-[#128C7E] px-2 py-1 rounded-full text-white font-medium hover:bg-[#075E54] transition-colors">
@@ -147,17 +147,17 @@ export function Header() {
             </span>
           </Link>
 
-          {/* DELIVER TO - desktop */}
-          <div className="hidden lg:flex items-center gap-2 text-xs shrink-0 p-1 rounded-sm cursor-pointer group hover:text-[#FFD814] transition-colors">
-            <MapPin className="h-4 w-4 group-hover:text-[#FFD814] transition-colors" />
-            <div className="leading-tight">
-              <div className="text-zinc-400 group-hover:text-[#FFD814] transition-colors">A todo</div>
-              <div className="font-bold text-sm group-hover:text-[#FFD814] transition-colors">Chile</div>
-            </div>
+          {/* DELIVER TO - pill como en ux-ui.png: visible en móvil */}
+          <div className="flex items-center gap-1.5 text-xs shrink-0 bg-[#232F3E] px-2.5 py-1.5 rounded-md cursor-pointer group hover:bg-[#37475A] transition-colors">
+            <MapPin className="h-3.5 w-3.5 text-white" />
+            <span className="leading-none">
+              <span className="text-zinc-300 hidden sm:inline">A todo </span>
+              <span className="font-bold text-white">Chile</span>
+            </span>
           </div>
 
-          {/* MEGA SEARCHBAR - clase única starshop-mega-search aislada + altura fija */}
-          <div className="starshop-mega-search flex-1 flex max-w-4xl mx-2 md:mx-4 relative">
+          {/* MEGA SEARCHBAR - desktop: oculto en móvil, visible lg+ */}
+          <div className="starshop-mega-search hidden lg:flex flex-1 max-w-4xl mx-2 md:mx-4 relative">
             <div className="hidden md:flex items-center bg-[#E6E6E6] text-black text-xs px-2 rounded-l-md border-r border-zinc-300 gap-1 cursor-pointer hover:bg-zinc-200">
               <select
                 value={categoryFilter}
@@ -271,11 +271,62 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mobile search - second row */}
-        <div className="md:hidden px-3 pb-3">
-          <div className="flex text-xs text-zinc-300 gap-3">
-            <span className="flex items-center gap-1"><Truck className="h-3 w-3" /> Envío gratis RM sobre $49.990</span>
-            <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" /> Certificación SEC</span>
+        {/* SEARCH ROW MOBILE/TABLET - como en ux-ui.png: dentro del mismo header, fila abajo */}
+        <div className="lg:hidden container pb-3">
+          <div className="flex relative">
+            <div className="flex items-center bg-[#E6E6E6] text-black text-xs px-2 rounded-l-md border-r border-zinc-300 gap-1">
+              <select
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="bg-transparent outline-none py-2 pr-4 pl-1 text-xs font-medium w-[80px] max-w-[80px] truncate cursor-pointer"
+                aria-label="Categoría"
+              >
+                <option>Todas</option>
+                {superCategories.map((c) => (
+                  <option key={c.id} value={c.name}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex-1 relative">
+              <Input
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setShowAutocomplete(true);
+                }}
+                onFocus={() => setShowAutocomplete(true)}
+                onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
+                placeholder="Buscar"
+                className="h-10 rounded-none rounded-l-none bg-white text-black placeholder:text-zinc-500 border-0 focus-visible:ring-2 focus-visible:ring-[#F90] text-sm"
+              />
+              {showAutocomplete && filteredProducts.length > 0 && (
+                <div className="absolute top-full left-0 right-0 bg-white text-black rounded-b-md shadow-2xl border border-zinc-200 z-50 max-h-[380px] overflow-auto">
+                  {filteredProducts.map((p) => (
+                    <Link
+                      key={p.id}
+                      href={`/producto/${p.id}`}
+                      className="flex items-center gap-3 p-3 hover:bg-zinc-50 border-b last:border-0"
+                      onClick={() => setShowAutocomplete(false)}
+                    >
+                      <img src={p.images[0]} alt={p.name} className="h-10 w-10 object-cover rounded border" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium line-clamp-1">{p.name}</div>
+                        <div className="text-xs text-zinc-500">{p.brand} • {p.sku}</div>
+                      </div>
+                      <div className="text-sm font-bold text-[#B12704]">{formatCLP(p.price)}</div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+            <Button
+              aria-label="Buscar"
+              className="h-10 rounded-l-none rounded-r-md bg-[#ffc13b] hover:bg-[#F3A847] text-black px-4 border-0"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
           </div>
         </div>
       </div>
