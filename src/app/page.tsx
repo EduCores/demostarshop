@@ -8,7 +8,7 @@ import { TrustBand } from "@/components/modules/TrustBand";
 
 export default function Home() {
   return (
-    <div className="pb-10">
+    <div className="pb-10 max-w-full overflow-hidden">
       <HeroSection />
       <FlashSale />
       <CategoryStrip />

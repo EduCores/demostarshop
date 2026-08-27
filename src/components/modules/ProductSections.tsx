@@ -91,21 +91,21 @@ function ProductRowSlider({
   };
 
   if (!mounted) {
-    return (
-      <div>
-        <div className="flex items-center justify-between mb-2.5">
-          <h3 className="text-sm font-black uppercase tracking-wide flex items-center gap-1.5">{icon} {title}</h3>
+      return (
+        <div className="overflow-hidden">
+          <div className="flex items-center justify-between mb-2.5">
+            <h3 className="text-sm font-black uppercase tracking-wide flex items-center gap-1.5">{icon} {title}</h3>
+          </div>
+          <div className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb-2">
+            {items.map((p) => (
+              <div key={p.id} className="snap-start flex-none w-[47%] sm:w-[31%] lg:w-[23%] opacity-50">
+                <ProductCard product={p} />
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2 -mx-1 px-1">
-          {items.map((p) => (
-            <div key={p.id} className="snap-start flex-none w-[46%] sm:w-[31%] lg:w-[23%] opacity-50">
-              <ProductCard product={p} />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
+      );
+    }
 
   return (
     <div>
@@ -140,13 +140,13 @@ function ProductRowSlider({
       <div
         ref={ref}
         onScroll={update}
-        className="flex gap-3 overflow-x-auto scroll-smooth scrollbar-hide snap-x pb-2 -mx-1 px-1"
+        className="flex gap-2 sm:gap-3 overflow-x-auto scroll-smooth scrollbar-hide snap-x pb-2"
       >
         {items.length === 0 ? (
           <div className="w-full py-8 text-center text-sm text-zinc-400 border border-dashed rounded-lg">Sin productos en esta categoría</div>
         ) : (
           items.map((p) => (
-            <div key={p.id} className="snap-start flex-none w-[46%] sm:w-[31%] lg:w-[23%] xs:w-[48%]">
+            <div key={p.id} className="snap-start flex-none w-[47%] sm:w-[31%] lg:w-[23%]">
               <ProductCard product={p} />
             </div>
           ))
@@ -185,7 +185,7 @@ function SectionBlock({ section }: { section: SectionDef }) {
   );
 
   return (
-    <div suppressHydrationWarning className="bg-white dark:bg-zinc-900 rounded-lg border p-3 md:p-4">
+    <div suppressHydrationWarning className="bg-white dark:bg-zinc-900 rounded-lg border p-2 sm:p-3 md:p-4 overflow-hidden max-w-full">
       {/* Encabezado de la sección */}
       <div className="flex flex-wrap items-end justify-between gap-2 mb-3">
         <div>
@@ -261,7 +261,7 @@ function SectionBlock({ section }: { section: SectionDef }) {
 
 export function ProductSections() {
   return (
-    <section id="explorar-lineas" className="container mt-6 space-y-6">
+    <section id="explorar-lineas" className="container mt-6 space-y-4 sm:space-y-6 max-w-full overflow-hidden">
       {SECTIONS.map((s) => (
         <SectionBlock key={s.id} section={s} />
       ))}

@@ -23,8 +23,8 @@ export function ProductGrid() {
   ];
 
   return (
-    <section id="mas-vendidos" className="container mt-6">
-      <div className="bg-white dark:bg-zinc-900 rounded-lg border p-3 md:p-4">
+    <section id="mas-vendidos" className="container mt-6 max-w-full overflow-hidden">
+      <div className="bg-white dark:bg-zinc-900 rounded-lg border p-2 sm:p-3 md:p-4 overflow-hidden">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <h2 className="text-lg md:text-xl font-black">Productos Destacados</h2>
           <div className="flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded-full">

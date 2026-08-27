@@ -41,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CartDrawer />
           <FloatingButtons />
           <Toaster />
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen max-w-full overflow-x-hidden">{children}</main>
           <footer className="bg-[#232F3E] text-white mt-12">
             <div className="container py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
               {/* Marca */}
