@@ -220,7 +220,7 @@ export default function CheckoutPage() {
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex gap-2 text-sm">
             <Truck className="h-5 w-5 text-amber-600 shrink-0" />
             <div>
-              <div className="font-bold">Envío: {formatCLP(shippingCost)} • {shipping.estimatedDays}</div>
+              <div className="font-bold text-black">Envío: {formatCLP(shippingCost)} • {shipping.estimatedDays}</div>
               <div className="text-zinc-600 text-xs">Envío gratis RM sobre $49.990. Factura y cotización B2B disponible post-compra.</div>
             </div>
           </div>
