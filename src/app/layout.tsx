@@ -18,6 +18,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import "./globals.css";
+import Link from "next/link";
 import { Header } from "@/components/modules/Header";
 import { CartDrawer } from "@/components/modules/CartDrawer";
 import { FloatingButtons } from "@/components/modules/FloatingButtons";
@@ -46,7 +47,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="container py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
               {/* Marca */}
               <div>
-                <h4 className="font-bold mb-3">Starshop Chile</h4>
+                <Link href="/" className="inline-flex items-baseline text-[26px] font-black tracking-tight leading-none select-none mb-3">
+                  <span className="text-[#fbffff]">ST</span>
+                  <span className="star-slot" aria-hidden>
+                    <span className="star-ghost">A</span>
+                    <span className="star-float">
+                      <img src="/star2.svg" alt="" className="star-logo star-anim-show" />
+                    </span>
+                  </span>
+                  <span className="text-[#fbffff]">R</span>
+                  <span className="text-[#fdd817]">SHOP</span>
+                </Link>
                 <p className="text-zinc-300 leading-relaxed">
                   Distribuidor masivo de herramientas, iluminación LED y artículos eléctricos. Más de 15 años
                   abasteciendo a contratistas e industrias.
