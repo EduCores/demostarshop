@@ -41,13 +41,13 @@ export function ProductCard({ product }: { product: Product }) {
           {product.isNew && <Badge variant="new">NUEVO</Badge>}
           {product.isBestSeller && <Badge className="bg-[#FFA41C] text-black">Más Vendido</Badge>}
         </div>
-        {/* Wishlist & quick view - fix: ícono visible en dark (blanco sobre blanco) */}
-        <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition">
-          <button className="h-7 w-7 bg-white dark:bg-zinc-100 rounded-full shadow flex items-center justify-center text-zinc-800 hover:bg-zinc-100 dark:hover:bg-white transition-transform hover:scale-110" aria-label="Favorito">
-            <Heart className="h-3.5 w-3.5 text-zinc-700" />
+        {/* Wishlist & quick view - fix dark: icono blanco invisible → negro sobre blanco */}
+        <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition">
+          <button className="h-7 w-7 bg-white rounded-full shadow flex items-center justify-center text-black hover:bg-zinc-100 transition-transform hover:scale-110 border border-zinc-200" aria-label="Favorito">
+            <Heart className="h-3.5 w-3.5 text-black fill-black/10 stroke-black" />
           </button>
-          <button className="h-7 w-7 bg-white dark:bg-zinc-100 rounded-full shadow flex items-center justify-center text-zinc-800 hover:bg-zinc-100 dark:hover:bg-white transition-transform hover:scale-110" aria-label="Vista rápida">
-            <Eye className="h-3.5 w-3.5 text-zinc-700" />
+          <button className="h-7 w-7 bg-white rounded-full shadow flex items-center justify-center text-black hover:bg-zinc-100 transition-transform hover:scale-110 border border-zinc-200" aria-label="Vista rápida">
+            <Eye className="h-3.5 w-3.5 text-black stroke-black" />
           </button>
         </div>
         {product.secCertified && (
