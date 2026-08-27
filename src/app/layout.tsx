@@ -47,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="container py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
               {/* Marca */}
               <div>
-                <Link href="/" className="inline-flex items-baseline text-[26px] font-black tracking-tight leading-none select-none mb-3">
+                <Link href="/" className="inline-flex items-baseline text-[26px] font-black tracking-tight leading-none select-none mb-3 notranslate" translate="no">
                   <span className="text-[#fbffff]">ST</span>
                   <span className="star-slot" aria-hidden>
                     <span className="star-ghost">A</span>

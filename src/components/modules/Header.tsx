@@ -128,8 +128,8 @@ export function Header() {
           </button>
 
           {/* LOGO - texto ST★RSHOP con estrella en lugar de la A */}
-          <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Starshop - Inicio">
-            <span className="relative inline-flex items-baseline text-[26px] md:text-[32px] font-black tracking-tight leading-none select-none">
+           <Link href="/" className="flex items-center gap-2 shrink-0 notranslate" aria-label="Starshop - Inicio" translate="no">
+             <span className="relative inline-flex items-baseline text-[26px] md:text-[32px] font-black tracking-tight leading-none select-none" translate="no">
               <span className="text-[#fbffff]">ST</span>
               <span className="star-slot" aria-hidden>
                 <span className="star-ghost">A</span>
