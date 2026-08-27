@@ -36,13 +36,13 @@ export function B2BBanner() {
                 ))}
               </div>
             </div>
-            <div className="bg-white text-black rounded-xl p-6 shadow-2xl">
+            <div className="bg-white text-black dark:bg-[#1118278c] dark:text-white rounded-xl p-6 shadow-2xl">
               <h3 className="font-black text-lg">Solicita tu cuenta empresa</h3>
-              <p className="text-sm text-zinc-600 mt-1">Obtén lista de precios mayorista y ejecutivo asignado.</p>
+              <p className="text-sm text-zinc-600 dark:text-zinc-300 mt-1">Obtén lista de precios mayorista y ejecutivo asignado.</p>
               <form className="mt-4 space-y-3" onSubmit={(e) => e.preventDefault()}>
-                <input placeholder="RUT Empresa" className="w-full border rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-[#FF3B30] outline-none" />
-                <input placeholder="Email corporativo" className="w-full border rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-[#FF3B30] outline-none" />
-                <input placeholder="Teléfono" className="w-full border rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-[#FF3B30] outline-none" />
+                <input placeholder="RUT Empresa" className="w-full border rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-zinc-800 dark:border-zinc-600 dark:text-white focus:ring-2 focus:ring-[#FF3B30] outline-none" />
+                <input placeholder="Email corporativo" className="w-full border rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-zinc-800 dark:border-zinc-600 dark:text-white focus:ring-2 focus:ring-[#FF3B30] outline-none" />
+                <input placeholder="Teléfono" className="w-full border rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-zinc-800 dark:border-zinc-600 dark:text-white focus:ring-2 focus:ring-[#FF3B30] outline-none" />
                 <Button className="w-full bg-[#FF3B30] hover:bg-[#E6352B] font-bold gap-2 shimmer">
                   Solicitar acceso B2B <ArrowRight className="h-4 w-4" />
                 </Button>
