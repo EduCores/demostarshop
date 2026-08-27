@@ -24,7 +24,7 @@ export function ProductCard({ product }: { product: Product }) {
       transition={{ type: "spring", stiffness: 300, damping: 22 }}
       className="group bg-white dark:bg-zinc-900 rounded-lg border hover:shadow-xl transition-shadow flex flex-col overflow-hidden"
     >
-      <Link href={`/producto/${product.id}`} className="relative aspect-square bg-zinc-50 dark:bg-zinc-800 overflow-hidden block">
+      <Link href={`/producto/${product.id}`} className="relative aspect-square bg-zinc-50 dark:bg-zinc-800 overflow-hidden block sm:aspect-auto sm:max-h-[220px]">
         <img
           src={product.images[0]}
           alt={product.name}
@@ -61,7 +61,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="text-[11px] text-zinc-500 font-medium">
           {product.brand} • {product.sku}
         </div>
-        <Link href={`/producto/${product.id}`} className="text-sm font-medium leading-tight line-clamp-2 min-h-[38px] hover:text-[#FF3B30] hover:underline">
+        <Link href={`/producto/${product.id}`} className="text-sm font-medium leading-tight line-clamp-2 sm:min-h-[32px] hover:text-[#FF3B30] hover:underline">
           {product.name}
         </Link>
 
@@ -77,7 +77,7 @@ export function ProductCard({ product }: { product: Product }) {
 
         <div className="mt-auto space-y-1.5">
           <div className="flex items-baseline gap-2">
-            <span className="text-base font-black text-[#B12704]">{formatCLP(product.price)}</span>
+            <span className="text-sm font-black text-[#B12704]">{formatCLP(product.price)}</span>
             {product.originalPrice && <span className="text-xs line-through text-zinc-400">{formatCLP(product.originalPrice)}</span>}
           </div>
           {product.tierPrices && <div className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded w-fit">Mayorista: {formatCLP(product.tierPrices[product.tierPrices.length - 1].price)}</div>}

@@ -146,7 +146,7 @@ function ProductRowSlider({
           <div className="w-full py-8 text-center text-sm text-zinc-400 border border-dashed rounded-lg">Sin productos en esta categoría</div>
         ) : (
           items.map((p) => (
-            <div key={p.id} className="snap-start flex-none w-[46%] sm:w-[31%] lg:w-[23%]">
+            <div key={p.id} className="snap-start flex-none w-[46%] sm:w-[31%] lg:w-[23%] xs:w-[48%]">
               <ProductCard product={p} />
             </div>
           ))
