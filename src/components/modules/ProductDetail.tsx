@@ -27,8 +27,8 @@ export function ProductDetail({ product }: { product: Product }) {
           <div className="aspect-square bg-zinc-50 dark:bg-zinc-800 rounded-lg overflow-hidden border">
             <img src={product.images[selectedImage]} alt={product.name} className="h-full w-full object-contain p-4" />
           </div>
-          <div className="flex gap-2">
-            {product.images.map((img, i) => (
+           <div className="flex gap-2 overflow-x-auto">
+             {product.images.map((img, i) => (
               <button
                 key={i}
                 onClick={() => setSelectedImage(i)}
@@ -45,7 +45,7 @@ export function ProductDetail({ product }: { product: Product }) {
             <span className="flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded">
               <ShieldCheck className="h-3 w-3" /> Certificación SEC
             </span>
-            <span className="flex items-center gap-1 bg-zinc-100 px-2 py-1 rounded">Garantía {product.warranty}</span>
+            <span className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-200 px-2 py-1 rounded">Garantía {product.warranty}</span>
           </div>
         </div>
 
@@ -89,15 +89,15 @@ export function ProductDetail({ product }: { product: Product }) {
                 <div className="text-xs font-bold flex items-center gap-1">
                   <Award className="h-3 w-3 text-amber-600" /> Descuento por Volumen
                 </div>
-                <div className="grid grid-cols-3 gap-2 mt-2">
-                  {product.tierPrices.map((t) => (
-                    <div key={t.label} className={`border rounded p-2 text-center text-xs ${qty >= t.minQty && (t.maxQty === undefined || qty <= t.maxQty) ? "border-[#FF3B30] bg-amber-50" : "bg-zinc-50"}`}>
-                      <div className="font-bold">{t.label}</div>
-                      <div className="font-black text-[#B12704]">{formatCLP(t.price)}</div>
-                      {qty >= t.minQty && (t.maxQty === undefined || qty <= t.maxQty) && <div className="text-emerald-600 flex items-center justify-center gap-1"><Check className="h-3 w-3" /> Activo</div>}
-                    </div>
-                  ))}
-                </div>
+                 <div className="grid grid-cols-3 gap-2 mt-2">
+                   {product.tierPrices.map((t) => (
+                     <div key={t.label} className={`border rounded p-2 text-center text-xs ${qty >= t.minQty && (t.maxQty === undefined || qty <= t.maxQty) ? "border-[#FF3B30] bg-amber-50 dark:bg-amber-950/40" : "bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700"}`}>
+                       <div className="font-bold text-zinc-700 dark:text-zinc-200">{t.label}</div>
+                       <div className="font-black text-[#B12704] dark:text-[#FF8A7A]">{formatCLP(t.price)}</div>
+                       {qty >= t.minQty && (t.maxQty === undefined || qty <= t.maxQty) && <div className="text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-1"><Check className="h-3 w-3" /> Activo</div>}
+                     </div>
+                   ))}
+                 </div>
               </div>
             )}
           </div>
