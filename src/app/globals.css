@@ -258,12 +258,15 @@
   min-height: 4.5rem;
 }
 
-/* Containers p-2/p-3 en tablets y celulares (≤1024px), desktop intacto */
+/* Tablets y celulares (≤1024px), desktop intacto */
 @media (max-width: 1024px) {
   .p-3 {
     padding: 0.35rem !important;
   }
   .p-2 {
     padding: 0.15rem !important;
+  }
+  .w-\[47\%\] {
+    width: 50% !important;
   }
 }
