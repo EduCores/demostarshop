@@ -20,6 +20,7 @@ import {
 import "./globals.css";
 import Link from "next/link";
 import { Header } from "@/components/modules/Header";
+import { Starfield } from "@/components/modules/Starfield";
 import { CartDrawer } from "@/components/modules/CartDrawer";
 import { FloatingButtons } from "@/components/modules/FloatingButtons";
 import { Toaster } from "@/components/ui/toast";
@@ -38,6 +39,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es-CL" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans bg-[#F5F5F5] dark:bg-zinc-950`}>
         <Providers>
+          <Starfield />
+          <div className="relative z-10">
           <Header />
           <CartDrawer />
           <FloatingButtons />
@@ -168,6 +171,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               seleccionados
             </div>
           </footer>
+          </div>
         </Providers>
       </body>
     </html>
