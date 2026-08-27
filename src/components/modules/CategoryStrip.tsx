@@ -4,14 +4,14 @@ import { Stagger, StaggerItem } from "@/components/ui/reveal";
 
 // Mapeo a imágenes locales en /public con mismo nombre o muy similar
 const CAT_IMAGE_MAP: Record<string, string> = {
-  "iluminacion-led-neon": "/Tira LED Decorativa 3m APP RGB.png",
-  "herramientas-maquinarias": "/Kit Electricista 12 Piezas Acero.png",
-  "instrumentos-medicion": "/Pinza Amperimetrica UNI-T UT210E True RMS 100A ACDC NCV.png",
-  "tubos-lamparas-especiales": "/Tubo Germicida UV-C 36W G13 120cm Esterilizacion O3 Free.png",
-  "fuentes-poder-soldadura": "/Fuente Laboratorio 30V 5A Display Dual.png",
-  "pilas-baterias-cargadores": "/Pack 4x Bateria Litio 18650 3000mAh 15A Samsung 30Q.png",
-  "seguridad-control-electrico": "/Camara Seguridad 2K IP66 Audio.png",
-  "electronica-miscelaneos": "/Protoboard 830 Puntos Cables.png",
+  "iluminacion-led-neon": "/Iluminacion LED & Neon Flex.png",
+  "herramientas-maquinarias": "/Herramientas y Maquinarias.png",
+  "instrumentos-medicion": "/Instrumentos de Medicion y Termicos.png",
+  "tubos-lamparas-especiales": "/Tubos y Lamparas Especiales.png",
+  "fuentes-poder-soldadura": "/Fuentes de Poder y Soldadura.png",
+  "pilas-baterias-cargadores": "/Pilas Baterias & Cargadores.png",
+  "seguridad-control-electrico": "/Seguridad & Control Electrico.png",
+  "electronica-miscelaneos": "/Electronica & Miscelaneos.png",
 };
 
 export function CategoryStrip() {
