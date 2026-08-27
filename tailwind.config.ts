@@ -87,6 +87,16 @@ const config: Config = {
       },
     },
   },
+  safelist: [
+    "bg-amber-500",
+    "bg-slate-700",
+    "bg-cyan-600",
+    "bg-violet-600",
+    "bg-orange-600",
+    "bg-emerald-600",
+    "bg-red-600",
+    "bg-indigo-600",
+  ],
   plugins: [],
 };
 export default config;
