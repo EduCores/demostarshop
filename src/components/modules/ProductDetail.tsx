@@ -21,9 +21,9 @@ export function ProductDetail({ product }: { product: Product }) {
 
   return (
     <div className="container mt-4 bg-white dark:bg-zinc-900 rounded-lg border overflow-hidden">
-      <div className="grid lg:grid-cols-2 gap-6 p-4 md:p-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4 md:p-6">
         {/* Gallery */}
-        <div className="space-y-3">
+        <div className="space-y-3 min-w-0">
           <div className="aspect-square bg-zinc-50 dark:bg-zinc-800 rounded-lg overflow-hidden border">
             <img src={product.images[selectedImage]} alt={product.name} className="h-full w-full object-contain p-4" />
           </div>
@@ -50,7 +50,7 @@ export function ProductDetail({ product }: { product: Product }) {
         </div>
 
         {/* Info */}
-        <div className="space-y-4">
+        <div className="space-y-4 min-w-0">
           <div>
             <div className="text-xs text-zinc-500">
               {product.brand} • SKU: {product.sku} • {product.subcategory}
@@ -136,15 +136,15 @@ export function ProductDetail({ product }: { product: Product }) {
               <Truck className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
               <div className="flex-1">
                 <div className="text-sm font-bold">Calcula tu envío</div>
-                <div className="flex gap-2 mt-2">
-                  <select value={region} onChange={(e) => setRegion(e.target.value)} className="flex-1 border rounded px-2 py-1.5 text-sm bg-white dark:bg-zinc-900">
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <select value={region} onChange={(e) => setRegion(e.target.value)} className="flex-1 min-w-0 border rounded px-2 py-1.5 text-sm bg-white dark:bg-zinc-900">
                     {shippingRegions.map((s) => (
                       <option key={s.region} value={s.region}>
                         {s.region}
                       </option>
                     ))}
                   </select>
-                  <span className="text-sm font-bold px-3 py-1.5 bg-white border rounded">
+                  <span className="text-sm font-bold px-3 py-1.5 bg-white dark:bg-zinc-800 border rounded shrink-0">
                     {formatCLP(shipping.cost)} • {shipping.estimatedDays}
                   </span>
                 </div>
@@ -155,14 +155,14 @@ export function ProductDetail({ product }: { product: Product }) {
 
           <div className="space-y-2 text-sm">
             <h3 className="font-bold">Especificaciones</h3>
-            <div className="grid grid-cols-2 gap-2">
-              {Object.entries(product.specs).map(([k, v]) => (
-                <div key={k} className="flex justify-between border-b py-1.5 text-xs">
-                  <span className="text-zinc-500">{k}</span>
-                  <span className="font-medium">{v}</span>
-                </div>
-              ))}
-            </div>
+             <div className="grid grid-cols-2 gap-2">
+               {Object.entries(product.specs).map(([k, v]) => (
+                 <div key={k} className="flex justify-between gap-2 border-b py-1.5 text-xs min-w-0">
+                   <span className="text-zinc-500 shrink-0">{k}</span>
+                   <span className="font-medium text-right break-words min-w-0">{v}</span>
+                 </div>
+               ))}
+             </div>
             <a href="#" className="inline-flex items-center gap-1 text-[#007185] hover:underline text-xs">
               <FileDown className="h-3 w-3" /> Descargar ficha técnica PDF
             </a>
