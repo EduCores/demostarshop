@@ -6,13 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/store/cart";
 import { toast } from "@/store/toast";
-import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
-  const [hover, setHover] = useState(false);
   const hasDiscount = product.discount && product.originalPrice;
 
   const handleAdd = () => {
@@ -22,15 +20,13 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <motion.div
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 300, damping: 22 }}
       className="group bg-white dark:bg-zinc-900 rounded-lg border hover:shadow-xl transition-shadow flex flex-col overflow-hidden"
     >
       <Link href={`/producto/${product.id}`} className="relative aspect-square bg-zinc-50 dark:bg-zinc-800 overflow-hidden block">
         <img
-          src={hover && product.images[1] ? product.images[1] : product.images[0]}
+          src={product.images[0]}
           alt={product.name}
           className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
           loading="lazy"
@@ -65,7 +61,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="text-[11px] text-zinc-500 font-medium">
           {product.brand} • {product.sku}
         </div>
-        <Link href={`/producto/${product.id}`} className="text-sm font-medium leading-tight line-clamp-2 min-h-[40px] hover:text-[#FF3B30] hover:underline">
+        <Link href={`/producto/${product.id}`} className="text-sm font-medium leading-tight line-clamp-2 min-h-[38px] hover:text-[#FF3B30] hover:underline">
           {product.name}
         </Link>
 
