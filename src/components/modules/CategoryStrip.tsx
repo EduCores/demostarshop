@@ -48,8 +48,8 @@ export function CategoryStrip() {
                       <div className={`h-20 w-20 rounded-full flex items-center justify-center text-white shadow-lg ${cat.color} group-hover:scale-105 active:scale-90 active:ring-4 active:ring-white/30 transition-transform duration-200`}>
                         <Icon className="h-10 w-10" />
                       </div>
-                      <div className="text-[18px] font-bold leading-tight line-clamp-2 text-white group-hover:text-[#FF3B30]">{cat.name}</div>
-                      <div className="text-[17px] text-white/80">{cat.subcategories.reduce((a, b) => a + b.count, 0)} productos</div>
+                      <div className="text-[18px] max-xl:text-[15px] font-bold leading-tight line-clamp-2 text-white group-hover:text-[#FF3B30]">{cat.name}</div>
+                      <div className="text-[17px] max-xl:text-[14px] text-white/80">{cat.subcategories.reduce((a, b) => a + b.count, 0)} productos</div>
                     </div>
                   </div>
                 </Link>
