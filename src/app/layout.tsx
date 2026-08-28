@@ -67,8 +67,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
               {/* Ayuda + Categorías */}
               <div>
-                <h4 className="font-bold mb-3">Ayuda</h4>
-                <ul className="space-y-2.5 text-zinc-300">
+                <h4 className="text-base font-bold mb-3">Ayuda</h4>
+                <ul className="space-y-3 text-base text-zinc-300">
                   {[
                     { Icon: LifeBuoy, label: "Centro de Ayuda" },
                     { Icon: Truck, label: "Envíos & Retiros" },
@@ -76,15 +76,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     { Icon: FileText, label: "Cotizaciones B2B" },
                   ].map(({ Icon, label }) => (
                     <li key={label}>
-                      <a href="#" className="flex items-center gap-2.5 hover:text-white hover:underline">
-                        <Icon className="h-[18px] w-[18px] shrink-0 text-[#FFD814]" />
+                      <a href="#" className="flex items-center gap-3 hover:text-white hover:underline">
+                        <Icon className="h-6 w-6 shrink-0 text-[#FFD814]" />
                         <span>{label}</span>
                       </a>
                     </li>
                   ))}
                 </ul>
-                <h5 className="font-bold mt-5 mb-3">Categorías</h5>
-                <ul className="space-y-2.5 text-zinc-300">
+                <h5 className="text-base font-bold mt-5 mb-3">Categorías</h5>
+                <ul className="space-y-3 text-base text-zinc-300">
                   {[
                     { Icon: Lightbulb, label: "Iluminación LED" },
                     { Icon: Wrench, label: "Herramientas" },
@@ -92,8 +92,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     { Icon: ShieldAlert, label: "Seguridad Eléctrica" },
                   ].map(({ Icon, label }) => (
                     <li key={label}>
-                      <a href="#" className="flex items-center gap-2.5 hover:text-white hover:underline">
-                        <Icon className="h-[18px] w-[18px] shrink-0 text-[#FFD814]" />
+                      <a href="#" className="flex items-center gap-3 hover:text-white hover:underline">
+                        <Icon className="h-6 w-6 shrink-0 text-[#FFD814]" />
                         <span>{label}</span>
                       </a>
                     </li>
@@ -103,37 +103,37 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
               {/* Contacto */}
               <div>
-                <h4 className="font-bold mb-3">Contacto</h4>
-                <ul className="space-y-3 text-zinc-300">
-                  <li className="flex items-center gap-2.5">
-                    <MapPin className="h-[18px] w-[18px] shrink-0 text-[#FFD814]" />
+                <h4 className="text-base font-bold mb-3">Contacto</h4>
+                <ul className="space-y-3 text-base text-zinc-300">
+                  <li className="flex items-center gap-3">
+                    <MapPin className="h-6 w-6 shrink-0 text-[#FFD814]" />
                     <span>Jecar Nehgme 70 - Santiago</span>
                   </li>
-                  <li className="flex items-center gap-2.5">
-                    <TrainFront className="h-[18px] w-[18px] shrink-0 text-[#FFD814]" />
+                  <li className="flex items-center gap-3">
+                    <TrainFront className="h-6 w-6 shrink-0 text-[#FFD814]" />
                     <span>Metro: República</span>
                   </li>
-                  <li className="flex items-center gap-2.5">
-                    <Mail className="h-[18px] w-[18px] shrink-0 text-[#FFD814]" />
+                  <li className="flex items-center gap-3">
+                    <Mail className="h-6 w-6 shrink-0 text-[#FFD814]" />
                     <a href="mailto:ventas@starshop.cl" className="hover:text-white hover:underline">
                       ventas@starshop.cl
                     </a>
                   </li>
-                  <li className="flex items-center gap-2.5">
-                    <Phone className="h-[18px] w-[18px] shrink-0 text-[#FFD814]" />
+                  <li className="flex items-center gap-3">
+                    <Phone className="h-6 w-6 shrink-0 text-[#FFD814]" />
                     <a href="tel:+56226972072" className="hover:text-white hover:underline">
                       22 697 2072
                     </a>
                     <span className="text-zinc-500">(Fijo)</span>
                   </li>
-                  <li className="flex items-center gap-2.5">
-                    <MessageCircle className="h-[18px] w-[18px] shrink-0 text-[#FFD814]" />
+                  <li className="flex items-center gap-3">
+                    <MessageCircle className="h-6 w-6 shrink-0 text-[#FFD814]" />
                     <a href="https://wa.me/56993301557" className="hover:text-white hover:underline">
                       +56 9 9330 1557
                     </a>
                   </li>
-                  <li className="flex items-center gap-2.5">
-                    <Smartphone className="h-[18px] w-[18px] shrink-0 text-[#FFD814]" />
+                  <li className="flex items-center gap-3">
+                    <Smartphone className="h-6 w-6 shrink-0 text-[#FFD814]" />
                     <a href="https://wa.me/56989005158" className="hover:text-white hover:underline">
                       +56 9 8900 5158
                     </a>
@@ -143,20 +143,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
               {/* Horario */}
               <div>
-                <h4 className="font-bold mb-3 flex items-center gap-2">
-                  <Clock className="h-[18px] w-[18px] shrink-0 text-[#FFD814]" />
+                <h4 className="text-base font-bold mb-3 flex items-center gap-2">
+                  <Clock className="h-6 w-6 shrink-0 text-[#FFD814]" />
                   Horario Atención
                 </h4>
-                <ul className="space-y-2.5 text-zinc-300">
-                  <li className="flex items-center justify-between gap-4">
+                <ul className="space-y-3 text-base text-zinc-300">
+                  <li className="flex items-center gap-3">
                     <span>Lun - Jue</span>
                     <span className="text-white font-medium">10:00 - 18:00h</span>
                   </li>
-                  <li className="flex items-center justify-between gap-4">
+                  <li className="flex items-center gap-3">
                     <span>Vie</span>
                     <span className="text-white font-medium">10:00 - 16:00h</span>
                   </li>
-                  <li className="flex items-center justify-between gap-4">
+                  <li className="flex items-center gap-3">
                     <span>Sáb - Dom</span>
                     <span>Cerrado</span>
                   </li>
