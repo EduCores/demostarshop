@@ -45,7 +45,7 @@ export function CategoryStrip() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/15" />
                     <div className="relative h-full w-full flex flex-col items-center justify-center gap-2 p-2">
-                      <div className={`h-20 w-20 rounded-full flex items-center justify-center text-white shadow-lg ${cat.color} group-hover:scale-105 transition`}>
+                      <div className={`h-20 w-20 rounded-full flex items-center justify-center text-white shadow-lg ${cat.color} group-hover:scale-105 active:scale-90 active:ring-4 active:ring-white/30 transition-transform duration-200`}>
                         <Icon className="h-10 w-10" />
                       </div>
                       <div className="text-[18px] font-bold leading-tight line-clamp-2 text-white group-hover:text-[#FF3B30]">{cat.name}</div>
