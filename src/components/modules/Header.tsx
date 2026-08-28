@@ -409,24 +409,26 @@ export function Header() {
 
       {/* MOBILE MENU */}
       {showMobileMenu && (
-        <div className="md:hidden bg-white text-black absolute inset-x-0 top-[20vh] shadow-2xl z-50 max-h-[80vh] overflow-auto">
+        <div className="md:hidden bg-zinc-900 text-white absolute inset-x-0 top-[20vh] shadow-2xl z-50 max-h-[80vh] overflow-auto">
           <div className="p-4 space-y-4">
             <div className="bg-[#232F3E] text-white -m-4 p-4 mb-4 flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center"><User className="h-5 w-5" /></div>
-              {session?.user ? (
-                <div>
-                  <div className="font-bold text-sm">{(session.user as unknown as { name?: string }).name || session.user.email}</div>
-                  <div className="text-xs text-zinc-300">{(session.user as unknown as { role?: string }).role === "B2B" ? "Cuenta Empresa" : "Mi cuenta"} • <button onClick={() => signOut()} className="underline">Salir</button></div>
-                </div>
-              ) : (
-                <div><div className="font-bold text-sm">Hola, identificate</div><div className="text-xs text-zinc-300">Cuenta y Listas</div></div>
-              )}
+              <h4 className="font-bold text-sm flex items-center gap-2"><Grid3X3 className="h-4 w-4" /> Todas las categorías</h4>
+              <div className="ml-auto flex items-center gap-3">
+                <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center"><User className="h-5 w-5" /></div>
+                {session?.user ? (
+                  <div>
+                    <div className="font-bold text-sm">{(session.user as unknown as { name?: string }).name || session.user.email}</div>
+                    <div className="text-xs text-zinc-300">{(session.user as unknown as { role?: string }).role === "B2B" ? "Cuenta Empresa" : "Mi cuenta"} • <button onClick={() => signOut()} className="underline">Salir</button></div>
+                  </div>
+                ) : (
+                  <div><div className="font-bold text-sm">Hola, identificate</div><div className="text-xs text-zinc-300">Cuenta y Listas</div></div>
+                )}
+              </div>
             </div>
             <div>
-              <h4 className="font-bold text-sm mb-2 flex items-center gap-2"><Grid3X3 className="h-4 w-4" /> Todas las categorías</h4>
               <div className="grid grid-cols-2 gap-2">
                 {superCategories.map((c) => (
-                  <Link key={c.id} href="#" className="border rounded p-2 text-xs font-medium hover:bg-zinc-50">
+                  <Link key={c.id} href="#" className="border border-zinc-700 rounded p-2 text-xs font-medium bg-zinc-800 text-white hover:bg-zinc-700">
                     {c.name}
                   </Link>
                 ))}
@@ -440,7 +442,7 @@ export function Header() {
               <a href="tel:+56226972072" className="flex items-center gap-2 py-2"><Phone className="h-4 w-4" /> 22 697 2072</a>
               <a href="https://wa.me/56993301557" className="flex items-center gap-2 py-2"><Smartphone className="h-4 w-4" /> +56 9 9330 1557</a>
               <a href="https://wa.me/56989005158" className="flex items-center gap-2 py-2"><Smartphone className="h-4 w-4" /> +56 9 8900 5158</a>
-              <div className="flex items-center gap-2 py-2 text-xs bg-zinc-50 rounded-lg px-3 border">
+              <div className="flex items-center gap-2 py-2 text-xs bg-zinc-800 rounded-lg px-3 border">
                 <Clock className="h-4 w-4" /> Lun-Jue 10:00-18:00h | Vie 10:00-16:00h
               </div>
             </div>

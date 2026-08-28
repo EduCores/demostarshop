@@ -1,0 +1,16 @@
+
+> starshop@1.0.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+  - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 2.5s
+ ○ Compiling / ...
+ ✓ Compiled / in 11s (1629 modules)
+ GET / 200 in 11905ms
+ ✓ Compiled in 1583ms (795 modules)
+ GET / 200 in 245ms
+^C^C
