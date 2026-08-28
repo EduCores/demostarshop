@@ -75,7 +75,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full px-[5px]">
+    <header className="sticky top-0 z-50 w-full">
       {/* TOPBAR - como en ux-ui.png: Cotizaciones B2B | Venta Mayorista */}
       <div className="bg-[#232F3E] text-white text-xs md:text-[13px] block">
         <div className="container flex h-8 items-center justify-between">
