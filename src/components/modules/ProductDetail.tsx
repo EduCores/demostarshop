@@ -117,8 +117,8 @@ export function ProductDetail({ product }: { product: Product }) {
               <span className="text-xs text-zinc-500">{product.stock} disponibles</span>
             </div>
 
-            <div className="flex gap-2">
-              <Button size="lg" className="flex-1 bg-[#FFD814] hover:bg-[#F7CA00] text-black border border-[#F2C200] font-bold gap-2" onClick={() => { addItem(product, qty); toast(`${product.name} agregado al carrito`, { variant: "success", description: `Cantidad: ${qty}` }); }}>
+            <div className="flex flex-wrap gap-2">
+              <Button size="lg" className="flex-1 min-w-[200px] bg-[#FFD814] hover:bg-[#F7CA00] text-black border border-[#F2C200] font-bold gap-2" onClick={() => { addItem(product, qty); toast(`${product.name} agregado al carrito`, { variant: "success", description: `Cantidad: ${qty}` }); }}>
                 <ShoppingCart className="h-5 w-5" /> Agregar al Carrito
               </Button>
               <Button size="lg" variant="outline" className="gap-2">
