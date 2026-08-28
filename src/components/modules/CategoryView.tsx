@@ -3,10 +3,21 @@ import { useMemo, useState } from "react";
 import { SuperCategory, Product } from "@/types";
 import { ProductCard } from "./ProductCard";
 import { Button } from "@/components/ui/button";
-import { SlidersHorizontal, X, RotateCcw, PackageSearch } from "lucide-react";
+import { SlidersHorizontal, X, RotateCcw, PackageSearch, Lightbulb, Wrench, Gauge, FlaskConical, Zap, BatteryCharging, ShieldCheck, Cpu, type LucideIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Sort = "popular" | "price-asc" | "price-desc";
+
+const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {
+  Lightbulb,
+  Wrench,
+  Gauge,
+  FlaskConical,
+  Zap,
+  BatteryCharging,
+  ShieldCheck,
+  Cpu,
+};
 
 export function CategoryView({ category, products }: { category: SuperCategory; products: Product[] }) {
   const [priceMin, setPriceMin] = useState("");
@@ -15,6 +26,8 @@ export function CategoryView({ category, products }: { category: SuperCategory; 
   const [onlyB2B, setOnlyB2B] = useState(false);
   const [sort, setSort] = useState<Sort>("popular");
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const CatIcon = CATEGORY_ICON_MAP[category.icon];
 
   const resetFilters = () => {
     setPriceMin("");
@@ -98,7 +111,14 @@ export function CategoryView({ category, products }: { category: SuperCategory; 
           <span>/</span>
           <span className="text-zinc-800 dark:text-zinc-200 font-medium">{category.name}</span>
         </nav>
-        <h1 className="text-2xl md:text-3xl font-black">{category.name}</h1>
+        <div className="flex items-center gap-3">
+          {CatIcon && (
+            <div className={`h-12 w-12 rounded-full flex items-center justify-center shrink-0 ${category.color}`}>
+              <CatIcon className="h-6 w-6 text-white" />
+            </div>
+          )}
+          <h1 className="text-2xl md:text-3xl font-black">{category.name}</h1>
+        </div>
         <p className="text-sm text-zinc-500 mt-1">{category.description} • {products.length} productos</p>
       </div>
 
