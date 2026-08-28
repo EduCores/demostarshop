@@ -41,15 +41,17 @@ export function CategoryStrip() {
                     <img
                       src={CAT_IMAGE_MAP[cat.id] ?? cat.image}
                       alt={cat.name}
-                      className="h-full w-full object-cover group-hover:scale-105 transition duration-300"
+                      className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition duration-300"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition" />
-                    <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-14 w-14 rounded-full flex items-center justify-center text-white shadow-md ${cat.color} group-hover:scale-105 transition`}>
-                      <Icon className="h-7 w-7" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/15" />
+                    <div className="relative h-full w-full flex flex-col items-center justify-center gap-2 p-2">
+                      <div className={`h-20 w-20 rounded-full flex items-center justify-center text-white shadow-lg ${cat.color} group-hover:scale-105 transition`}>
+                        <Icon className="h-10 w-10" />
+                      </div>
+                      <div className="text-[11px] font-bold leading-tight line-clamp-2 text-white group-hover:text-[#FF3B30]">{cat.name}</div>
+                      <div className="text-[10px] text-white/80">{cat.subcategories.reduce((a, b) => a + b.count, 0)} productos</div>
                     </div>
                   </div>
-                  <div className="mt-2 text-xs font-bold leading-tight line-clamp-2 group-hover:text-[#FF3B30]">{cat.name}</div>
-                  <div className="text-[11px] text-zinc-500">{cat.subcategories.reduce((a, b) => a + b.count, 0)} productos</div>
                 </Link>
               </StaggerItem>
             );
