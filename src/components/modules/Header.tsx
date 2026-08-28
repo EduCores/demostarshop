@@ -395,14 +395,14 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="absolute left-0 right-0 bg-zinc-900 text-white shadow-2xl border-t-4 border-[#FF3B30] z-40"
+            className="absolute left-0 right-0 bg-white text-black dark:bg-zinc-900 dark:text-white shadow-2xl border-t-4 border-[#FF3B30] z-40"
           >
             <div className="container py-6 grid grid-cols-4 gap-6 max-h-[70vh] overflow-auto">
               {superCategories.map((cat) => {
                 const Icon = SUPER_ICON_MAP[cat.icon];
                 return (
                 <div key={cat.id} className="space-y-2">
-                  <h3 className="font-bold text-sm flex items-center gap-2 border-b border-zinc-700 pb-2">
+                  <h3 className="font-bold text-sm flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-700 pb-2">
                     <span className={`h-7 w-7 rounded-full flex items-center justify-center shrink-0 ${cat.color}`}>
                       {Icon && <Icon className="h-3.5 w-3.5 text-white" />}
                     </span>
@@ -411,7 +411,7 @@ export function Header() {
                   <ul className="space-y-1">
                     {cat.subcategories.map((sub) => (
                       <li key={sub.id}>
-                        <Link href={`/categoria/${cat.slug}`} className="text-xs text-zinc-300 hover:text-[#FF3B30] hover:underline flex justify-between">
+                        <Link href={`/categoria/${cat.slug}`} className="text-xs text-zinc-600 dark:text-zinc-300 hover:text-[#FF3B30] hover:underline flex justify-between">
                           <span>{sub.name}</span>
                           <span className="text-zinc-400">({sub.count})</span>
                         </Link>
@@ -422,8 +422,8 @@ export function Header() {
                 );
               })}
             </div>
-            <div className="bg-zinc-800 border-t border-zinc-700 px-6 py-3 flex items-center justify-between text-xs">
-              <span className="text-zinc-200 font-bold">¿Eres empresa? Obtén precios mayoristas y facturación directa.</span>
+            <div className="bg-zinc-50 dark:bg-zinc-800 border-t border-zinc-200 dark:border-zinc-700 px-6 py-3 flex items-center justify-between text-xs">
+              <span className="text-zinc-600 dark:text-zinc-200 font-bold">¿Eres empresa? Obtén precios mayoristas y facturación directa.</span>
               <Link href="#b2b" className="bg-[#232F3E] text-white px-4 py-1.5 rounded font-bold hover:bg-black">Solicitar Cuenta B2B</Link>
             </div>
           </motion.div>
