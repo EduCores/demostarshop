@@ -78,7 +78,7 @@ export function FlashSale() {
           {flashProducts.map((p) => {
             const soldPercent = Math.round((p.soldCount / (p.soldCount + p.stock)) * 100);
             return (
-              <div key={p.id} className="border rounded-lg overflow-hidden hover:shadow-lg transition group bg-white dark:bg-zinc-900">
+              <Link key={p.id} href={`/producto/${p.id}`} className="border rounded-lg overflow-hidden hover:shadow-lg transition group bg-white dark:bg-zinc-900 block">
                 <div className="relative aspect-square bg-zinc-50 overflow-hidden">
                   <img src={p.images[0]} alt={p.name} className="h-full w-full object-cover group-hover:scale-105 transition duration-300" />
                   {p.discount && (
@@ -103,11 +103,11 @@ export function FlashSale() {
                       <span>Quedan {p.stock}</span>
                     </div>
                   </div>
-                  <Button size="sm" className="w-full h-7 text-xs font-bold bg-[#FF3B30] hover:bg-[#E6352B]" onClick={() => addItem(p)}>
+                  <Button size="sm" className="w-full h-7 text-xs font-bold bg-[#FF3B30] hover:bg-[#E6352B]" onClick={(e) => { e.preventDefault(); addItem(p); }}>
                     Agregar
                   </Button>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
