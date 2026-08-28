@@ -97,7 +97,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full">
       {/* TOPBAR - como en ux-ui.png: Cotizaciones B2B | Venta Mayorista */}
       <div className="bg-[#232F3E] text-white text-xs md:text-[13px] block">
-        <div className="container flex h-8 items-center justify-between">
+        <div className="container flex h-8 items-center justify-between px-6">
           <div className="flex items-center gap-4">
             <span className="hidden lg:flex items-center gap-1.5">
               <MapPin className="h-3.5 w-3.5 text-zinc-400" />
@@ -140,7 +140,7 @@ export function Header() {
 
       {/* MAIN HEADER */}
       <div className="bg-[#0F1111] md:bg-[#131921] text-white border-b border-white/10">
-        <div className="container flex h-[60px] md:h-[64px] items-center gap-2 md:gap-4">
+        <div className="container flex h-[60px] md:h-[64px] items-center gap-2 md:gap-4 px-6">
           {/* Mobile menu button */}
           <button className="md:hidden p-2 -ml-2" onClick={() => setShowMobileMenu(!showMobileMenu)} aria-label="Menú">
             {showMobileMenu ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
