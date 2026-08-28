@@ -428,7 +428,7 @@ export function Header() {
 
       {/* MOBILE MENU */}
       {showMobileMenu && (
-        <div className="md:hidden bg-zinc-900 text-white absolute inset-x-0 top-[9vh] shadow-2xl z-50 max-h-[80vh] overflow-auto">
+        <div className="md:hidden bg-white text-black dark:bg-zinc-900 dark:text-white absolute inset-x-0 top-[9vh] shadow-2xl z-50 max-h-[80vh] overflow-auto">
           <div className="p-4 pb-10 space-y-4">
             <div className="bg-[#232F3E] text-white -m-4 p-4 mb-4 flex items-center gap-3">
               <div className="flex items-center gap-3">
@@ -457,14 +457,14 @@ export function Header() {
                 })}
               </div>
             </div>
-            <div className="space-y-3 text-base border-t pt-4">
+            <div className="space-y-3 text-base border-t border-zinc-200 dark:border-zinc-700 pt-4">
               <div className="grid grid-cols-2 gap-3">
                 <a href="mailto:ventas@starshop.cl" className="flex items-center gap-3 py-2"><Mail className="h-6 w-6" /> ventas@starshop.cl</a>
                 <a href="tel:+56226972072" className="flex items-center gap-3 py-2"><Phone className="h-6 w-6" /> 22 697 2072</a>
                 <a href="https://wa.me/56993301557" className="flex items-center gap-3 py-2"><Smartphone className="h-6 w-6" /> +56 9 9330 1557</a>
                 <a href="https://wa.me/56989005158" className="flex items-center gap-3 py-2"><Smartphone className="h-6 w-6" /> +56 9 8900 5158</a>
               </div>
-              <div className="flex items-center gap-2 py-2 text-xs bg-zinc-800 rounded-lg px-3 border">
+              <div className="flex items-center gap-2 py-2 text-xs bg-zinc-100 dark:bg-zinc-800 rounded-lg px-3 border border-zinc-200 dark:border-zinc-700">
                 <Clock className="h-4 w-4" /> Lun-Jue 10:00-18:00h | Vie 10:00-16:00h
               </div>
             </div>
