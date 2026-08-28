@@ -163,7 +163,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </ul>
               </div>
             </div>
-              <div className="bg-[#131921] py-4 px-4 text-center text-xs text-zinc-400">
+              <div className="container px-4 pt-6">
+              <img src="/logo_footer_mascota.png" alt="Mascota Starshop" className="h-24 w-auto select-none" />
+            </div>
+            <div className="bg-[#131921] py-4 px-4 text-center text-xs text-zinc-400">
               Pagos seguros: WebPay • Transferencia • Factura B2B • Certificación SEC disponible en productos
               seleccionados
             </div>
