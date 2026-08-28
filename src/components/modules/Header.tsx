@@ -449,7 +449,7 @@ export function Header() {
                 {superCategories.map((c) => {
                   const Icon = SUPER_ICON_MAP[c.icon];
                   return (
-                    <Link key={c.id} href="#" className={`flex items-center gap-2 rounded p-[0.55rem] text-[1rem] font-medium text-white ${c.color}`}>
+                    <Link key={c.id} href={`/categoria/${c.slug}`} onClick={() => setShowMobileMenu(false)} className={`flex items-center gap-2 rounded p-[0.55rem] text-[1rem] font-medium text-white ${c.color}`}>
                       {Icon && <Icon className="h-10 w-10 text-white" />}
                       <span>{c.name}</span>
                     </Link>
