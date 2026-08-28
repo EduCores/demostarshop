@@ -30,10 +30,29 @@ import {
   Mail,
   Clock,
   Smartphone,
+  Lightbulb,
+  Wrench,
+  Gauge,
+  FlaskConical,
+  Zap,
+  BatteryCharging,
+  Cpu,
+  type LucideIcon,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession, signOut } from "next-auth/react";
+
+const SUPER_ICON_MAP: Record<string, LucideIcon> = {
+  Lightbulb,
+  Wrench,
+  Gauge,
+  FlaskConical,
+  Zap,
+  BatteryCharging,
+  ShieldCheck,
+  Cpu,
+};
 
 export function Header() {
   const [search, setSearch] = useState("");
@@ -427,11 +446,15 @@ export function Header() {
             </div>
             <div>
               <div className="grid grid-cols-2 gap-2">
-                {superCategories.map((c) => (
-                  <Link key={c.id} href="#" className="border border-zinc-700 rounded p-2 text-xs font-medium bg-zinc-800 text-white hover:bg-zinc-700">
-                    {c.name}
-                  </Link>
-                ))}
+                {superCategories.map((c) => {
+                  const Icon = SUPER_ICON_MAP[c.icon];
+                  return (
+                    <Link key={c.id} href="#" className={`flex items-center gap-2 rounded p-[0.55rem] text-[1rem] font-medium text-white ${c.color}`}>
+                      {Icon && <Icon className="h-5 w-5 text-white" />}
+                      <span>{c.name}</span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
             <div className="space-y-3 text-base border-t pt-4">
