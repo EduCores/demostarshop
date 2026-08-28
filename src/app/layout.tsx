@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Toaster />
           <main className="min-h-screen max-w-full overflow-x-hidden">{children}</main>
           <footer className="bg-[#232F3E] text-white mt-12">
-            <div className="container py-12 px-4 pb-32 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm bg-[url('/logo_footer_mascota.png')] bg-no-repeat bg-left-bottom bg-[length:96px]">
+            <div className="container py-12 px-4 pr-8 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm bg-[url('/logo_footer_mascota.png')] bg-no-repeat bg-right-bottom">
               {/* Marca */}
               <div>
                 <Link href="/" className="inline-flex items-baseline text-[26px] font-black tracking-tight leading-none select-none mb-3 notranslate" translate="no">
