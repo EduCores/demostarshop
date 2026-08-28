@@ -49,7 +49,7 @@ export function CategoryStrip() {
                         <Icon className="h-10 w-10" />
                       </div>
                       <div className="text-[18px] max-xl:text-[15px] font-bold leading-tight line-clamp-2 text-white group-hover:text-[#FF3B30]">{cat.name}</div>
-                      <div className="text-[17px] max-xl:text-[14px] text-white/80">{cat.subcategories.reduce((a, b) => a + b.count, 0)} productos</div>
+                      <div className="text-[14px] lg:text-[11px] text-white/80">{cat.subcategories.reduce((a, b) => a + b.count, 0)} productos</div>
                     </div>
                   </div>
                 </Link>
@@ -61,3 +61,4 @@ export function CategoryStrip() {
     </section>
   );
 }
+
