@@ -433,7 +433,7 @@ export function Header() {
 
       {/* MOBILE MENU */}
       {showMobileMenu && (
-        <div className="md:hidden bg-white text-black dark:bg-zinc-900 dark:text-white absolute inset-x-0 top-[9vh] shadow-2xl z-50 max-h-[80vh] overflow-auto">
+        <div className="md:hidden bg-white text-black dark:bg-zinc-900 dark:text-white absolute inset-x-0 top-[10vh] shadow-2xl z-50 max-h-[80vh] overflow-auto">
           <div className="p-4 pb-10 space-y-4">
             <div className="bg-[#232F3E] text-white -m-4 p-4 mb-4 flex items-center gap-3">
               <div className="flex items-center gap-3">
