@@ -436,10 +436,10 @@ export function Header() {
                 {session?.user ? (
                   <div>
                     <div className="font-bold text-sm">{(session.user as unknown as { name?: string }).name || session.user.email}</div>
-                    <div className="text-xs text-zinc-300">{(session.user as unknown as { role?: string }).role === "B2B" ? "Cuenta Empresa" : "Mi cuenta"} • <button onClick={() => signOut()} className="underline">Salir</button></div>
+                    <div className="text-xs text-zinc-300">ir a mi cuenta • <button onClick={() => signOut()} className="underline">Salir</button></div>
                   </div>
                 ) : (
-                  <div><div className="font-bold text-sm">Hola, identificate</div><div className="text-xs text-zinc-300">Cuenta y Listas</div></div>
+                  <div><div className="font-bold text-sm">Hola, Usuario</div><div className="text-xs text-zinc-300">ir a mi cuenta</div></div>
                 )}
               </div>
               <h4 className="ml-auto font-bold text-sm flex items-center gap-2"><Grid3X3 className="h-4 w-4" /> Todas las categorías</h4>
