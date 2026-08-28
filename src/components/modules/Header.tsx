@@ -418,7 +418,7 @@ export function Header() {
               ))}
             </div>
             <div className="bg-zinc-50 border-t px-6 py-3 flex items-center justify-between text-xs">
-              <span className="text-zinc-600">¿Eres empresa? Obtén precios mayoristas y facturación directa.</span>
+              <span className="text-zinc-600 font-bold">¿Eres empresa? Obtén precios mayoristas y facturación directa.</span>
               <Link href="#b2b" className="bg-[#232F3E] text-white px-4 py-1.5 rounded font-bold hover:bg-black">Solicitar Cuenta B2B</Link>
             </div>
           </motion.div>
@@ -449,8 +449,10 @@ export function Header() {
                 {superCategories.map((c) => {
                   const Icon = SUPER_ICON_MAP[c.icon];
                   return (
-                    <Link key={c.id} href={`/categoria/${c.slug}`} onClick={() => setShowMobileMenu(false)} className={`flex items-center gap-2 rounded p-[0.55rem] text-[1rem] font-medium text-white ${c.color}`}>
-                      {Icon && <Icon className="h-10 w-10 text-white" />}
+                    <Link key={c.id} href={`/categoria/${c.slug}`} onClick={() => setShowMobileMenu(false)} className="flex items-center gap-2 rounded p-2 text-[1rem] font-medium text-black dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                      <span className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 ${c.color}`}>
+                        {Icon && <Icon className="h-4 w-4 text-white" />}
+                      </span>
                       <span>{c.name}</span>
                     </Link>
                   );
