@@ -412,8 +412,7 @@ export function Header() {
         <div className="md:hidden bg-zinc-900 text-white absolute inset-x-0 top-[20vh] shadow-2xl z-50 max-h-[80vh] overflow-auto">
           <div className="p-4 space-y-4">
             <div className="bg-[#232F3E] text-white -m-4 p-4 mb-4 flex items-center gap-3">
-              <h4 className="font-bold text-sm flex items-center gap-2"><Grid3X3 className="h-4 w-4" /> Todas las categorías</h4>
-              <div className="ml-auto flex items-center gap-3">
+              <div className="flex items-center gap-3">
                 <div className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center"><User className="h-5 w-5" /></div>
                 {session?.user ? (
                   <div>
@@ -424,6 +423,7 @@ export function Header() {
                   <div><div className="font-bold text-sm">Hola, identificate</div><div className="text-xs text-zinc-300">Cuenta y Listas</div></div>
                 )}
               </div>
+              <h4 className="ml-auto font-bold text-sm flex items-center gap-2"><Grid3X3 className="h-4 w-4" /> Todas las categorías</h4>
             </div>
             <div>
               <div className="grid grid-cols-2 gap-2">
