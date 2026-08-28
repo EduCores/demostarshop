@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Toaster />
           <main className="min-h-screen max-w-full overflow-x-hidden">{children}</main>
           <footer className="bg-[#232F3E] text-white mt-12">
-            <div className="container py-12 px-4 pr-8 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm bg-[url('/logo_footer_mascota.png')] bg-no-repeat bg-right-bottom">
+            <div className="container py-12 px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
               {/* Marca */}
               <div>
                 <Link href="/" className="inline-flex items-baseline text-[26px] font-black tracking-tight leading-none select-none mb-3 notranslate" translate="no">
@@ -162,6 +162,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </li>
                 </ul>
               </div>
+            </div>
+            <div className="container flex justify-end px-4">
+              <img
+                src="/logo_footer_mascota.png"
+                alt="Mascota Starshop"
+                style={{ padding: "20px", margin: "20px 20px 20px auto", width: "172px" }}
+                className="h-auto select-none"
+              />
             </div>
             <div className="bg-[#131921] py-4 px-4 text-center text-xs text-zinc-400">
               Pagos seguros: WebPay • Transferencia • Factura B2B • Certificación SEC disponible en productos
