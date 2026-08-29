@@ -134,26 +134,24 @@ export function ProductDetail({ product }: { product: Product }) {
           </div>
 
           <div className="border rounded-lg p-3 space-y-3 bg-zinc-50 dark:bg-zinc-800/50">
-            <div className="flex gap-2">
-              <Truck className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
-              <div className="flex-1">
-                <div className="text-sm font-bold">Calcula tu envío</div>
-                <ShippingRegionComunaSelect
-                  className="mt-2"
-                  region={region}
-                  comuna={comuna}
-                  onRegionChange={(v) => {
-                    setRegion(v);
-                    setComuna("");
-                  }}
-                  onComunaChange={setComuna}
-                />
-                <span className="inline-block text-sm font-bold px-3 py-1.5 mt-2 bg-white dark:bg-zinc-800 border rounded">
-                  {formatCLP(shippingInfo.cost)} • {shippingInfo.estimatedDays}
-                </span>
-                <div className="text-xs text-emerald-600 mt-1">✓ Envío gratis RM sobre {formatCLP(49990)}</div>
-              </div>
+            <div className="flex items-center gap-2 text-sm font-bold">
+              <Truck className="h-5 w-5 text-emerald-600 shrink-0" />
+              Calcula tu envío
             </div>
+            <ShippingRegionComunaSelect
+              className="mt-2"
+              region={region}
+              comuna={comuna}
+              onRegionChange={(v) => {
+                setRegion(v);
+                setComuna("");
+              }}
+              onComunaChange={setComuna}
+            />
+            <span className="inline-block text-sm font-bold px-3 py-1.5 bg-white dark:bg-zinc-800 border rounded">
+              {formatCLP(shippingInfo.cost)} • {shippingInfo.estimatedDays}
+            </span>
+            <div className="text-xs text-emerald-600 mt-1">✓ Envío gratis RM sobre {formatCLP(49990)}</div>
           </div>
 
           <div className="space-y-2 text-sm">
