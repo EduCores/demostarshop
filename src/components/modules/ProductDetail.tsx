@@ -106,17 +106,17 @@ export function ProductDetail({ product }: { product: Product }) {
 
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <span className="text-sm font-medium">Cantidad:</span>
-              <div className="flex items-center border rounded-full">
-                <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 rounded-full">
+              <span className="text-sm font-medium dark:text-zinc-200">Cantidad:</span>
+              <div className="flex items-center border rounded-full dark:border-zinc-700 dark:bg-zinc-800">
+                <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:text-zinc-200 rounded-full">
                   <Minus className="h-4 w-4" />
                 </button>
-                <span className="w-10 text-center font-bold">{qty}</span>
-                <button onClick={() => setQty(qty + 1)} className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 rounded-full">
+                <span className="w-10 text-center font-bold dark:text-white">{qty}</span>
+                <button onClick={() => setQty(qty + 1)} className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:text-zinc-200 rounded-full">
                   <Plus className="h-4 w-4" />
                 </button>
               </div>
-              <span className="text-xs text-zinc-500">{product.stock} disponibles</span>
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">{product.stock} disponibles</span>
             </div>
 
             <div className="flex flex-wrap gap-2">
