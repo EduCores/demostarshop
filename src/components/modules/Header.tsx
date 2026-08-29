@@ -359,7 +359,7 @@ export function Header() {
             onFocus={openMega}
             onClick={() => setShowMega(!showMega)}
             onKeyDown={(e) => e.key === "Escape" && setShowMega(false)}
-            className="flex items-center gap-2 font-bold hover:underline underline-offset-4 decoration-2 decoration-[#FFD814] hover:text-[#FFD814] transition-colors px-2 py-1 rounded-sm h-8"
+            className="flex items-center gap-2 font-bold hover:text-[#FFD814] transition-colors px-2 py-1 rounded-sm h-8"
             aria-expanded={showMega}
             aria-haspopup="true"
           >
@@ -367,17 +367,17 @@ export function Header() {
           </button>
 
           <nav className="flex items-center gap-1 ml-2 font-semibold">
-            <Link href="#flash-sale" className="flex items-center gap-1.5 px-3 py-1 font-semibold hover:underline underline-offset-4 decoration-2 decoration-[#FFD814] hover:text-[#FFD814] transition-colors rounded-sm">
+            <Link href="#flash-sale" className="flex items-center gap-1.5 px-3 py-1 font-semibold hover:text-[#FFD814] transition-colors rounded-sm">
               <Flame className="h-6 w-6 text-[#FF6B00]" /> Ofertas Relámpago
             </Link>
-            <Link href="#mas-vendidos" className="flex items-center gap-1.5 px-3 py-1 font-semibold hover:underline underline-offset-4 decoration-2 decoration-[#FFD814] hover:text-[#FFD814] transition-colors rounded-sm">
+            <Link href="#mas-vendidos" className="flex items-center gap-1.5 px-3 py-1 font-semibold hover:text-[#FFD814] transition-colors rounded-sm">
               <Star className="h-6 w-6 text-[#FFD814]" /> Más Vendidos
             </Link>
-            <Link href="#b2b" className="flex items-center gap-1.5 px-3 py-1 font-semibold hover:underline underline-offset-4 decoration-2 decoration-[#FFD814] hover:text-[#FFD814] transition-colors rounded-sm">
+            <Link href="#b2b" className="flex items-center gap-1.5 px-3 py-1 font-semibold hover:text-[#FFD814] transition-colors rounded-sm">
               <Award className="h-6 w-6" /> Venta Mayorista / B2B
             </Link>
-            <Link href="#" className="px-3 py-1 font-semibold hover:underline underline-offset-4 decoration-2 decoration-[#FFD814] hover:text-[#FFD814] transition-colors rounded-sm">Servicio al Cliente</Link>
-            <Link href="/cotizacion" className="px-3 py-1 font-semibold hover:underline underline-offset-4 decoration-2 decoration-[#FFD814] hover:text-[#FFD814] transition-colors rounded-sm hidden xl:inline">Cotizador Express</Link>
+            <Link href="#" className="px-3 py-1 font-semibold hover:text-[#FFD814] transition-colors rounded-sm">Servicio al Cliente</Link>
+            <Link href="/cotizacion" className="px-3 py-1 font-semibold hover:text-[#FFD814] transition-colors rounded-sm hidden xl:inline">Cotizador Express</Link>
           </nav>
 
           <div className="ml-auto hidden lg:flex items-center gap-2 text-xs font-bold bg-[#37475A] px-3 py-1 rounded-sm">
