@@ -37,7 +37,7 @@ export function CategoryStrip() {
             return (
               <StaggerItem key={cat.id}>
                 <Link href={`/categoria/${cat.slug}`} className="group text-center block transition-transform duration-200 hover:-translate-y-1">
-                  <div className="aspect-square rounded-xl overflow-hidden bg-zinc-50 border group-hover:shadow-md transition relative">
+                  <div className="aspect-[2/3] rounded-xl overflow-hidden bg-zinc-50 border group-hover:shadow-md transition relative">
                     <img
                       src={CAT_IMAGE_MAP[cat.id] ?? cat.image}
                       alt={cat.name}
