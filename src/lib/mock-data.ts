@@ -1001,3 +1001,11 @@ export function formatCLP(value: number) {
 export function discountPercent(original: number, current: number) {
   return Math.round(((original - current) / original) * 100);
 }
+
+export function getChileShipping(regionName: string, subtotal: number) {
+  const region = chileRegions.find((r) => r.name === regionName);
+  const zone = region?.zone ?? "rm";
+  const info = chileRegionCosts[zone];
+  const free = subtotal >= 49990 && zone === "rm";
+  return { cost: free ? 0 : info.cost, estimatedDays: info.estimatedDays, free };
+}

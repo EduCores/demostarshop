@@ -1,7 +1,8 @@
 "use client";
 import { useCart } from "@/store/cart";
 import { formatCLP } from "@/lib/utils";
-import { chileRegions, chileRegionCosts } from "@/lib/mock-data";
+import { chileRegions, getChileShipping } from "@/lib/mock-data";
+import { ShippingRegionComunaSelect } from "@/components/modules/ShippingRegionComunaSelect";
 import { PaymentMethod, Order } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,19 +36,23 @@ export default function CheckoutPage() {
   // Servidor y primer render del cliente ven carrito vacío; el estado real se aplica post-montaje.
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const selectedRegion = chileRegions.find((r) => r.name === region)!;
-  const zoneInfo = chileRegionCosts[selectedRegion.zone];
   const subtotal = total();
-  const shippingCost = subtotal >= 49990 && selectedRegion.zone === "rm" ? 0 : zoneInfo.cost;
-  const estimatedDays = zoneInfo.estimatedDays;
+  const shippingInfo = getChileShipping(region, subtotal);
+  const shippingCost = shippingInfo.cost;
+  const estimatedDays = shippingInfo.estimatedDays;
   const grandTotal = subtotal + shippingCost;
 
   const {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(schema) });
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: { region: chileRegions[0].name, comuna: "" },
+  });
+  const comunaValue = watch("comuna");
 
   const onSubmit = async (data: FormData) => {
     if (isSubmitting) return;
@@ -202,41 +207,19 @@ export default function CheckoutPage() {
             {errors.direccion && <p className="text-xs text-red-600 mt-1">{errors.direccion.message}</p>}
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4">
-            <div>
-              <label className="text-sm font-medium">Región *</label>
-              <select
-                {...register("region")}
-                value={region}
-                onChange={(e) => {
-                  setRegion(e.target.value);
-                  setValue("comuna", "", { shouldValidate: false });
-                }}
-                className="mt-1 w-full border rounded-md h-9 px-3 text-sm bg-white dark:bg-zinc-900"
-              >
-                {chileRegions.map((r) => (
-                  <option key={r.name} value={r.name}>
-                    {r.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="md:col-span-2">
-              <label className="text-sm font-medium">Comuna *</label>
-              <select
-                {...register("comuna")}
-                className="mt-1 w-full border rounded-md h-9 px-3 text-sm bg-white dark:bg-zinc-900"
-              >
-                <option value="">Selecciona una comuna</option>
-                {selectedRegion.communes.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-              {errors.comuna && <p className="text-xs text-red-600 mt-1">{errors.comuna.message}</p>}
-            </div>
-          </div>
+          <ShippingRegionComunaSelect
+            className="grid md:grid-cols-3 gap-4"
+            comunaClassName="md:col-span-2"
+            region={region}
+            comuna={comunaValue}
+            comunaError={errors.comuna?.message}
+            onRegionChange={(v) => {
+              setRegion(v);
+              setValue("region", v, { shouldValidate: false });
+              setValue("comuna", "", { shouldValidate: false });
+            }}
+            onComunaChange={(v) => setValue("comuna", v, { shouldValidate: true })}
+          />
 
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex gap-2 text-sm">
             <Truck className="h-5 w-5 text-amber-600 shrink-0" />

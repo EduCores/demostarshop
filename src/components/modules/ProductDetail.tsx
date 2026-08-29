@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { Product, ShippingOption } from "@/types";
 import { formatCLP } from "@/lib/utils";
-import { shippingRegions } from "@/lib/mock-data";
+import { chileRegions, getChileShipping } from "@/lib/mock-data";
+import { ShippingRegionComunaSelect } from "@/components/modules/ShippingRegionComunaSelect";
 import { Star, ShieldCheck, Truck, FileDown, Minus, Plus, ShoppingCart, Heart, Share2, Award, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,12 +13,13 @@ import { toast } from "@/store/toast";
 export function ProductDetail({ product }: { product: Product }) {
   const [qty, setQty] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [region, setRegion] = useState(shippingRegions[0].region);
+  const [region, setRegion] = useState(chileRegions[0].name);
+  const [comuna, setComuna] = useState("");
   const { addItem } = useCart();
 
   const tierPrice = product.tierPrices?.find((t) => qty >= t.minQty && (t.maxQty === undefined || qty <= t.maxQty))?.price ?? product.price;
-  const shipping = shippingRegions.find((s) => s.region === region)!;
   const total = tierPrice * qty;
+  const shippingInfo = getChileShipping(region, total);
 
   return (
     <div className="container mt-4 bg-white dark:bg-zinc-900 rounded-lg border overflow-hidden">
@@ -136,18 +138,19 @@ export function ProductDetail({ product }: { product: Product }) {
               <Truck className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
               <div className="flex-1">
                 <div className="text-sm font-bold">Calcula tu envío</div>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  <select value={region} onChange={(e) => setRegion(e.target.value)} className="flex-1 min-w-0 border rounded px-2 py-1.5 text-sm bg-white dark:bg-zinc-900">
-                    {shippingRegions.map((s) => (
-                      <option key={s.region} value={s.region}>
-                        {s.region}
-                      </option>
-                    ))}
-                  </select>
-                  <span className="text-sm font-bold px-3 py-1.5 bg-white dark:bg-zinc-800 border rounded shrink-0">
-                    {formatCLP(shipping.cost)} • {shipping.estimatedDays}
-                  </span>
-                </div>
+                <ShippingRegionComunaSelect
+                  className="mt-2"
+                  region={region}
+                  comuna={comuna}
+                  onRegionChange={(v) => {
+                    setRegion(v);
+                    setComuna("");
+                  }}
+                  onComunaChange={setComuna}
+                />
+                <span className="inline-block text-sm font-bold px-3 py-1.5 mt-2 bg-white dark:bg-zinc-800 border rounded">
+                  {formatCLP(shippingInfo.cost)} • {shippingInfo.estimatedDays}
+                </span>
                 <div className="text-xs text-emerald-600 mt-1">✓ Envío gratis RM sobre {formatCLP(49990)}</div>
               </div>
             </div>
