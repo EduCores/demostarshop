@@ -91,7 +91,7 @@ export function FlashSale() {
                 <div className="p-2.5 space-y-1.5">
                   <h3 className="text-xs font-medium line-clamp-2 leading-tight min-h-[32px]">{p.name}</h3>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-sm font-black text-[#B12704]">{formatCLP(p.price)}</span>
+                    <span className="text-sm font-black text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(p.price)}</span>
                     {p.originalPrice && <span className="text-[11px] line-through text-zinc-400">{formatCLP(p.originalPrice)}</span>}
                   </div>
                   <div className="space-y-1">

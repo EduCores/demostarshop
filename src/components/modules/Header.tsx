@@ -219,7 +219,7 @@ export function Header() {
                         <div className="text-sm font-medium line-clamp-1">{p.name}</div>
                         <div className="text-xs text-zinc-500">{p.brand} • {p.sku}</div>
                       </div>
-                      <div className="text-sm font-bold text-[#B12704]">{formatCLP(p.price)}</div>
+                      <div className="text-sm font-bold text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(p.price)}</div>
                     </Link>
                   ))}
                   <div className="p-2 text-center">
@@ -334,7 +334,7 @@ export function Header() {
                         <div className="text-sm font-medium line-clamp-1">{p.name}</div>
                         <div className="text-xs text-zinc-500">{p.brand} • {p.sku}</div>
                       </div>
-                      <div className="text-sm font-bold text-[#B12704]">{formatCLP(p.price)}</div>
+                      <div className="text-sm font-bold text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(p.price)}</div>
                     </Link>
                   ))}
                 </div>

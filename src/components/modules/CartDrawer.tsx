@@ -48,7 +48,7 @@ export function CartDrawer() {
               <span className="text-emerald-700 dark:text-emerald-400 font-medium">¡Felicidades! Tienes envío gratis 🎉</span>
             ) : (
               <span className="text-zinc-700 dark:text-zinc-300">
-                Agrega <strong className="text-[#B12704]">{formatCLP(remaining)}</strong> para <strong>Envío Gratis</strong> RM
+                Agrega <strong className="text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(remaining)}</strong> para <strong>Envío Gratis</strong> RM
               </span>
             )}
           </div>
@@ -86,7 +86,7 @@ export function CartDrawer() {
                       </span>
                     )}
                     <div className="flex items-center justify-between mt-2">
-                      <span className="font-bold text-[#B12704]">{formatCLP(product.price)}</span>
+                      <span className="font-bold text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(product.price)}</span>
                       <div className="flex items-center gap-1 border rounded-full">
                         <button onClick={() => updateQty(product.id, quantity - 1)} className="h-7 w-7 flex items-center justify-center hover:bg-zinc-100 rounded-full" aria-label="Disminuir">
                           <Minus className="h-3 w-3" />
@@ -112,7 +112,7 @@ export function CartDrawer() {
           <div className="border-t bg-zinc-50 dark:bg-zinc-900 p-4 space-y-3">
             <div className="flex justify-between text-sm">
               <span>Subtotal ({items.reduce((a, b) => a + b.quantity, 0)} productos)</span>
-              <span className="font-bold text-lg text-[#B12704]">{formatCLP(subtotal)}</span>
+              <span className="font-bold text-lg text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(subtotal)}</span>
             </div>
             <p className="text-xs text-zinc-500">Impuestos y envío calculados en el checkout</p>
             <Link href="/checkout" onClick={() => setOpen(false)} className="block">

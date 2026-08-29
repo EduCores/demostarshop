@@ -75,7 +75,7 @@ export function ProductDetail({ product }: { product: Product }) {
 
           <div className="border-y py-4 space-y-2">
             <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-black text-[#B12704]">{formatCLP(tierPrice)}</span>
+              <span className="text-3xl font-black text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(tierPrice)}</span>
               {product.originalPrice && product.originalPrice !== tierPrice && (
                 <>
                   <span className="line-through text-zinc-400">{formatCLP(product.originalPrice)}</span>
@@ -95,7 +95,7 @@ export function ProductDetail({ product }: { product: Product }) {
                    {product.tierPrices.map((t) => (
                      <div key={t.label} className={`border rounded p-2 text-center text-xs ${qty >= t.minQty && (t.maxQty === undefined || qty <= t.maxQty) ? "border-[#FF3B30] bg-amber-50 dark:bg-amber-950/40" : "bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700"}`}>
                        <div className="font-bold text-zinc-700 dark:text-zinc-200">{t.label}</div>
-                       <div className="font-black text-[#B12704] dark:text-[#FF8A7A]">{formatCLP(t.price)}</div>
+                        <div className="font-black text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(t.price)}</div>
                        {qty >= t.minQty && (t.maxQty === undefined || qty <= t.maxQty) && <div className="text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-1"><Check className="h-3 w-3" /> Activo</div>}
                      </div>
                    ))}
@@ -130,7 +130,7 @@ export function ProductDetail({ product }: { product: Product }) {
                 <Share2 className="h-4 w-4" />
               </Button>
             </div>
-            <div className="text-center text-sm font-bold text-[#B12704]">Subtotal ({qty}): {formatCLP(total)}</div>
+            <div className="text-center text-sm font-bold text-[#6b7280] dark:text-[#f9fafb]">Subtotal ({qty}): {formatCLP(total)}</div>
           </div>
 
           <div className="border rounded-lg p-3 space-y-3 bg-zinc-50 dark:bg-zinc-800/50">

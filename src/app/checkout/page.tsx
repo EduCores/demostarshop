@@ -282,14 +282,14 @@ export default function CheckoutPage() {
                 <div className="text-sm font-medium line-clamp-2 leading-tight">{product.name}</div>
                 <div className="text-xs text-zinc-500">Cant: {quantity}</div>
               </div>
-              <div className="text-sm font-bold">{formatCLP(product.price * quantity)}</div>
+              <div className="text-sm font-bold text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(product.price * quantity)}</div>
             </div>
           ))}
         </div>
         <div className="border-t mt-4 pt-4 space-y-2 text-sm">
           <div className="flex justify-between">
             <span>Subtotal</span>
-            <span>{formatCLP(subtotal)}</span>
+            <span className="text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(subtotal)}</span>
           </div>
           <div className="flex justify-between">
             <span>Envío ({estimatedDays})</span>
@@ -297,7 +297,7 @@ export default function CheckoutPage() {
           </div>
           <div className="flex justify-between font-black text-base border-t pt-2">
             <span>Total</span>
-            <span className="text-[#B12704]">{formatCLP(grandTotal)}</span>
+            <span className="text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(grandTotal)}</span>
           </div>
         </div>
         <div className="mt-4 h-2 bg-zinc-200 rounded-full overflow-hidden">

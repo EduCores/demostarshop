@@ -151,14 +151,14 @@ function CheckoutSuccessContent() {
                   <div className="text-sm font-medium line-clamp-2 leading-tight">{i.name}</div>
                   <div className="text-xs text-zinc-500">Cant: {i.quantity}</div>
                 </div>
-                <div className="text-sm font-bold">{formatCLP(i.price * i.quantity)}</div>
+                <div className="text-sm font-bold text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(i.price * i.quantity)}</div>
               </div>
             ))}
           </div>
           <div className="border-t mt-3 pt-3 space-y-1.5 text-sm">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span>{formatCLP(order.subtotal)}</span>
+              <span className="text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(order.subtotal)}</span>
             </div>
             <div className="flex justify-between">
               <span>Envío</span>
@@ -168,7 +168,7 @@ function CheckoutSuccessContent() {
             </div>
             <div className="flex justify-between font-black text-base border-t pt-2">
               <span>Total</span>
-              <span className="text-[#B12704]">{formatCLP(order.grandTotal)}</span>
+              <span className="text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(order.grandTotal)}</span>
             </div>
           </div>
         </div>
