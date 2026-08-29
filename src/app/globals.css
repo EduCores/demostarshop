@@ -258,6 +258,14 @@
   min-height: 4.5rem;
 }
 
+/* explorar-lineas: forzar amarillo rgb(255 216 20) por sobre naranja default */
+#explorar-lineas .bg-\[\#FFD814\] {
+  background-color: rgb(255 216 20 / var(--tw-bg-opacity, 1)) !important;
+}
+#explorar-lineas .bg-\[\#FFD814\]:hover {
+  background-color: rgb(247 202 0 / var(--tw-bg-opacity, 1)) !important;
+}
+
 /* Tablets y celulares (≤1024px), desktop intacto */
 @media (max-width: 1024px) {
   .p-3 {

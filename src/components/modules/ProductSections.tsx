@@ -149,7 +149,7 @@ function ProductRowSlider({
         ) : (
           items.map((p) => (
             <div key={p.id} className="snap-start flex-none w-[47%] sm:w-[31%] lg:w-[23%]">
-              <ProductCard product={p} />
+              <ProductCard product={p} addButtonVariant={cardButtonVariant} />
             </div>
           ))
         )}
