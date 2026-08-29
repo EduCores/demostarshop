@@ -81,11 +81,11 @@ export function ProductCard({ product, showOriginalPrice = false, addButtonVaria
             {showOriginalPrice && product.originalPrice && <span className="text-xs line-through text-zinc-400">{formatCLP(product.originalPrice)}</span>}
           </div>
           {product.tierPrices && <div className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded w-fit">Mayorista: {formatCLP(product.tierPrices[product.tierPrices.length - 1].price)}</div>}
-          <div className="grid grid-cols-2 gap-1.5 pt-1">
-            <Button size="sm" variant={addButtonVariant} className="h-8 text-xs font-bold gap-1" onClick={handleAdd}>
+          <div className="grid grid-cols-1 gap-1.5 pt-1">
+            <Button size="sm" variant={addButtonVariant} className="h-8 text-xs font-bold gap-1 w-full" onClick={handleAdd}>
               <ShoppingCart className="h-3.5 w-3.5" /> Agregar
             </Button>
-            <Button size="sm" variant="outline" className="h-8 text-xs gap-1">
+            <Button size="sm" variant="outline" className="h-8 text-xs gap-1 w-full">
               <FileText className="h-3.5 w-3.5" /> Cotizar
             </Button>
           </div>
