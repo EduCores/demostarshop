@@ -9,7 +9,7 @@ import { toast } from "@/store/toast";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-export function ProductCard({ product, showOriginalPrice = false }: { product: Product; showOriginalPrice?: boolean }) {
+export function ProductCard({ product, showOriginalPrice = false, addButtonVariant = "default" as const }: { product: Product; showOriginalPrice?: boolean; addButtonVariant?: "default" | "starshop" }) {
   const { addItem } = useCart();
   const hasDiscount = product.discount && product.originalPrice;
 
@@ -82,7 +82,7 @@ export function ProductCard({ product, showOriginalPrice = false }: { product: P
           </div>
           {product.tierPrices && <div className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded w-fit">Mayorista: {formatCLP(product.tierPrices[product.tierPrices.length - 1].price)}</div>}
           <div className="grid grid-cols-2 gap-1.5 pt-1">
-            <Button size="sm" className="h-8 text-xs font-bold gap-1" onClick={handleAdd}>
+            <Button size="sm" variant={addButtonVariant} className="h-8 text-xs font-bold gap-1" onClick={handleAdd}>
               <ShoppingCart className="h-3.5 w-3.5" /> Agregar
             </Button>
             <Button size="sm" variant="outline" className="h-8 text-xs gap-1">

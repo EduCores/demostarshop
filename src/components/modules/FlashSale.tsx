@@ -103,7 +103,7 @@ export function FlashSale() {
                       <span>Quedan {p.stock}</span>
                     </div>
                   </div>
-                  <Button size="sm" className="w-full h-7 text-xs font-bold bg-[#FF3B30] hover:bg-[#E6352B]" onClick={(e) => { e.preventDefault(); addItem(p); }}>
+                    <Button size="sm" className="w-full h-7 text-xs font-bold bg-[rgb(255_89_22/var(--tw-bg-opacity,1))] hover:bg-[rgb(230_81_20/var(--tw-bg-opacity,1))] text-white" onClick={(e) => { e.preventDefault(); addItem(p); }}>
                     Agregar
                   </Button>
                 </div>

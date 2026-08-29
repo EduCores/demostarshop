@@ -53,11 +53,13 @@ function ProductRowSlider({
   icon,
   items,
   onShuffle,
+  cardButtonVariant,
 }: {
   title: string;
   icon: ReactNode;
   items: Product[];
   onShuffle?: () => void;
+  cardButtonVariant?: "default" | "starshop";
 }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -97,11 +99,11 @@ function ProductRowSlider({
             <h3 className="text-sm font-black uppercase tracking-wide flex items-center gap-1.5">{icon} {title}</h3>
           </div>
           <div className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb-2">
-            {items.map((p) => (
-              <div key={p.id} className="snap-start flex-none w-[47%] sm:w-[31%] lg:w-[23%] opacity-50">
-                <ProductCard product={p} />
-              </div>
-            ))}
+        {items.map((p) => (
+            <div key={p.id} className="snap-start flex-none w-[47%] sm:w-[31%] lg:w-[23%]">
+              <ProductCard product={p} addButtonVariant={cardButtonVariant} />
+            </div>
+          ))}
           </div>
         </div>
       );
@@ -113,7 +115,7 @@ function ProductRowSlider({
         <h3 className="text-sm font-black uppercase tracking-wide flex items-center gap-1.5">{icon} {title}</h3>
         <div className="flex items-center gap-1.5">
           {onShuffle && (
-            <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs mr-1" onClick={onShuffle}>
+            <Button variant="starshop" size="sm" className="gap-1.5 h-8 text-xs mr-1" onClick={onShuffle}>
               <Shuffle className="h-3.5 w-3.5" /> Mezclar
             </Button>
           )}
@@ -212,20 +214,20 @@ function SectionBlock({ section }: { section: SectionDef }) {
               onClick={() => setCat(cid)}
               className={`relative flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs md:text-sm font-bold border transition-colors duration-200 ${
                 isActive
-                  ? "border-transparent text-white"
+                  ? "border-transparent text-black"
                   : "bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:text-[#ff5916] hover:border-[#ff5916]/40"
               }`}
             >
               {isActive && (
                 <motion.span
                   layoutId={`pill-${section.id}`}
-                  className="absolute inset-0 rounded-full bg-[#232F3E]"
+                  className="absolute inset-0 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                 />
               )}
               <span className="relative z-10 flex items-center gap-1.5">
                 {CAT_NAME[cid]}
-                <ChevronRight className={`h-3.5 w-3.5 ${isActive ? "text-[#FFD814]" : "opacity-50"}`} />
+                <ChevronRight className={`h-3.5 w-3.5 ${isActive ? "text-black" : "opacity-50"}`} />
               </span>
             </button>
           );
@@ -244,6 +246,7 @@ function SectionBlock({ section }: { section: SectionDef }) {
             title={`Destacados · ${CAT_NAME[cat]}`}
             icon={<Star className="h-4 w-4 fill-[#FFA41C] text-[#FFA41C]" />}
             items={featured}
+            cardButtonVariant="starshop"
           />
         </div>
 
@@ -252,6 +255,7 @@ function SectionBlock({ section }: { section: SectionDef }) {
           title="Sugeridos para ti"
           icon={<Sparkles className="h-4 w-4 text-emerald-500" />}
           items={secondRow}
+          cardButtonVariant="starshop"
           onShuffle={() => setSeed((s) => s + 1)}
         />
       </div>
