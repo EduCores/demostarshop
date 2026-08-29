@@ -161,9 +161,9 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="container py-6 grid lg:grid-cols-3 gap-6">
+    <div className="container mx-auto py-6 grid lg:grid-cols-3 gap-6 min-w-0">
       {/* Form */}
-      <div className="lg:col-span-2 bg-white dark:bg-zinc-900 rounded-lg border p-6">
+      <div className="lg:col-span-2 min-w-0 bg-white dark:bg-zinc-900 rounded-lg border p-6">
         <h1 className="text-xl font-black flex items-center gap-2">
           <Lock className="h-5 w-5" /> Checkout Seguro
         </h1>
@@ -268,7 +268,7 @@ export default function CheckoutPage() {
       </div>
 
       {/* Summary */}
-      <div className="bg-white dark:bg-zinc-900 rounded-lg border p-6 h-fit">
+      <div className="bg-white dark:bg-zinc-900 rounded-lg border p-6 h-fit min-w-0">
         <h2 className="font-bold">Resumen del pedido</h2>
         <div className="divide-y mt-4">
           {items.map(({ product, quantity }) => (
