@@ -381,9 +381,9 @@ export function Header() {
           </nav>
 
           <div className="ml-auto hidden lg:flex items-center gap-2 text-xs font-bold bg-[#37475A] px-3 py-1 rounded-sm">
-            <span className="flex items-center gap-1"><Truck className="h-4 w-4" /> Envíos a todo Chile</span>
+            <span className="flex items-center gap-1"><Truck className="h-4 w-4 text-emerald-600" /> Envíos a todo Chile</span>
             <span className="opacity-50">|</span>
-            <span className="flex items-center gap-1"><Zap className="h-4 w-4" /> Despacho 24h RM</span>
+            <span className="flex items-center gap-1"><Zap className="h-4 w-4 text-[#FFD814]" /> Despacho 24h RM</span>
           </div>
         </div>
 
