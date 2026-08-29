@@ -13,9 +13,21 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { id: string } }): Metadata {
   const product = products.find((p) => p.id === params.id);
+  const title = product ? `${product.name} | Starshop` : "Producto | Starshop";
+  const description = product?.shortDescription ?? "Ficha técnica, precio y despacho. Producto demo (mockup) — no es oferta real.";
+  const url = `https://starshop.cl/producto/${params.id}`;
+  const img = product?.images[0];
   return {
-    title: product ? `${product.name} | Starshop` : "Producto | Starshop",
-    description: product?.shortDescription,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "website",
+      images: img ? [{ url: img, width: 800, height: 800, alt: product?.name ?? "Producto" }] : [{ url: "/og-starshop.jpg", width: 1200, height: 630, alt: "Starshop" }],
+    },
   };
 }
 

@@ -377,7 +377,7 @@ export function Header() {
               <Award className="h-6 w-6" /> Venta Mayorista / B2B
             </Link>
             <Link href="#" className="px-3 py-1 hover:underline underline-offset-4 decoration-2 decoration-[#FFD814] hover:text-[#FFD814] transition-colors rounded-sm">Servicio al Cliente</Link>
-            <Link href="#" className="px-3 py-1 hover:underline underline-offset-4 decoration-2 decoration-[#FFD814] hover:text-[#FFD814] transition-colors rounded-sm hidden xl:inline">Cotizador Express</Link>
+            <Link href="/cotizacion" className="px-3 py-1 hover:underline underline-offset-4 decoration-2 decoration-[#FFD814] hover:text-[#FFD814] transition-colors rounded-sm hidden xl:inline">Cotizador Express</Link>
           </nav>
 
           <div className="ml-auto hidden lg:flex items-center gap-2 text-xs font-bold bg-[#37475A] px-3 py-1 rounded-sm">

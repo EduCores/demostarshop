@@ -9,9 +9,14 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const category = superCategories.find((c) => c.slug === params.slug);
+  const title = category ? `${category.name} | Starshop` : "Categoría | Starshop";
+  const description = category?.description ?? "Explora herramientas, LED e instrumentos. Catálogo demo.";
+  const url = `https://starshop.cl/categoria/${params.slug}`;
   return {
-    title: category ? `${category.name} | Starshop` : "Categoría | Starshop",
-    description: category?.description,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { title, description, url, type: "website", images: [{ url: "/og-starshop.jpg", width: 1200, height: 630, alt: category?.name ?? "Categoría" }] },
   };
 }
 

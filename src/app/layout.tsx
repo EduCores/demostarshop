@@ -28,9 +28,25 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Starshop | Distribuidor Mayorista Herramientas, LED e Instrumentos",
-  description: "Starshop - Líder en distribución masiva de herramientas, iluminación LED, instrumentos de medición y artículos eléctricos. Envíos a todo Chile. Venta mayorista B2B.",
-  keywords: ["herramientas", "led", "iluminacion", "multimetro", "starshop", "chile"],
+  metadataBase: new URL("https://starshop.cl"),
+  title: {
+    default: "Starshop | Distribuidor Mayorista Herramientas, LED e Instrumentos",
+    template: "%s | Starshop",
+  },
+  description: "Starshop - Líder en distribución masiva de herramientas, iluminación LED, instrumentos de medición y artículos eléctricos. Envíos a todo Chile. Venta mayorista B2B. (Catálogo demo con productos mockup)",
+  keywords: ["herramientas", "led", "iluminacion", "multimetro", "starshop", "chile", "ferreteria", "b2b", "mayorista"],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "es_CL",
+    url: "https://starshop.cl",
+    siteName: "Starshop",
+    title: "Starshop | Distribuidor Mayorista",
+    description: "Herramientas, LED e instrumentos con despacho a todo Chile. Catálogo demo.",
+    images: [{ url: "/og-starshop.jpg", width: 1200, height: 630, alt: "Starshop" }],
+  },
+  twitter: { card: "summary_large_image", title: "Starshop | Distribuidor Mayorista", description: "Catálogo demo — Herramientas, LED e instrumentos." },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -82,6 +98,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       </a>
                     </li>
                   ))}
+                  <li>
+                    <Link href="/blog" className="flex items-center gap-3 hover:text-white hover:underline">
+                      <FileText className="h-6 w-6 shrink-0 text-[#FFD814]" />
+                      <span>Blog (guías demo)</span>
+                    </Link>
+                  </li>
                 </ul>
                 <h5 className="text-base font-bold mt-5 mb-3">Categorías</h5>
                 <ul className="space-y-3 text-base text-zinc-300">
