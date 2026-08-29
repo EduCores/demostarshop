@@ -77,10 +77,7 @@ export function ProductDetail({ product }: { product: Product }) {
             <div className="flex items-baseline gap-3">
               <span className="text-3xl font-black text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(tierPrice)}</span>
               {product.originalPrice && product.originalPrice !== tierPrice && (
-                <>
-                  <span className="line-through text-zinc-400">{formatCLP(product.originalPrice)}</span>
-                  <Badge variant="discount">-{product.discount}% OFF</Badge>
-                </>
+                <Badge variant="discount">-{product.discount}% OFF</Badge>
               )}
             </div>
             <div className="text-xs text-zinc-600">

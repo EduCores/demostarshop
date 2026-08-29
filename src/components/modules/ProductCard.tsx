@@ -9,7 +9,7 @@ import { toast } from "@/store/toast";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, showOriginalPrice = false }: { product: Product; showOriginalPrice?: boolean }) {
   const { addItem } = useCart();
   const hasDiscount = product.discount && product.originalPrice;
 
@@ -78,7 +78,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="mt-auto space-y-1.5">
           <div className="flex items-baseline gap-2">
             <span className="text-sm font-black text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(product.price)}</span>
-            {product.originalPrice && <span className="text-xs line-through text-zinc-400">{formatCLP(product.originalPrice)}</span>}
+            {showOriginalPrice && product.originalPrice && <span className="text-xs line-through text-zinc-400">{formatCLP(product.originalPrice)}</span>}
           </div>
           {product.tierPrices && <div className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded w-fit">Mayorista: {formatCLP(product.tierPrices[product.tierPrices.length - 1].price)}</div>}
           <div className="grid grid-cols-2 gap-1.5 pt-1">
