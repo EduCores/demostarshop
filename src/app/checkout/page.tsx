@@ -1,7 +1,7 @@
 "use client";
 import { useCart } from "@/store/cart";
 import { formatCLP } from "@/lib/utils";
-import { shippingRegions } from "@/lib/mock-data";
+import { chileRegions, chileRegionCosts } from "@/lib/mock-data";
 import { PaymentMethod, Order } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,21 +28,24 @@ type FormData = z.infer<typeof schema>;
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCart();
   const router = useRouter();
-  const [region, setRegion] = useState(shippingRegions[0].region);
+  const [region, setRegion] = useState(chileRegions[0].name);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("webpay");
   const [isSubmitting, setIsSubmitting] = useState(false);
   // Evita mismatch de hidratación: el carrito viene de localStorage (Zustand persist).
   // Servidor y primer render del cliente ven carrito vacío; el estado real se aplica post-montaje.
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const shipping = shippingRegions.find((s) => s.region === region)!;
+  const selectedRegion = chileRegions.find((r) => r.name === region)!;
+  const zoneInfo = chileRegionCosts[selectedRegion.zone];
   const subtotal = total();
-  const shippingCost = subtotal >= 49990 && region === "Región Metropolitana" ? 0 : shipping.cost;
+  const shippingCost = subtotal >= 49990 && selectedRegion.zone === "rm" ? 0 : zoneInfo.cost;
+  const estimatedDays = zoneInfo.estimatedDays;
   const grandTotal = subtotal + shippingCost;
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
@@ -74,7 +77,7 @@ export default function CheckoutPage() {
         telefono: data.telefono,
         direccion: data.direccion,
       },
-      estimatedDays: shipping.estimatedDays,
+      estimatedDays,
       createdAt: new Date().toISOString(),
     };
 
@@ -202,17 +205,35 @@ export default function CheckoutPage() {
           <div className="grid md:grid-cols-3 gap-4">
             <div>
               <label className="text-sm font-medium">Región *</label>
-              <select {...register("region")} value={region} onChange={(e) => setRegion(e.target.value)} className="mt-1 w-full border rounded-md h-9 px-3 text-sm bg-white dark:bg-zinc-900">
-                {shippingRegions.map((r) => (
-                  <option key={r.region} value={r.region}>
-                    {r.region} — {formatCLP(r.cost)}
+              <select
+                {...register("region")}
+                value={region}
+                onChange={(e) => {
+                  setRegion(e.target.value);
+                  setValue("comuna", "", { shouldValidate: false });
+                }}
+                className="mt-1 w-full border rounded-md h-9 px-3 text-sm bg-white dark:bg-zinc-900"
+              >
+                {chileRegions.map((r) => (
+                  <option key={r.name} value={r.name}>
+                    {r.name}
                   </option>
                 ))}
               </select>
             </div>
             <div className="md:col-span-2">
               <label className="text-sm font-medium">Comuna *</label>
-              <Input placeholder="Santiago Centro" {...register("comuna")} className="mt-1" />
+              <select
+                {...register("comuna")}
+                className="mt-1 w-full border rounded-md h-9 px-3 text-sm bg-white dark:bg-zinc-900"
+              >
+                <option value="">Selecciona una comuna</option>
+                {selectedRegion.communes.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
               {errors.comuna && <p className="text-xs text-red-600 mt-1">{errors.comuna.message}</p>}
             </div>
           </div>
@@ -220,7 +241,7 @@ export default function CheckoutPage() {
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex gap-2 text-sm">
             <Truck className="h-5 w-5 text-amber-600 shrink-0" />
             <div>
-              <div className="font-bold text-black">Envío: {formatCLP(shippingCost)} • {shipping.estimatedDays}</div>
+              <div className="font-bold text-black">Envío: {formatCLP(shippingCost)} • {estimatedDays}</div>
               <div className="text-zinc-600 text-xs">Envío gratis RM sobre $49.990. Factura y cotización B2B disponible post-compra.</div>
             </div>
           </div>
@@ -288,7 +309,7 @@ export default function CheckoutPage() {
             <span>{formatCLP(subtotal)}</span>
           </div>
           <div className="flex justify-between">
-            <span>Envío ({shipping.estimatedDays})</span>
+            <span>Envío ({estimatedDays})</span>
             <span className={shippingCost === 0 ? "text-emerald-600 font-bold" : ""}>{shippingCost === 0 ? "GRATIS" : formatCLP(shippingCost)}</span>
           </div>
           <div className="flex justify-between font-black text-base border-t pt-2">

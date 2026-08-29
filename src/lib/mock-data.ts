@@ -867,6 +867,99 @@ export const shippingRegions = [
   { region: "Extremo Sur & Norte", cost: 9990, estimatedDays: "4-6 días" },
 ];
 
+export type ChileRegionZone = "rm" | "central" | "norte" | "sur" | "extremo";
+
+export const chileRegionCosts: Record<ChileRegionZone, { cost: number; estimatedDays: string }> = {
+  rm: { cost: 3990, estimatedDays: "24-48h" },
+  central: { cost: 4990, estimatedDays: "48-72h" },
+  norte: { cost: 6990, estimatedDays: "3-4 días" },
+  sur: { cost: 6990, estimatedDays: "3-4 días" },
+  extremo: { cost: 9990, estimatedDays: "4-6 días" },
+};
+
+export const chileRegions: { name: string; zone: ChileRegionZone; communes: string[] }[] = [
+  {
+    name: "Región de Arica y Parinacota",
+    zone: "norte",
+    communes: ["Arica", "Camarones", "Putre", "General Lagos"],
+  },
+  {
+    name: "Región de Tarapacá",
+    zone: "norte",
+    communes: ["Iquique", "Alto Hospicio", "Pozo Almonte", "Camiña", "Colchane", "Huara", "Pica"],
+  },
+  {
+    name: "Región de Antofagasta",
+    zone: "norte",
+    communes: ["Antofagasta", "Mejillones", "Sierra Gorda", "Taltal", "Calama", "Ollagüe", "San Pedro de Atacama", "Tocopilla", "María Elena"],
+  },
+  {
+    name: "Región de Atacama",
+    zone: "norte",
+    communes: ["Copiapó", "Caldera", "Tierra Amarilla", "Chañaral", "Diego de Almagro", "Vallenar", "Huasco", "Freirina", "Alto del Carmen"],
+  },
+  {
+    name: "Región de Coquimbo",
+    zone: "norte",
+    communes: ["La Serena", "Coquimbo", "Vicuña", "Andacollo", "Paiguano", "Río Hurtado", "Illapel", "Salamanca", "Los Vilos", "Canela", "Ovalle", "Combarbalá", "Monte Patria", "Punitaqui"],
+  },
+  {
+    name: "Región de Valparaíso",
+    zone: "central",
+    communes: ["Valparaíso", "Casablanca", "Concón", "Quintero", "Puchuncaví", "Juan Fernández", "Viña del Mar", "Quilpué", "Villa Alemana", "Limache", "Olmué", "San Antonio", "Cartagena", "El Quisco", "Algarrobo", "Santo Domingo", "San Felipe", "Santa María", "Los Andes", "Calle Larga", "Rinconada", "Panquehue", "La Ligua", "Papudo", "Petorca", "Zapallar", "Cabildo", "Catemu", "Quillota", "La Cruz", "Hijuelas", "Nogales", "Isla de Pascua"],
+  },
+  {
+    name: "Región Metropolitana de Santiago",
+    zone: "rm",
+    communes: ["Santiago", "Cerrillos", "Cerro Navia", "Conchalí", "El Bosque", "Estación Central", "Huechuraba", "Independencia", "La Cisterna", "La Granja", "La Florida", "La Pintana", "Las Condes", "Lo Barnechea", "Lo Espejo", "Lo Prado", "Macul", "Maipú", "Ñuñoa", "Pedro Aguirre Cerda", "Peñalolén", "Providencia", "Pudahuel", "Quilicura", "Quinta Normal", "Recoleta", "Renca", "San Bernardo", "San Joaquín", "San Miguel", "San Ramón", "Vitacura", "Puente Alto", "San José de Maipú", "Colina", "Lampa", "Til Til", "Calera de Tango", "Buin", "Paine", "Melipilla", "Curacaví", "Alhué", "San Pedro", "María Pinto", "Talagante", "El Monte", "Isla de Maipo", "Padre Hurtado", "Peñaflor"],
+  },
+  {
+    name: "Región del Libertador General Bernardo O'Higgins",
+    zone: "central",
+    communes: ["Rancagua", "Codegua", "Coínco", "Coltauco", "Doñihue", "Graneros", "Las Cabras", "Machalí", "Malloa", "Mostazal", "Olivar", "Peumo", "Pichidegua", "Quinta de Tilcoco", "Rengo", "Requínoa", "San Vicente", "Pichilemu", "La Estrella", "Litueche", "Marchihue", "Navidad", "Paredones", "San Fernando", "Chépica", "Chimbarongo", "Lolol", "Nancagua", "Palmilla", "Peralillo", "Placilla", "Pumanque", "Santa Cruz"],
+  },
+  {
+    name: "Región del Maule",
+    zone: "sur",
+    communes: ["Talca", "Constitución", "Curepto", "Curicó", "Hualañé", "Licantén", "Molina", "Teno", "Vichuquén", "Rauco", "Romeral", "Sagrada Familia", "San Clemente", "San Rafael", "Pelarco", "Pencahue", "Maule", "San Javier", "Villa Alegre", "Yerbas Buenas", "Linares", "Colbún", "Longaví", "Parral", "Retiro", "Cauquenes", "Chanco", "Pelluhue", "Empedrado"],
+  },
+  {
+    name: "Región de Ñuble",
+    zone: "sur",
+    communes: ["Chillán", "Chillán Viejo", "Bulnes", "Cobquecura", "Coelemu", "Coihueco", "El Carmen", "Ninhue", "Ñiquén", "Pemuco", "Pinto", "Quillón", "Quirihue", "Ránquil", "San Carlos", "San Fabián", "San Ignacio", "San Nicolás", "Treguaco", "Yungay", "Portezuelo"],
+  },
+  {
+    name: "Región del Biobío",
+    zone: "sur",
+    communes: ["Concepción", "Coronel", "Chiguayante", "Florida", "Hualqui", "Lota", "Penco", "San Pedro de la Paz", "Santa Juana", "Talcahuano", "Tomé", "Hualpén", "Lebu", "Arauco", "Cañete", "Contulmo", "Curanilahue", "Los Álamos", "Tirúa", "Los Ángeles", "Antuco", "Cabrero", "Laja", "Mulchén", "Nacimiento", "Negrete", "Quilaco", "Quilleco", "San Rosendo", "Santa Bárbara", "Tucapel", "Yumbel", "Alto Biobío"],
+  },
+  {
+    name: "Región de La Araucanía",
+    zone: "sur",
+    communes: ["Temuco", "Carahue", "Cunco", "Curarrehue", "Freire", "Galvarino", "Gorbea", "Lautaro", "Loncoche", "Melipeuco", "Nueva Imperial", "Padre las Casas", "Perquenco", "Pitrufquén", "Pucón", "Saavedra", "Teodoro Schmidt", "Toltén", "Villarrica", "Cholchol", "Angol", "Collipulli", "Curacautín", "Ercilla", "Lonquimay", "Los Sauces", "Lumaco", "Purén", "Renaico", "Traiguén", "Victoria"],
+  },
+  {
+    name: "Región de Los Ríos",
+    zone: "sur",
+    communes: ["Valdivia", "Corral", "Lanco", "Los Lagos", "Máfil", "Mariquina", "Paillaco", "Panguipulli", "Río Bueno", "La Unión", "Futrono", "Lago Ranco"],
+  },
+  {
+    name: "Región de Los Lagos",
+    zone: "sur",
+    communes: ["Puerto Montt", "Calbuco", "Cochamó", "Fresia", "Frutillar", "Los Muermos", "Llanquihue", "Maullín", "Puerto Varas", "Castro", "Ancud", "Chonchi", "Curaco de Vélez", "Dalcahue", "Puqueldón", "Queilén", "Quellón", "Quemchi", "Quinchao", "Osorno", "Puerto Octay", "Purranque", "Puyehue", "Río Negro", "San Juan de la Costa", "San Pablo", "Chaitén", "Futaleufú", "Hualaihué", "Palena"],
+  },
+  {
+    name: "Región de Aysén del General Carlos Ibáñez del Campo",
+    zone: "extremo",
+    communes: ["Coihaique", "Lago Verde", "Aysén", "Cisnes", "Guaitecas", "Chile Chico", "Coyhaique", "O'Higgins", "Río Ibáñez", "Tortel"],
+  },
+  {
+    name: "Región de Magallanes y la Antártica Chilena",
+    zone: "extremo",
+    communes: ["Punta Arenas", "Cabo de Hornos", "Laguna Blanca", "Río Verde", "San Gregorio", "Natales", "Torres del Paine", "Porvenir", "Primavera", "Timaukel"],
+  },
+];
+
 export const heroSlides = [
   {
     id: 2,
