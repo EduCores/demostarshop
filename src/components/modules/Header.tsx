@@ -206,24 +206,24 @@ export function Header() {
               />
               {/* Autocomplete - independizado, casi ancho dispositivo */}
               {showAutocomplete && filteredProducts.length > 0 && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[95vw] max-w-[760px] bg-white text-black rounded-md shadow-2xl border border-zinc-200 z-50 max-h-[420px] overflow-auto">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[95vw] max-w-[760px] bg-white text-black dark:bg-zinc-900 dark:text-white rounded-md shadow-2xl border border-zinc-200 dark:border-zinc-700 z-50 max-h-[420px] overflow-auto">
                   {filteredProducts.map((p) => (
                     <Link
                       key={p.id}
                       href={`/producto/${p.id}`}
-                      className="flex items-center gap-3 p-3 hover:bg-zinc-50 border-b last:border-0"
+                      className="flex items-center gap-3 p-3 hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b last:border-0 dark:border-zinc-700"
                       onClick={() => setShowAutocomplete(false)}
                     >
                       <img src={p.images[0]} alt={p.name} className="h-10 w-10 object-cover rounded border" />
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-medium line-clamp-1">{p.name}</div>
-                        <div className="text-xs text-zinc-500">{p.brand} • {p.sku}</div>
+                        <div className="text-xs text-zinc-500 dark:text-zinc-400">{p.brand} • {p.sku}</div>
                       </div>
                       <div className="text-sm font-bold text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(p.price)}</div>
                     </Link>
                   ))}
                   <div className="p-2 text-center">
-                    <span className="text-xs text-zinc-500">{filteredProducts.length} resultados • Presiona Enter para ver todos</span>
+                    <span className="text-xs text-zinc-500 dark:text-zinc-400">{filteredProducts.length} resultados • Presiona Enter para ver todos</span>
                   </div>
                 </div>
               )}
@@ -321,18 +321,18 @@ export function Header() {
                 className="h-10 rounded-none rounded-l-none bg-white text-black placeholder:text-zinc-500 border-0 focus-visible:ring-2 focus-visible:ring-[#F90] text-sm"
               />
               {showAutocomplete && filteredProducts.length > 0 && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[95vw] max-w-[760px] bg-white text-black rounded-md shadow-2xl border border-zinc-200 z-50 max-h-[420px] overflow-auto">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[95vw] max-w-[760px] bg-white text-black dark:bg-zinc-900 dark:text-white rounded-md shadow-2xl border border-zinc-200 dark:border-zinc-700 z-50 max-h-[420px] overflow-auto">
                   {filteredProducts.map((p) => (
                     <Link
                       key={p.id}
                       href={`/producto/${p.id}`}
-                      className="flex items-center gap-3 p-3 hover:bg-zinc-50 border-b last:border-0"
+                      className="flex items-center gap-3 p-3 hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b last:border-0 dark:border-zinc-700"
                       onClick={() => setShowAutocomplete(false)}
                     >
                       <img src={p.images[0]} alt={p.name} className="h-10 w-10 object-cover rounded border" />
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-medium line-clamp-1">{p.name}</div>
-                        <div className="text-xs text-zinc-500">{p.brand} • {p.sku}</div>
+                        <div className="text-xs text-zinc-500 dark:text-zinc-400">{p.brand} • {p.sku}</div>
                       </div>
                       <div className="text-sm font-bold text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(p.price)}</div>
                     </Link>
