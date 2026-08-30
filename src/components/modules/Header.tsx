@@ -8,7 +8,7 @@ import { formatCLP } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Search,
+  Bot,
   ShoppingCart,
   User,
   Menu,
@@ -229,10 +229,10 @@ export function Header() {
               )}
             </div>
             <Button
-              aria-label="Buscar"
+              aria-label="Agente IA"
               className="h-10 rounded-l-none rounded-r-md bg-[#ffc13b] hover:bg-[#F3A847] text-black px-4 md:px-5 border-0"
             >
-              <Search className="h-5 w-5" />
+              <Bot className="h-5 w-5" />
             </Button>
           </div>
 
@@ -341,10 +341,10 @@ export function Header() {
               )}
             </div>
             <Button
-              aria-label="Buscar"
+              aria-label="Agente IA"
               className="h-10 rounded-l-none rounded-r-md bg-[#ffc13b] hover:bg-[#F3A847] text-black px-4 border-0"
             >
-              <Search className="h-5 w-5" />
+              <Bot className="h-5 w-5" />
             </Button>
           </div>
         </div>
