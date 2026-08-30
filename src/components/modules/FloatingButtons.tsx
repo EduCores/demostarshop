@@ -16,8 +16,20 @@ export function FloatingButtons() {
   const [agentOpen, setAgentOpen] = useState(false);
   const [agentInput, setAgentInput] = useState("");
   const [agentMessages, setAgentMessages] = useState<{ role: "user" | "agent"; text: string }[]>([
-    { role: "agent", text: "¡Hola! Soy el asistente Starshop. Pregunta por productos, envíos o cotizaciones." },
+    { role: "agent", text: "¡Hola! Soy Star, tu asistente de Starshop. ¿En qué te ayudo hoy? ¿Buscas iluminación LED, herramientas o una cotización B2B? ¿Es para tu empresa?" },
   ]);
+  const [agentTyping, setAgentTyping] = useState(false);
+
+  const getAgentReply = (input: string) => {
+    const t = input.toLowerCase();
+    if (/(hola|buenas|hello|hey)/.test(t)) return "¡Hola! Qué bueno tenerte por aquí. ¿Qué proyecto tienes entre manos? ¿Es para oficina, obra o reposición de stock? ¿Buscas precio por unidad o por volumen?";
+    if (/(panel|led|iluminaci|neon|tubo)/.test(t)) return "Buena elección. Los paneles 36W 600x600 4000K son los más pedidos para oficina (3600lm). ¿Para cuántos m² necesitas iluminar y cuántas unidades estimas? ¿Buscas luz cálida, neutra o fría?";
+    if (/(herramienta|crimpadora|taladro|prensa|sierra)/.test(t)) return "Entiendo. ¿Qué tipo de faena harás — eléctrica, construcción o mantención? ¿Prefieres kit profesional o herramienta puntual? ¿Tienes alguna marca en mente?";
+    if (/(cotiz|cotizar|b2b|empresa|factura|volumen|mayorista)/.test(t)) return "Perfecto, te oriento en B2B. ¿Me cuentas el RUT y razón social? ¿Qué productos y cantidades necesitas? Puedes agregarlos al carrito y usar Cotizador Express en el header. ¿Quieres que te guíe?";
+    if (/(envio|despacho|region|comuna|retiro)/.test(t)) return "Hacemos envíos a todo Chile y despacho 24h en RM. ¿A qué región y comuna despachamos? En la ficha del producto puedes calcular costo y plazo. ¿Cuál es tu comuna?";
+    if (/(precio|cuanto|vale|costo|barato)/.test(t)) return "Los precios que ves son de catálogo de ejemplo. ¿Cuál es tu presupuesto aproximado y cuántas unidades necesitas? Así te sugiero la mejor opción por precio/volumen.";
+    return `Gracias por contarme. ¿Podrías darme un poco más de detalle? Por ejemplo: ¿es para empresa o particular, y qué uso le darás? ¿Quieres que te recomiende 2-3 opciones?`;
+  };
 
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 400);
@@ -29,8 +41,14 @@ export function FloatingButtons() {
   const sendAgent = () => {
     const t = agentInput.trim();
     if (!t) return;
-    setAgentMessages((m) => [...m, { role: "user", text: t }, { role: "agent", text: `Recibí "${t}". Prueba preguntar por "panel LED" o "cotización".` }]);
+    setAgentMessages((m) => [...m, { role: "user", text: t }]);
     setAgentInput("");
+    setAgentTyping(true);
+    setTimeout(() => {
+      const reply = getAgentReply(t);
+      setAgentMessages((m) => [...m, { role: "agent", text: reply }]);
+      setAgentTyping(false);
+    }, 600);
   };
 
   return (
@@ -88,6 +106,15 @@ export function FloatingButtons() {
                   <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${m.role === "user" ? "bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100"}`}>{m.text}</div>
                 </div>
               ))}
+              {agentTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-zinc-100 dark:bg-zinc-800 rounded-2xl px-3 py-2 text-sm flex gap-1 items-center">
+                    <span className="h-2 w-2 bg-zinc-400 rounded-full animate-bounce" />
+                    <span className="h-2 w-2 bg-zinc-400 rounded-full animate-bounce [animation-delay:0.2s]" />
+                    <span className="h-2 w-2 bg-zinc-400 rounded-full animate-bounce [animation-delay:0.4s]" />
+                  </div>
+                </div>
+              )}
             </div>
             <div className="border-t p-2 flex gap-2">
               <input
