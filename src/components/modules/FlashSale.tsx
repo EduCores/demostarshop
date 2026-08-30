@@ -27,7 +27,7 @@ export function FlashSale() {
   const minutes = timeLeft?.minutes ?? 0;
   const seconds = timeLeft?.seconds ?? 0;
   const flashProducts = products.filter((p) => p.isFlashSale).slice(0, 6);
-  const { addItem } = useCart();
+  const { addItem, setOpen } = useCart();
 
   return (
     <section id="flash-sale" className="container mt-6">
@@ -110,7 +110,8 @@ export function FlashSale() {
                         e.preventDefault();
                         const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
                         window.dispatchEvent(new CustomEvent("star-fly", { detail: { x: r.left + r.width / 2, y: r.top + r.height / 2 } }));
-                        addItem(p);
+                        setTimeout(() => addItem(p), 850);
+                        setTimeout(() => setOpen(true), 1550);
                       }}
                     >
                       Agregar

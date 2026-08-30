@@ -26,10 +26,9 @@ export const useCart = create<CartState>()(
           if (existing) {
             return {
               items: s.items.map((i) => (i.product.id === product.id ? { ...i, quantity: i.quantity + qty } : i)),
-              isOpen: true,
             };
           }
-          return { items: [...s.items, { product, quantity: qty }], isOpen: true };
+          return { items: [...s.items, { product, quantity: qty }] };
         }),
       removeItem: (id) => set((s) => ({ items: s.items.filter((i) => i.product.id !== id) })),
       updateQty: (id, qty) =>

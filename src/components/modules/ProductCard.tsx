@@ -6,12 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/store/cart";
 import { useAgent } from "@/store/agent";
-import { toast } from "@/store/toast";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 export function ProductCard({ product, showOriginalPrice = false, addButtonVariant = "default" as const }: { product: Product; showOriginalPrice?: boolean; addButtonVariant?: "default" | "starshop" }) {
-  const { addItem } = useCart();
+  const { addItem, setOpen } = useCart();
   const openAgent = useAgent((s) => s.openWithProduct);
   const hasDiscount = product.discount && product.originalPrice;
 
@@ -20,8 +19,9 @@ export function ProductCard({ product, showOriginalPrice = false, addButtonVaria
       const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
       window.dispatchEvent(new CustomEvent("star-fly", { detail: { x: r.left + r.width / 2, y: r.top + r.height / 2 } }));
     }
-    addItem(product);
-    toast(`${product.name} agregado al carrito`, { variant: "success" });
+    // timing: estrella vuela 850ms, luego carrito recibe con burst 650ms, luego abre
+    setTimeout(() => addItem(product), 850);
+    setTimeout(() => setOpen(true), 1550);
   };
 
   return (
