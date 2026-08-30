@@ -16,6 +16,8 @@ import {
   Wrench,
   Ruler,
   ShieldAlert,
+  Instagram,
+  Facebook,
 } from "lucide-react";
 import "./globals.css";
 import Link from "next/link";
@@ -63,17 +65,30 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="container py-12 px-4 pb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm bg-[url('/logo_footer_mascota.png')] bg-no-repeat bg-[position:right_20px_bottom_20px] bg-[length:220px] md:bg-[length:300px]">
               {/* Marca */}
               <div>
-                <Link href="/" className="inline-flex items-baseline text-[26px] font-black tracking-tight leading-none select-none mb-3 notranslate" translate="no">
-                  <span className="text-[#fbffff]">ST</span>
-                  <span className="star-slot" aria-hidden>
-                    <span className="star-ghost">A</span>
-                    <span className="star-float">
-                      <img src="/star2.svg" alt="" className="star-logo star-anim-show" />
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  <Link href="/" className="inline-flex items-baseline text-[26px] font-black tracking-tight leading-none select-none notranslate" translate="no">
+                    <span className="text-[#fbffff]">ST</span>
+                    <span className="star-slot" aria-hidden>
+                      <span className="star-ghost">A</span>
+                      <span className="star-float">
+                        <img src="/star2.svg" alt="" className="star-logo star-anim-show" />
+                      </span>
                     </span>
-                  </span>
-                  <span className="text-[#fbffff]">R</span>
-                  <span className="text-[#fdd817]">SHOP</span>
-                </Link>
+                    <span className="text-[#fbffff]">R</span>
+                    <span className="text-[#fdd817]">SHOP</span>
+                  </Link>
+                  <div className="flex items-center gap-2">
+                    <a href="#" aria-label="Instagram" className="h-8 w-8 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))] transition-colors">
+                      <Instagram className="h-4 w-4" />
+                    </a>
+                    <a href="#" aria-label="Facebook" className="h-8 w-8 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))] transition-colors">
+                      <Facebook className="h-4 w-4" />
+                    </a>
+                    <a href="https://wa.me/56993301557" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer" className="h-8 w-8 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))] transition-colors">
+                      <MessageCircle className="h-4 w-4" />
+                    </a>
+                  </div>
+                </div>
                 <p className="text-zinc-300 leading-relaxed">
                   Distribuidor masivo de herramientas, iluminación LED y artículos eléctricos. Más de 15 años
                   abasteciendo a contratistas e industrias.
