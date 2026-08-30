@@ -204,9 +204,9 @@ export function Header() {
                 placeholder="Buscar herramientas, LED, instrumentos..."
                 className="h-10 rounded-none md:rounded-none rounded-l-md md:rounded-l-none bg-white text-black placeholder:text-zinc-500 border-0 focus-visible:ring-2 focus-visible:ring-[#F90] text-sm"
               />
-              {/* Autocomplete */}
+              {/* Autocomplete - independizado, casi ancho dispositivo */}
               {showAutocomplete && filteredProducts.length > 0 && (
-                <div className="absolute top-full left-0 right-0 bg-white text-black rounded-b-md shadow-2xl border border-zinc-200 z-50 max-h-[380px] overflow-auto">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[95vw] max-w-[760px] bg-white text-black rounded-md shadow-2xl border border-zinc-200 z-50 max-h-[420px] overflow-auto">
                   {filteredProducts.map((p) => (
                     <Link
                       key={p.id}
@@ -321,7 +321,7 @@ export function Header() {
                 className="h-10 rounded-none rounded-l-none bg-white text-black placeholder:text-zinc-500 border-0 focus-visible:ring-2 focus-visible:ring-[#F90] text-sm"
               />
               {showAutocomplete && filteredProducts.length > 0 && (
-                <div className="absolute top-full left-0 right-0 bg-white text-black rounded-b-md shadow-2xl border border-zinc-200 z-50 max-h-[380px] overflow-auto">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[95vw] max-w-[760px] bg-white text-black rounded-md shadow-2xl border border-zinc-200 z-50 max-h-[420px] overflow-auto">
                   {filteredProducts.map((p) => (
                     <Link
                       key={p.id}
