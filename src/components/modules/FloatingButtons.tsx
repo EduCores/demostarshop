@@ -16,7 +16,7 @@ export function FloatingButtons() {
   const [agentOpen, setAgentOpen] = useState(false);
   const [agentInput, setAgentInput] = useState("");
   const [agentMessages, setAgentMessages] = useState<{ role: "user" | "agent"; text: string }[]>([
-    { role: "agent", text: "¡Hola! Soy Star, tu asistente de Starshop. ¿En qué te ayudo hoy? ¿Buscas iluminación LED, herramientas o una cotización B2B? ¿Es para tu empresa?" },
+    { role: "agent", text: "Hola! Soy Star, tu asistente de Starshop. ¿En qué te ayudo hoy?" },
   ]);
   const [agentTyping, setAgentTyping] = useState(false);
 
