@@ -79,10 +79,10 @@ export function FloatingButtons() {
         transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 18 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="relative h-14 w-14 md:h-16 md:w-16 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black shadow-xl flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))] transition-colors"
+        className="relative h-[67px] w-[67px] md:h-16 md:w-16 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black shadow-xl flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))] transition-colors"
         aria-label="Agente IA"
       >
-        <Bot className="h-7 w-7 md:h-8 md:w-8" />
+        <Bot className="h-8 w-8 md:h-8 md:w-8" />
         <span className="absolute -top-1 -right-1 h-3 w-3 bg-emerald-400 rounded-full border-2 border-white" aria-hidden />
       </motion.button>
 
@@ -140,11 +140,11 @@ export function FloatingButtons() {
         transition={{ delay: 0.6, type: "spring", stiffness: 260, damping: 18 }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="relative h-14 w-14 md:h-16 md:w-16 rounded-full bg-[#25D366] text-white shadow-xl flex items-center justify-center hover:bg-[#128C7E] transition-colors"
+        className="relative h-[67px] w-[67px] md:h-16 md:w-16 rounded-full bg-[#25D366] text-white shadow-xl flex items-center justify-center hover:bg-[#128C7E] transition-colors"
         aria-label="Contactar por WhatsApp"
       >
         <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20" aria-hidden />
-        <WhatsAppIcon className="h-7 w-7 md:h-8 md:w-8 relative" />
+        <WhatsAppIcon className="h-8 w-8 md:h-8 md:w-8 relative" />
       </motion.a>
     </div>
   );
