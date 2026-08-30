@@ -85,7 +85,7 @@ export function FloatingButtons() {
             <div className="flex-1 max-h-[320px] overflow-auto p-3 space-y-2">
               {agentMessages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${m.role === "user" ? "bg-[#7c3aed] text-white" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100"}`}>{m.text}</div>
+                  <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${m.role === "user" ? "bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100"}`}>{m.text}</div>
                 </div>
               ))}
             </div>
@@ -95,9 +95,9 @@ export function FloatingButtons() {
                 onChange={(e) => setAgentInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendAgent()}
                 placeholder="Pregunta por un producto mockup..."
-                className="flex-1 border rounded-full px-4 py-2 text-sm bg-white dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[#7c3aed]"
+                className="flex-1 border rounded-full px-4 py-2 text-sm bg-white dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[rgb(255_216_20/var(--tw-bg-opacity,1))]"
               />
-              <button onClick={sendAgent} className="h-9 w-9 rounded-full bg-[#7c3aed] text-white flex items-center justify-center hover:bg-[#6d28d9]"><Send className="h-4 w-4" /></button>
+              <button onClick={sendAgent} className="h-9 w-9 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))]"><Send className="h-4 w-4" /></button>
             </div>
           </motion.div>
         )}
