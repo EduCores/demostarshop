@@ -5,12 +5,14 @@ import { Star, ShoppingCart, FileText, ShieldCheck, Heart, Eye } from "lucide-re
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/store/cart";
+import { useAgent } from "@/store/agent";
 import { toast } from "@/store/toast";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 export function ProductCard({ product, showOriginalPrice = false, addButtonVariant = "default" as const }: { product: Product; showOriginalPrice?: boolean; addButtonVariant?: "default" | "starshop" }) {
   const { addItem } = useCart();
+  const openAgent = useAgent((s) => s.openWithProduct);
   const hasDiscount = product.discount && product.originalPrice;
 
   const handleAdd = () => {
@@ -85,7 +87,15 @@ export function ProductCard({ product, showOriginalPrice = false, addButtonVaria
             <Button size="sm" variant={addButtonVariant} className="h-8 text-xs font-bold gap-1 w-full" onClick={handleAdd}>
               <ShoppingCart className="h-3.5 w-3.5" /> Agregar
             </Button>
-            <Button size="sm" variant="outline" className="h-8 text-xs gap-1 w-full">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 text-xs gap-1 w-full"
+              onClick={() => {
+                openAgent(product.name);
+                // animación simpática: vibración del botón agente se maneja en FloatingButtons vía pendingProduct
+              }}
+            >
               <FileText className="h-3.5 w-3.5" /> Cotizar
             </Button>
           </div>

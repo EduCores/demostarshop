@@ -1,18 +1,32 @@
-Hoy StarShop no tiene pasarela real — es mock.
+Ambas pasarelas integradas y testeadas. Build verde (70 páginas).
 
-src/app/checkout/page.tsx guarda la orden en sessionStorage y redirige a /checkout/success + src/types/index.ts:96 PaymentMethod = "webpay" | "mercadopago" | "transferencia" solo cambia el label. No llama a ninguna API de pago.
+Archivos creados:
 
-Cómo funciona una pasarela real
-No es parte del PaaS, es un servicio externo que procesa tarjetas. Tú no tocas la tarjeta (por PCI):
+src/app/api/webpay/route.ts (create, usa transbank-sdk con fallback a credenciales integración 597055555532 si no hay env)
+src/app/api/webpay/commit/route.ts (commit, soporta POST y GET ?token_ws=)
+src/app/api/mercadopago/route.ts (crea Preference con mercadopago SDK)
+src/app/api/mercadopago/webhook/route.ts (log, responde 200)
+src/app/checkout/webpay/return/page.tsx (confirma con Transbank, muestra aprobado/rechazado/abortado)
+.env.example (plantilla para PaaS)
+src/app/checkout/page.tsx (onSubmit ahora bifurca por método, llama a la API y redirige)
+src/app/checkout/success/page.tsx (maneja ?gateway=mercadopago&status=failure/pending y muestra datos bancarios si es transferencia)
+Cómo funciona:
 
-Cliente paga $100.000 en tu checkout → tu servidor (API Route de Next) crea una transacción en la API de la pasarela (ej. Webpay Plus) con monto, ordenId, returnUrl.
-Rediriges al cliente a la URL de la pasarela (fuera de tu sitio).
-Cliente paga allí con tarjeta.
-Pasarela lo redirige de vuelta a tu /checkout/success?token=... y a la vez te avisa por webhook (llamada servidor a servidor) que el pago es válido. Solo el webhook es prueba real.
-Para Chile
-Webpay Plus (Transbank): estándar en Chile, necesitas contrato con Transbank → te dan commerceCode + apiKey. El más usado para CLP.
-MercadoPago / Flow: más simple de integrar, te dan access_token.
-En un PaaS (Vercel/Railway) esas claves van como variables de entorno (WEBPAY_API_KEY), nunca en el código. Next las lee en process.env dentro de app/api/webpay/route.ts.
+Webpay: Checkout → POST /api/webpay (buyOrder, amount, returnUrl=http://TU_DOMINIO/checkout/webpay/return) → devuelve {url, token} → window.location = url?token_ws=token → usuario paga en Transbank → vuelve a /checkout/webpay/return?token_ws=... → POST /api/webpay/commit → si status=AUTHORIZED y response_code=0 → éxito.
+MercadoPago: Checkout → POST /api/mercadopago (items, payer, back_urls) → devuelve init_point → redirige → vuelve a /checkout/success?gateway=mercadopago.
+Transferencia: sin API, guarda orden y muestra en /checkout/success los datos Banco de Chile 123-45678-90 / 76.123.456-7.
+Test local (sin env):
+
+Webpay ya funciona: probado POST /api/webpay → 200 url https://webpay3gint.transbank.cl/... Usa tarjeta prueba 4051885600446623 CVV 123 cualquier fecha futura, RUT 11.111.111-1.
+MercadoPago sin env devuelve 500 {"error":"Falta MERCADOPAGO_ACCESS_TOKEN"} (esperado). Para probar pon en .env.local: MERCADOPAGO_ACCESS_TOKEN=TEST-xxx (de https://www.mercadopago.com/developers/panel) y reinicia dev. Usa tarjetas prueba de su doc. Webhook en local requiere ngrok si quieres probar notificaciones, pero el flujo back_urls ya funciona.
+Para PaaS (Vercel/Railway): En el dashboard del servicio configura:
+
+NEXT_PUBLIC_APP_URL=https://tu-dominio.vercel.app
+# Solo para producción real:
+WEBPAY_COMMERCE_CODE=tu_codigo_real
+WEBPAY_API_KEY=tu_api_key_real
+WEBPAY_ENV=production
+MERCADOPAGO_ACCESS_TOKEN=APP_USR-xxx (producción)webpay/route.ts.
 
 Para StarShop
 Tienes 2 flujos:

@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ArrowUp, Bot, X, Send } from "lucide-react";
+import { ArrowUp, Bot, X, Send, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAgent } from "@/store/agent";
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -13,12 +14,13 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 export function FloatingButtons() {
   const [showTop, setShowTop] = useState(false);
-  const [agentOpen, setAgentOpen] = useState(false);
+  const { isOpen: agentOpen, setOpen: setAgentOpen, pendingProduct, setPendingProduct } = useAgent();
   const [agentInput, setAgentInput] = useState("");
   const [agentMessages, setAgentMessages] = useState<{ role: "user" | "agent"; text: string }[]>([
     { role: "agent", text: "Hola! Soy Star, tu asistente de Starshop. ¿En qué te ayudo hoy?" },
   ]);
   const [agentTyping, setAgentTyping] = useState(false);
+  const [agentPulse, setAgentPulse] = useState(0);
 
   const getAgentReply = (input: string) => {
     const t = input.toLowerCase();
@@ -37,6 +39,22 @@ export function FloatingButtons() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Abrir desde Cotizar con animación simpática
+  useEffect(() => {
+    if (pendingProduct) {
+      setAgentTyping(true);
+      setAgentPulse((k) => k + 1);
+      setTimeout(() => {
+        setAgentMessages((m) => [
+          ...m,
+          { role: "agent", text: `¡Genial! Quieres cotizar "${pendingProduct}". ¿Me cuentas cuántas unidades necesitas y si es para empresa? ¿RUT y comuna para calcular despacho?` },
+        ]);
+        setAgentTyping(false);
+        setPendingProduct(null);
+      }, 700);
+    }
+  }, [pendingProduct, setPendingProduct]);
 
   const sendAgent = () => {
     const t = agentInput.trim();
@@ -73,17 +91,31 @@ export function FloatingButtons() {
 
       {/* Agente IA - alineado vertical con WhatsApp */}
       <motion.button
-        onClick={() => setAgentOpen((o) => !o)}
+        key={`agent-${agentPulse}`}
+        onClick={() => setAgentOpen(!agentOpen)}
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 18 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="relative h-[67px] w-[67px] md:h-16 md:w-16 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black shadow-xl flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))] transition-colors"
+        className={`relative h-[67px] w-[67px] md:h-16 md:w-16 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black shadow-xl flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))] transition-colors ${agentPulse ? "animate-wiggle" : ""}`}
         aria-label="Agente IA"
       >
         <Bot className="h-8 w-8 md:h-8 md:w-8" />
         <span className="absolute -top-1 -right-1 h-3 w-3 bg-emerald-400 rounded-full border-2 border-white" aria-hidden />
+        <AnimatePresence>
+          {agentPulse > 0 && (
+            <motion.span
+              key={agentPulse}
+              initial={{ opacity: 0, scale: 0.5, y: 0 }}
+              animate={{ opacity: 1, scale: 1, y: -12 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute -top-2 left-1/2 -translate-x-1/2 pointer-events-none"
+            >
+              <Sparkles className="h-4 w-4 text-[#FFD814]" />
+            </motion.span>
+          )}
+        </AnimatePresence>
       </motion.button>
 
       {/* Panel agente */}
