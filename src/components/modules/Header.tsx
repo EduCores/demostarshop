@@ -435,7 +435,7 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="absolute left-0 right-0 bg-white text-black dark:bg-zinc-900 dark:text-white shadow-2xl border-t-4 border-[#FF3B30] z-40"
+            className="absolute left-0 right-0 bg-white text-black dark:bg-zinc-900 dark:text-white shadow-2xl border-t-4 border-[rgb(253_216_23/var(--tw-border-opacity,1))] z-40"
           >
             <div className="container py-6 grid grid-cols-4 gap-6 max-h-[70vh] overflow-auto">
               {superCategories.map((cat) => {
