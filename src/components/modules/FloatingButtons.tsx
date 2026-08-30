@@ -81,7 +81,7 @@ export function FloatingButtons() {
               <div className="flex items-center gap-2 font-bold text-sm"><Bot className="h-5 w-5" /> Agente Starshop (demo)</div>
               <button onClick={() => setAgentOpen(false)} className="p-1 hover:bg-white/20 rounded" aria-label="Cerrar"><X className="h-4 w-4" /></button>
             </div>
-            <div className="text-[11px] bg-amber-50 border-b border-amber-200 text-amber-800 px-3 py-2">Mockup: sin IA real. Productos de catálogo son de ejemplo.</div>
+            <div className="text-[11px] bg-amber-50 border-b border-amber-200 text-amber-800 px-3 py-2">Mockup: sin IA real. conectar API para habilitar.</div>
             <div className="flex-1 max-h-[320px] overflow-auto p-3 space-y-2">
               {agentMessages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
