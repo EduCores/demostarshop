@@ -230,7 +230,7 @@ export function Header() {
             </div>
             <Button
               aria-label="Agente IA"
-              className="h-10 rounded-l-none rounded-r-md bg-[#ffc13b] hover:bg-[#F3A847] text-black px-4 md:px-5 border-0"
+              className="h-10 rounded-l-none rounded-r-md bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))] text-black px-4 md:px-5 border-0"
             >
               <Bot className="h-5 w-5" />
             </Button>
@@ -342,7 +342,7 @@ export function Header() {
             </div>
             <Button
               aria-label="Agente IA"
-              className="h-10 rounded-l-none rounded-r-md bg-[#ffc13b] hover:bg-[#F3A847] text-black px-4 border-0"
+              className="h-10 rounded-l-none rounded-r-md bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))] text-black px-4 border-0"
             >
               <Bot className="h-5 w-5" />
             </Button>

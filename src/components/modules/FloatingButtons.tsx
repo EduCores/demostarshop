@@ -61,7 +61,7 @@ export function FloatingButtons() {
         transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 18 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="relative h-14 w-14 md:h-16 md:w-16 rounded-full bg-[#7c3aed] text-white shadow-xl flex items-center justify-center hover:bg-[#6d28d9] transition-colors"
+        className="relative h-14 w-14 md:h-16 md:w-16 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black shadow-xl flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))] transition-colors"
         aria-label="Agente IA"
       >
         <Bot className="h-7 w-7 md:h-8 md:w-8" />
