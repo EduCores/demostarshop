@@ -101,7 +101,8 @@ export function FloatingButtons() {
         className={`relative h-[67px] w-[67px] md:h-16 md:w-16 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black shadow-xl flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))] transition-colors ${agentPulse ? "animate-wiggle" : ""}`}
         aria-label="Agente IA"
       >
-        <Bot className="h-8 w-8 md:h-8 md:w-8" />
+        <span className="absolute inset-0 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] animate-ping opacity-20" aria-hidden />
+        <Bot className="h-8 w-8 md:h-8 md:w-8 relative" />
         <span className="absolute -top-1 -right-1 h-3 w-3 bg-emerald-400 rounded-full border-2 border-white" aria-hidden />
         <AnimatePresence>
           {agentPulse > 0 && (
