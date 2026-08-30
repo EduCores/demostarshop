@@ -107,8 +107,116 @@ export function Header() {
     };
   }, []);
 
+  const [showSticky, setShowSticky] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setShowSticky(window.scrollY > 180);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 w-full">
+    <>
+      {/* STICKY HEADER - solo LOGO + BUSCADOR + CARRITO */}
+      <AnimatePresence>
+        {showSticky && (
+          <motion.div
+            initial={{ y: -80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -80, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 320, damping: 30 }}
+            className="fixed top-0 left-0 right-0 z-50 bg-[#131921] text-white border-b border-white/10"
+          >
+            <div className="container flex h-[60px] items-center gap-2 md:gap-4 px-4 relative">
+              <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Starshop - Inicio">
+                <span className="relative inline-flex items-baseline text-[26px] md:text-[28px] font-black tracking-tight leading-none select-none" translate="no">
+                  <span className="text-[#fbffff]">ST</span>
+                  <span className="star-slot" aria-hidden>
+                    <span className="star-ghost">A</span>
+                    <span className="star-float">
+                      <img src="/star2.svg" alt="" className="star-logo star-anim-show" />
+                    </span>
+                  </span>
+                  <span className="text-[#fbffff]">R</span>
+                  <span className="text-[#fdd817]">SHOP</span>
+                </span>
+              </Link>
+              <div className="flex-1 max-w-3xl mx-2 md:mx-4">
+                <div className="flex">
+                  <Input
+                    value={search}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                      setShowAutocomplete(true);
+                    }}
+                    onFocus={() => setShowAutocomplete(true)}
+                    onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
+                    placeholder="Buscar herramientas, LED, instrumentos..."
+                    className="h-10 rounded-l-md bg-white text-black placeholder:text-zinc-500 border-0 focus-visible:ring-2 focus-visible:ring-[#F90] text-sm flex-1"
+                  />
+                  <Button
+                    aria-label="Agente IA"
+                    className="h-10 rounded-l-none rounded-r-md bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))] text-black px-4 border-0"
+                  >
+                    <Bot className="h-5 w-5" />
+                  </Button>
+                </div>
+                {showAutocomplete && filteredProducts.length > 0 && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-[95vw] max-w-[760px] bg-white text-black dark:bg-zinc-900 dark:text-white rounded-md shadow-2xl border border-zinc-200 dark:border-zinc-700 z-50 max-h-[420px] overflow-auto mt-2">
+                    {filteredProducts.map((p) => (
+                      <Link
+                        key={p.id}
+                        href={`/producto/${p.id}`}
+                        className="flex items-center gap-3 p-3 hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b last:border-0 dark:border-zinc-700"
+                        onClick={() => setShowAutocomplete(false)}
+                      >
+                        <img src={p.images[0]} alt={p.name} className="h-10 w-10 object-cover rounded border" />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium line-clamp-1">{p.name}</div>
+                          <div className="text-xs text-zinc-500 dark:text-zinc-400">{p.brand} • {p.sku}</div>
+                        </div>
+                        <div className="text-sm font-bold text-[#6b7280] dark:text-[#f9fafb]">{formatCLP(p.price)}</div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => setOpen(true)}
+                className="relative flex items-center gap-1 p-1.5 rounded-sm group hover:text-[#FFD814] transition-colors shrink-0"
+                aria-label={`Carrito con ${mounted ? cartCount : 0} productos`}
+              >
+                <div className="relative">
+                  <ShoppingCart className="h-7 w-7 group-hover:text-[#FFD814] transition-colors" />
+                  {mounted && cartCount > 0 && (
+                    <motion.span
+                      key={`sticky-star-${cartBurst}-${cartCount}`}
+                      initial={{ scale: 0.9 }}
+                      animate={{ scale: cartBurst ? [1, 1.28, 1] : 1, rotate: cartBurst ? [0, -12, 12, 0] : 0 }}
+                      transition={{ duration: 0.55, ease: "easeOut" }}
+                      className="absolute -top-2.5 -right-2.5 w-[30px] h-[30px]"
+                      aria-hidden
+                    >
+                      <img src="/star2.svg" alt=" estrella" className="w-full h-full object-contain" />
+                      <motion.span
+                        key={cartCount}
+                        initial={{ scale: 0.3 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 600, damping: 14 }}
+                        className="absolute inset-0 flex items-center justify-center text-black text-[12px] font-extrabold leading-none pt-[3px]"
+                      >
+                        {cartCount > 99 ? "99+" : cartCount}
+                      </motion.span>
+                    </motion.span>
+                  )}
+                </div>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <header className="w-full">
       {/* TOPBAR - como en ux-ui.png: Cotizaciones B2B | Venta Mayorista */}
       <div className="bg-[#232F3E] text-white text-xs md:text-[13px] block">
         <div className="container flex h-8 items-center justify-between px-4">
@@ -519,5 +627,6 @@ export function Header() {
         </div>
       )}
     </header>
+    </>
   );
 }
