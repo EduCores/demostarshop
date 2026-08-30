@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import ReactFlow, { Background, Controls, MiniMap, Node, Edge } from "reactflow";
 import "reactflow/dist/style.css";
 import { Button } from "@/components/ui/button";
@@ -35,6 +35,8 @@ export async function generarCotizacionPDF(data: any) { "use step"; return { pdf
 export default function BuilderPage() {
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -53,16 +55,20 @@ export default function BuilderPage() {
   return (
     <div className="container py-6">
       <h1 className="text-2xl font-black flex items-center gap-2"><FileText className="h-6 w-6" /> Builder Visual — React Flow + Vercel Workflows (demo)</h1>
-      <p className="text-sm text-zinc-500 mt-1">Arrastra los nodos. Este builder es <strong>mockup</strong> y genera TS con <code>"use workflow"</code> para tu repo. Productos mockup.</p>
+      <p className="text-sm text-zinc-500 mt-1">Arrastra los nodos. Este builder es <strong>mockup</strong> y genera TS con <code>&quot;use workflow&quot;</code> para tu repo. Productos mockup.</p>
       <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4 text-xs text-amber-800">Demo local: no requiere DB. El código generado va a <code>src/app/workflows/cotizacion-mock.ts</code> y corre con <code>workflow</code> SDK.</div>
 
       <div className="grid lg:grid-cols-2 gap-6 mt-6">
         <div className="border rounded-lg overflow-hidden bg-white dark:bg-zinc-900 h-[420px]">
-          <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} fitView>
-            <Background />
-            <Controls />
-            <MiniMap />
-          </ReactFlow>
+          {mounted ? (
+            <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} fitView>
+              <Background />
+              <Controls />
+              <MiniMap />
+            </ReactFlow>
+          ) : (
+            <div className="h-full flex items-center justify-center text-sm text-zinc-500">Cargando canvas...</div>
+          )}
         </div>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
