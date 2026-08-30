@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Bot, X, Send } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -13,6 +13,11 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 export function FloatingButtons() {
   const [showTop, setShowTop] = useState(false);
+  const [agentOpen, setAgentOpen] = useState(false);
+  const [agentInput, setAgentInput] = useState("");
+  const [agentMessages, setAgentMessages] = useState<{ role: "user" | "agent"; text: string }[]>([
+    { role: "agent", text: "¡Hola! Soy el asistente Starshop (demo mockup). Pregunta por productos, envíos o cotizaciones." },
+  ]);
 
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 400);
@@ -21,9 +26,16 @@ export function FloatingButtons() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const sendAgent = () => {
+    const t = agentInput.trim();
+    if (!t) return;
+    setAgentMessages((m) => [...m, { role: "user", text: t }, { role: "agent", text: `Demo (mockup): recibí "${t}". Productos son de catálogo de ejemplo. Prueba preguntar por "panel LED" o "cotización".` }]);
+    setAgentInput("");
+  };
+
   return (
     <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40 flex flex-col items-end gap-3">
-      {/* Volver arriba - aparece tras hacer scroll */}
+      {/* Volver arriba - arriba del agente */}
       <AnimatePresence>
         {showTop && (
           <motion.button
@@ -41,7 +53,57 @@ export function FloatingButtons() {
         )}
       </AnimatePresence>
 
-      {/* WhatsApp */}
+      {/* Agente IA - alineado vertical con WhatsApp */}
+      <motion.button
+        onClick={() => setAgentOpen((o) => !o)}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 18 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="relative h-14 w-14 md:h-16 md:w-16 rounded-full bg-[#7c3aed] text-white shadow-xl flex items-center justify-center hover:bg-[#6d28d9] transition-colors"
+        aria-label="Agente IA"
+      >
+        <Bot className="h-7 w-7 md:h-8 md:w-8" />
+        <span className="absolute -top-1 -right-1 h-3 w-3 bg-emerald-400 rounded-full border-2 border-white" aria-hidden />
+      </motion.button>
+
+      {/* Panel agente */}
+      <AnimatePresence>
+        {agentOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 12, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 12, scale: 0.95 }}
+            className="w-[320px] md:w-[360px] bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border overflow-hidden flex flex-col"
+          >
+            <div className="bg-[#7c3aed] text-white px-4 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-2 font-bold text-sm"><Bot className="h-5 w-5" /> Agente Starshop (demo)</div>
+              <button onClick={() => setAgentOpen(false)} className="p-1 hover:bg-white/20 rounded" aria-label="Cerrar"><X className="h-4 w-4" /></button>
+            </div>
+            <div className="text-[11px] bg-amber-50 border-b border-amber-200 text-amber-800 px-3 py-2">Mockup: sin IA real. Productos de catálogo son de ejemplo.</div>
+            <div className="flex-1 max-h-[320px] overflow-auto p-3 space-y-2">
+              {agentMessages.map((m, i) => (
+                <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${m.role === "user" ? "bg-[#7c3aed] text-white" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100"}`}>{m.text}</div>
+                </div>
+              ))}
+            </div>
+            <div className="border-t p-2 flex gap-2">
+              <input
+                value={agentInput}
+                onChange={(e) => setAgentInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && sendAgent()}
+                placeholder="Pregunta por un producto mockup..."
+                className="flex-1 border rounded-full px-4 py-2 text-sm bg-white dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[#7c3aed]"
+              />
+              <button onClick={sendAgent} className="h-9 w-9 rounded-full bg-[#7c3aed] text-white flex items-center justify-center hover:bg-[#6d28d9]"><Send className="h-4 w-4" /></button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* WhatsApp - alineado vertical con agente */}
       <motion.a
         href="https://wa.me/56993301557?text=Hola%20Starshop,%20quiero%20hacer%20una%20consulta"
         target="_blank"
@@ -54,7 +116,6 @@ export function FloatingButtons() {
         className="relative h-14 w-14 md:h-16 md:w-16 rounded-full bg-[#25D366] text-white shadow-xl flex items-center justify-center hover:bg-[#128C7E] transition-colors"
         aria-label="Contactar por WhatsApp"
       >
-        {/* Anillo pulsante */}
         <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20" aria-hidden />
         <WhatsAppIcon className="h-7 w-7 md:h-8 md:w-8 relative" />
       </motion.a>
