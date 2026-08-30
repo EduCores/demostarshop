@@ -152,7 +152,7 @@ export function Header() {
                     onFocus={() => setShowAutocomplete(true)}
                     onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
                     placeholder="Buscar herramientas, LED, instrumentos..."
-                    className="h-10 rounded-l-md bg-white text-black placeholder:text-zinc-500 border-0 focus-visible:ring-2 focus-visible:ring-[#F90] text-sm flex-1"
+                    className="h-10 rounded-l-md rounded-r-none bg-white text-black placeholder:text-zinc-500 border-0 focus-visible:ring-2 focus-visible:ring-[#F90] text-sm flex-1"
                   />
                   <Button
                     aria-label="Agente IA"
@@ -324,7 +324,7 @@ export function Header() {
                 onFocus={() => setShowAutocomplete(true)}
                 onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
                 placeholder="Buscar herramientas, LED, instrumentos..."
-                className="h-10 rounded-none md:rounded-none rounded-l-md md:rounded-l-none bg-white text-black placeholder:text-zinc-500 border-0 focus-visible:ring-2 focus-visible:ring-[#F90] text-sm"
+                className="h-10 rounded-none md:rounded-none rounded-l-md md:rounded-l-none rounded-r-none bg-white text-black placeholder:text-zinc-500 border-0 focus-visible:ring-2 focus-visible:ring-[#F90] text-sm"
               />
               {/* Autocomplete - centrado a viewport */}
               {showAutocomplete && filteredProducts.length > 0 && (
@@ -466,7 +466,7 @@ export function Header() {
                 onFocus={() => setShowAutocomplete(true)}
                 onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
                 placeholder="Buscar"
-                className="h-10 rounded-none rounded-l-none bg-white text-black placeholder:text-zinc-500 border-0 focus-visible:ring-2 focus-visible:ring-[#F90] text-sm"
+                className="h-10 rounded-none rounded-l-none rounded-r-none bg-white text-black placeholder:text-zinc-500 border-0 focus-visible:ring-2 focus-visible:ring-[#F90] text-sm"
               />
               {showAutocomplete && filteredProducts.length > 0 && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 w-[90vw] max-w-[760px] bg-white text-black dark:bg-zinc-900 dark:text-white rounded-md shadow-2xl border border-zinc-200 dark:border-zinc-700 z-50 max-h-[420px] overflow-auto">
