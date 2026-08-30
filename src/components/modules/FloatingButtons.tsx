@@ -77,7 +77,7 @@ export function FloatingButtons() {
             exit={{ opacity: 0, y: 12, scale: 0.95 }}
             className="w-[320px] md:w-[360px] bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border overflow-hidden flex flex-col"
           >
-            <div className="bg-[#7c3aed] text-white px-4 py-3 flex items-center justify-between">
+            <div className="bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-2 font-bold text-sm"><Bot className="h-5 w-5" /> Agente Starshop (demo)</div>
               <button onClick={() => setAgentOpen(false)} className="p-1 hover:bg-white/20 rounded" aria-label="Cerrar"><X className="h-4 w-4" /></button>
             </div>
