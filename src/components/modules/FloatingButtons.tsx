@@ -16,7 +16,7 @@ export function FloatingButtons() {
   const [agentOpen, setAgentOpen] = useState(false);
   const [agentInput, setAgentInput] = useState("");
   const [agentMessages, setAgentMessages] = useState<{ role: "user" | "agent"; text: string }[]>([
-    { role: "agent", text: "¡Hola! Soy el asistente Starshop (demo mockup). Pregunta por productos, envíos o cotizaciones." },
+    { role: "agent", text: "¡Hola! Soy el asistente Starshop. Pregunta por productos, envíos o cotizaciones." },
   ]);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function FloatingButtons() {
   const sendAgent = () => {
     const t = agentInput.trim();
     if (!t) return;
-    setAgentMessages((m) => [...m, { role: "user", text: t }, { role: "agent", text: `Demo (mockup): recibí "${t}". Productos son de catálogo de ejemplo. Prueba preguntar por "panel LED" o "cotización".` }]);
+    setAgentMessages((m) => [...m, { role: "user", text: t }, { role: "agent", text: `Recibí "${t}". Prueba preguntar por "panel LED" o "cotización".` }]);
     setAgentInput("");
   };
 
@@ -78,10 +78,10 @@ export function FloatingButtons() {
             className="w-[320px] md:w-[360px] bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border overflow-hidden flex flex-col"
           >
             <div className="bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black px-4 py-3 flex items-center justify-between">
-              <div className="flex items-center gap-2 font-bold text-sm"><Bot className="h-5 w-5" /> Agente Starshop (demo)</div>
+              <div className="flex items-center gap-2 font-bold text-sm"><Bot className="h-5 w-5" /> Agente Starshop</div>
               <button onClick={() => setAgentOpen(false)} className="p-1 hover:bg-white/20 rounded" aria-label="Cerrar"><X className="h-4 w-4" /></button>
             </div>
-            <div className="text-[11px] bg-amber-50 border-b border-amber-200 text-amber-800 px-3 py-2">Mockup: sin IA real. conectar API para habilitar.</div>
+            <div className="text-[11px] bg-amber-50 border-b border-amber-200 text-amber-800 px-3 py-2">sin IA real. conectar API para habilitar.</div>
             <div className="flex-1 max-h-[320px] overflow-auto p-3 space-y-2">
               {agentMessages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
