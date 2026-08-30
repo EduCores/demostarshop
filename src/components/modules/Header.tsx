@@ -291,8 +291,8 @@ export function Header() {
         </div>
 
         {/* SEARCH ROW MOBILE/TABLET - como en ux-ui.png: dentro del mismo header, fila abajo */}
-        <div className="lg:hidden container pb-3">
-          <div className="flex relative">
+        <div className="lg:hidden container pb-3 relative">
+          <div className="flex">
             <div className="flex items-center bg-[#E6E6E6] text-black text-xs px-2 rounded-l-md border-r border-zinc-300 gap-1">
               <select
                 value={categoryFilter}
@@ -321,7 +321,7 @@ export function Header() {
                 className="h-10 rounded-none rounded-l-none bg-white text-black placeholder:text-zinc-500 border-0 focus-visible:ring-2 focus-visible:ring-[#F90] text-sm"
               />
               {showAutocomplete && filteredProducts.length > 0 && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[95vw] max-w-[760px] bg-white text-black dark:bg-zinc-900 dark:text-white rounded-md shadow-2xl border border-zinc-200 dark:border-zinc-700 z-50 max-h-[420px] overflow-auto">
+                <div className="absolute top-full left-2 right-2 bg-white text-black dark:bg-zinc-900 dark:text-white rounded-md shadow-2xl border border-zinc-200 dark:border-zinc-700 z-50 max-h-[420px] overflow-auto">
                   {filteredProducts.map((p) => (
                     <Link
                       key={p.id}
