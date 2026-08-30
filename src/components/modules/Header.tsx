@@ -66,6 +66,20 @@ export function Header() {
   const mounted = useIsMounted();
   const { items, setOpen, count } = useCart();
   const cartCount = count();
+  const [cartBurst, setCartBurst] = useState(0);
+  const prevCartRef = useRef(0);
+  useEffect(() => {
+    if (!mounted) return;
+    if (cartCount > prevCartRef.current) {
+      setCartBurst((k) => k + 1);
+      const t = setTimeout(() => setCartBurst(0), 900);
+      return () => clearTimeout(t);
+    }
+    prevCartRef.current = cartCount;
+  }, [cartCount, mounted]);
+  useEffect(() => {
+    prevCartRef.current = cartCount;
+  }, [mounted]);
   const { theme, setTheme } = useTheme();
   const { data: session } = useSession();
 
@@ -266,20 +280,46 @@ export function Header() {
             >
               <div className="relative">
                 <ShoppingCart className="h-8 w-8 md:h-7 md:w-7 group-hover:text-[#FFD814] transition-colors" />
-                 {mounted && cartCount > 0 && (
-                   <span className="absolute -top-2.5 -right-2.5 w-[30px] h-[30px]" aria-hidden>
-                     <img src="/star2.svg" alt=" estrella" className="w-full h-full object-contain" />
-                     <motion.span
-                       key={cartCount}
-                       initial={{ scale: 0.3 }}
-                       animate={{ scale: 1 }}
-                       transition={{ type: "spring", stiffness: 600, damping: 14 }}
-                       className="absolute inset-0 flex items-center justify-center text-black text-[12px] font-extrabold leading-none pt-[3px]"
-                     >
-                       {cartCount > 99 ? "99+" : cartCount}
-                     </motion.span>
-                   </span>
-                 )}
+                  {mounted && cartCount > 0 && (
+                    <motion.span
+                      key={`star-${cartBurst}-${cartCount}`}
+                      initial={{ scale: 0.9 }}
+                      animate={{ scale: cartBurst ? [1, 1.28, 1] : 1, rotate: cartBurst ? [0, -12, 12, 0] : 0 }}
+                      transition={{ duration: 0.55, ease: "easeOut" }}
+                      className="absolute -top-2.5 -right-2.5 w-[30px] h-[30px]"
+                      aria-hidden
+                    >
+                      <img src="/star2.svg" alt=" estrella" className="w-full h-full object-contain" />
+                      <motion.span
+                        key={cartCount}
+                        initial={{ scale: 0.3 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 600, damping: 14 }}
+                        className="absolute inset-0 flex items-center justify-center text-black text-[12px] font-extrabold leading-none pt-[3px]"
+                      >
+                        {cartCount > 99 ? "99+" : cartCount}
+                      </motion.span>
+                      <AnimatePresence>
+                        {cartBurst > 0 &&
+                          Array.from({ length: 6 }).map((_, i) => {
+                            const angle = (i * 60 * Math.PI) / 180;
+                            const dist = 20 + (i % 2) * 6;
+                            return (
+                              <motion.span
+                                key={`${cartBurst}-${i}`}
+                                initial={{ x: 0, y: 0, opacity: 1, scale: 0.9 }}
+                                animate={{ x: Math.cos(angle) * dist, y: Math.sin(angle) * dist, opacity: 0, scale: 0.2 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.65, ease: "easeOut", delay: i * 0.03 }}
+                                className="absolute left-1/2 top-1/2 -ml-1 -mt-1 pointer-events-none"
+                              >
+                                <img src="/star2.svg" alt="" className="h-2.5 w-2.5 object-contain drop-shadow-sm" />
+                              </motion.span>
+                            );
+                          })}
+                      </AnimatePresence>
+                    </motion.span>
+                  )}
               </div>
               <span className="hidden md:inline text-sm font-bold mb-1 group-hover:text-[#FFD814] transition-colors">Carrito</span>
             </button>

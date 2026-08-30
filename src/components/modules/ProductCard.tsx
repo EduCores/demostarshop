@@ -15,7 +15,11 @@ export function ProductCard({ product, showOriginalPrice = false, addButtonVaria
   const openAgent = useAgent((s) => s.openWithProduct);
   const hasDiscount = product.discount && product.originalPrice;
 
-  const handleAdd = () => {
+  const handleAdd = (e?: React.MouseEvent) => {
+    if (e) {
+      const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      window.dispatchEvent(new CustomEvent("star-fly", { detail: { x: r.left + r.width / 2, y: r.top + r.height / 2 } }));
+    }
     addItem(product);
     toast(`${product.name} agregado al carrito`, { variant: "success" });
   };

@@ -24,6 +24,7 @@ import Link from "next/link";
 import { Header } from "@/components/modules/Header";
 import { CartDrawer } from "@/components/modules/CartDrawer";
 import { FloatingButtons } from "@/components/modules/FloatingButtons";
+import { FlyingStars } from "@/components/modules/FlyingStars";
 import { Toaster } from "@/components/ui/toast";
 import { Providers } from "./providers";
 
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <CartDrawer />
           <FloatingButtons />
+          <FlyingStars />
           <Toaster />
           <main className="min-h-screen max-w-full overflow-x-hidden">{children}</main>
           <footer className="bg-[#232F3E] text-white mt-12">

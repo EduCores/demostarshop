@@ -103,9 +103,18 @@ export function FlashSale() {
                       <span>Quedan {p.stock}</span>
                     </div>
                   </div>
-                    <Button size="sm" className="w-full h-7 text-xs font-bold bg-[rgb(255_89_22/var(--tw-bg-opacity,1))] hover:bg-[rgb(230_81_20/var(--tw-bg-opacity,1))] text-white" onClick={(e) => { e.preventDefault(); addItem(p); }}>
-                    Agregar
-                  </Button>
+                    <Button
+                      size="sm"
+                      className="w-full h-7 text-xs font-bold bg-[rgb(255_89_22/var(--tw-bg-opacity,1))] hover:bg-[rgb(230_81_20/var(--tw-bg-opacity,1))] text-white"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                        window.dispatchEvent(new CustomEvent("star-fly", { detail: { x: r.left + r.width / 2, y: r.top + r.height / 2 } }));
+                        addItem(p);
+                      }}
+                    >
+                      Agregar
+                    </Button>
                 </div>
               </Link>
             );
