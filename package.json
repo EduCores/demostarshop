@@ -25,8 +25,10 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.52.1",
+    "reactflow": "^11.11.4",
     "tailwind-merge": "^2.4.0",
     "transbank-sdk": "^6.1.1",
+    "workflow": "^4.8.5",
     "zod": "^3.23.8",
     "zustand": "^4.5.2"
   },
