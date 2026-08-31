@@ -24,7 +24,7 @@ export function FloatingButtons() {
 
   const ACS_URL = process.env.NEXT_PUBLIC_ACS_API_URL ?? "https://agentic-commerce-stack.vercel.app";
 
-  const getAgentReply = async (input: string): Promise<string> => {
+  const getAgentReply = async (input: string): Promise<{ text: string; navigateTo?: string }> => {
     try {
       const r = await fetch(`${ACS_URL}/api/chat`, {
         method: "POST",
@@ -32,11 +32,13 @@ export function FloatingButtons() {
         body: JSON.stringify({ message: input, agentSlug: "sales-assistant", storeId: "seed-store" }),
       });
       const data = await r.json();
-      if (data.text) return data.text;
-      if (data.error) return `Error ACS: ${data.error}`;
-      return "Sin respuesta del agente. Verificá OPENROUTER_API_KEY en ACS.";
+      const nav = data.toolCalls?.find((t: any) => t.toolName === "navigateTo" || t.name === "navigateTo");
+      const navigateTo = nav?.args?.path ?? nav?.input?.path ?? nav?.result?.navigateTo;
+      if (data.text) return { text: data.text, navigateTo };
+      if (data.error) return { text: `Error ACS: ${data.error}` };
+      return { text: "Sin respuesta del agente. Verificá OPENROUTER_API_KEY en ACS." };
     } catch {
-      return "Error: no pude conectar con ACS. Verifica que agentic-commerce-stack esté en Producción y OPENROUTER_API_KEY configurada.";
+      return { text: "Error: no pude conectar con ACS. Verifica que agentic-commerce-stack esté en Producción y OPENROUTER_API_KEY configurada." };
     }
   };
 
@@ -69,9 +71,14 @@ export function FloatingButtons() {
     setAgentMessages((m) => [...m, { role: "user", text: t }]);
     setAgentInput("");
     setAgentTyping(true);
-    const reply = await getAgentReply(t);
-    setAgentMessages((m) => [...m, { role: "agent", text: reply }]);
+    const { text, navigateTo } = await getAgentReply(t);
+    setAgentMessages((m) => [...m, { role: "agent", text }]);
     setAgentTyping(false);
+    if (navigateTo) {
+      setTimeout(() => {
+        window.location.href = navigateTo.startsWith("http") ? navigateTo : navigateTo;
+      }, 800);
+    }
   };
 
   return (
