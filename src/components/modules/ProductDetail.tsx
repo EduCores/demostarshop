@@ -12,7 +12,7 @@ import { useCart } from "@/store/cart";
 export function ProductDetail({ product }: { product: Product }) {
   const [qty, setQty] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [region, setRegion] = useState(chileRegions[0].name);
+  const [region, setRegion] = useState(chileRegions.find((r) => r.zone === "rm")?.name ?? chileRegions[0].name);
   const [comuna, setComuna] = useState("");
   const { addItem, setOpen } = useCart();
 
