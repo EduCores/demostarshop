@@ -159,7 +159,7 @@ export function FloatingButtons() {
                 value={agentInput}
                 onChange={(e) => setAgentInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendAgent()}
-                placeholder="Ej: stock CHAIR-001 o busca silla gamer..."
+                placeholder="Ej: busca proyector LED o panel 36W..."
                 className="flex-1 border rounded-full px-4 py-2 text-sm bg-white dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[rgb(255_216_20/var(--tw-bg-opacity,1))]"
               />
               <button onClick={sendAgent} className="h-9 w-9 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))]"><Send className="h-4 w-4" /></button>
