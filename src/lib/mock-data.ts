@@ -956,7 +956,7 @@ export const chileRegions: { name: string; zone: ChileRegionZone; communes: stri
   {
     name: "Región de Magallanes y la Antártica Chilena",
     zone: "extremo",
-    communes: ["Punta Arenas", "Cabo de Hornos", "Laguna Blanca", "Río Verde", "San Gregorio", "Natales", "Torres del Paine", "Porvenir", "Primavera", "Timaukel"],
+    communes: ["Punta Arenas", "Cabo de Hornos", "Laguna Blanca", "Río Verde", "San Gregorio", "Puerto Natales", "Torres del Paine", "Porvenir", "Primavera", "Timaukel"],
   },
 ];
 
