@@ -144,7 +144,7 @@ export function FloatingButtons() {
               <div className="flex items-center gap-2 font-bold text-sm"><Bot className="h-5 w-5" /> Agente Starshop</div>
               <button onClick={() => setAgentOpen(false)} className="p-1 hover:bg-white/20 rounded" aria-label="Cerrar"><X className="h-4 w-4" /></button>
             </div>
-            <div className="text-[11px] bg-emerald-50 border-b border-emerald-200 text-emerald-800 px-3 py-2">Conectado a ACS • qwen3-30b • store seed-store</div>
+            <div className="text-[11px] bg-emerald-50 border-b border-emerald-200 text-emerald-800 px-3 py-2 flex items-center gap-2"><span className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse" /> ACS activo</div>
             <div className="flex-1 max-h-[320px] overflow-auto p-3 space-y-2">
               {agentMessages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
