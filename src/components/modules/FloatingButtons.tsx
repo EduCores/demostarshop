@@ -22,7 +22,7 @@ export function FloatingButtons() {
   const [agentTyping, setAgentTyping] = useState(false);
   const [agentPulse, setAgentPulse] = useState(0);
 
-  const ACS_URL = process.env.NEXT_PUBLIC_ACS_API_URL ?? "https://agentic-commerce-stack.vercel.app";
+  const ACS_URL = process.env.NEXT_PUBLIC_ACS_API_URL ?? "https://demostarshop.vercel.app";
 
   const getAgentReply = async (input: string): Promise<{ text: string; navigateTo?: string }> => {
     try {
@@ -38,7 +38,7 @@ export function FloatingButtons() {
       if (data.error) return { text: `Error ACS: ${data.error}` };
       return { text: "Sin respuesta del agente. Verificá OPENROUTER_API_KEY en ACS." };
     } catch {
-      return { text: "Error: no pude conectar con ACS. Verifica que agentic-commerce-stack esté en Producción y OPENROUTER_API_KEY configurada." };
+      return { text: "Error: no pude conectar con demostarshop. Verifica que esté en Producción y OPENROUTER_API_KEY configurada en Vercel." };
     }
   };
 
