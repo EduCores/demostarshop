@@ -266,6 +266,20 @@
   background-color: rgb(247 202 0 / var(--tw-bg-opacity, 1)) !important;
 }
 
+/* Footer: fondo de estrellas con 40% de opacidad (solo la imagen, no el contenido) */
+.starshop-footer-stars::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/back_stars.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.4;
+  z-index: -1;
+  pointer-events: none;
+}
+
 /* Tablets y celulares (≤1024px), desktop intacto */
 @media (max-width: 1024px) {
   .p-3 {
