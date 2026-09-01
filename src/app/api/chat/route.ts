@@ -1,7 +1,55 @@
 import { NextRequest, NextResponse } from "next/server";
 import { products, superCategories } from "@/lib/mock-data";
+import fs from "fs";
+import path from "path";
+
+export const runtime = "nodejs";
 
 const catMap = Object.fromEntries(superCategories.map(c => [c.id, c.name]));
+
+// --- Embeddings (RAG vector) ---
+let productEmbeddings: Record<string, number[]> | null = null;
+let embeddingsLoaded = false;
+
+function cosine(a: number[], b: number[]): number {
+  let dot = 0, na = 0, nb = 0;
+  for (let i=0;i<a.length;i++) { dot+=a[i]*b[i]; na+=a[i]*a[i]; nb+=b[i]*b[i]; }
+  return dot / (Math.sqrt(na)*Math.sqrt(nb) + 1e-9);
+}
+
+async function getEmbedding(text: string, apiKey: string, isOpenRouter: boolean): Promise<number[] | null> {
+  try {
+    const endpoint = isOpenRouter ? "https://openrouter.ai/api/v1/embeddings" : "https://api.openai.com/v1/embeddings";
+    const model = isOpenRouter ? (process.env.OPENROUTER_EMBED_MODEL || "openai/text-embedding-3-small") : (process.env.OPENAI_EMBED_MODEL || "text-embedding-3-small");
+    const headers: Record<string,string> = { "Content-Type":"application/json", "Authorization":`Bearer ${apiKey}` };
+    if (isOpenRouter) { headers["HTTP-Referer"] = process.env.NEXT_PUBLIC_APP_URL || "https://demostarshop.vercel.app"; headers["X-Title"]="Starshop Embeddings"; }
+    const r = await fetch(endpoint, { method:"POST", headers, body: JSON.stringify({ model, input: text }) });
+    if (!r.ok) { console.warn("[embed] error", r.status, await r.text().then(t=>t.slice(0,200))); return null; }
+    const j = await r.json();
+    return j.data?.[0]?.embedding || null;
+  } catch(e){ console.warn("[embed] fetch fail", e); return null; }
+}
+
+function loadEmbeddingsFromFile(): Record<string, number[]> | null {
+  if (embeddingsLoaded) return productEmbeddings;
+  embeddingsLoaded = true;
+  try {
+    const p1 = path.join(process.cwd(), "data", "productos-embeddings.json");
+    const p2 = path.join(process.cwd(), "public", "productos-embeddings.json");
+    const file = fs.existsSync(p1) ? p1 : fs.existsSync(p2) ? p2 : null;
+    if (file) {
+      const j = JSON.parse(fs.readFileSync(file, "utf-8"));
+      productEmbeddings = j;
+      console.log(`[embed] loaded ${Object.keys(j).length} vectors from ${file}`);
+      return j;
+    }
+  } catch(e){ console.warn("[embed] load fail", e); }
+  return null;
+}
+
+function productText(p:any): string {
+  return `${p.name} ${p.shortDescription} ${p.description} ${p.brand} ${catMap[p.categoryId]} ${p.subcategory} ${(p.tags||[]).join(" ")} ${Object.entries(p.specs||{}).map(([k,v])=>`${k} ${v}`).join(" ")}`.slice(0,8000);
+}
 
 // --- Retrieval simple (keywords + filtros) - mismo que scripts/probar-agente.mjs ---
 function scoreProduct(p: any, query: string) {
@@ -34,11 +82,42 @@ function scoreProduct(p: any, query: string) {
 function getTopProducts(query: string, k = 5) {
   const scored = products.map(p => ({ p, s: scoreProduct(p, query) })).sort((a,b)=> (b.s as number) - (a.s as number));
   const top = scored.filter(x=>x.s>0).slice(0,k);
-  // si nada matchea, devuelve los más vendidos como fallback
-  if (top.length===0) {
-    return products.filter(p=>p.isBestSeller).slice(0,3).map(p=>({p, s:1}));
-  }
+  if (top.length===0) return products.filter(p=>p.isBestSeller).slice(0,3).map(p=>({p, s:1}));
   return top;
+}
+
+// Versión con embeddings (híbrida: 0.6 vector + 0.4 keyword)
+async function getTopProductsHybrid(query: string, k = 5, apiKey?: string, isOpenRouter?: boolean): Promise<{p:any,s:number,vecScore?:number}[]> {
+  const keywordScored = products.map(p => ({ p, s: scoreProduct(p, query) }));
+  const maxKw = Math.max(...keywordScored.map(x=>x.s), 1);
+  // Intenta vector
+  let vecScores: Map<string, number> | null = null;
+  if (apiKey) {
+    const fileEmbeds = loadEmbeddingsFromFile();
+    if (fileEmbeds) {
+      const qEmb = await getEmbedding(query, apiKey, !!isOpenRouter);
+      if (qEmb) {
+        vecScores = new Map();
+        for (const p of products) {
+          const pe = fileEmbeds[p.id];
+          if (pe) vecScores.set(p.id, cosine(qEmb, pe));
+        }
+      }
+    }
+  }
+  if (vecScores) {
+    const hybrid = keywordScored.map(({p,s}) => {
+      const v = vecScores!.get(p.id) ?? 0;
+      // normaliza keyword a 0-1 y mezcla
+      const kwNorm = s / maxKw;
+      const hybridScore = 0.6 * v + 0.4 * kwNorm + (s>=6?0.1:0); // boost si keyword ya era fuerte
+      return { p, s: hybridScore, vecScore: v };
+    }).sort((a,b)=>b.s-a.s).slice(0,k);
+    // si el híbrido da scores muy bajos (<0.15) fallback a keyword
+    if (hybrid[0].s < 0.15) return getTopProducts(query, k);
+    return hybrid;
+  }
+  return getTopProducts(query, k);
 }
 
 function formatContext(top: {p:any,s:number}[]) {
@@ -54,7 +133,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Falta message" }, { status: 400 });
     }
 
-    const top = getTopProducts(message, 5);
+    const openRouterKeyEarly = process.env.OPENROUTER_API_KEY;
+    const openAiKeyEarly = process.env.OPENAI_API_KEY;
+    const apiKeyEarly = openRouterKeyEarly || openAiKeyEarly;
+    const isOpenRouterEarly = !!openRouterKeyEarly;
+
+    // Usa híbrido con embeddings si hay key y embeddings file, sino keyword
+    const top = apiKeyEarly ? await getTopProductsHybrid(message, 5, apiKeyEarly, isOpenRouterEarly) : getTopProducts(message, 5);
     const context = formatContext(top);
     const best = top[0]?.p;
 
@@ -92,10 +177,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Si no hay keys de LLM, responde en modo RAG mock (sin gastar tokens) - útil para probar Excel sin OpenRouter
-    const openRouterKey = process.env.OPENROUTER_API_KEY;
-    const openAiKey = process.env.OPENAI_API_KEY;
-    const apiKey = openRouterKey || openAiKey;
-    const isOpenRouter = !!openRouterKey;
+    const openRouterKey = openRouterKeyEarly;
+    const openAiKey = openAiKeyEarly;
+    const apiKey = apiKeyEarly;
+    const isOpenRouter = isOpenRouterEarly;
 
     if (!apiKey) {
       // Mock RAG con guía por categoría + persuasión (mismo comportamiento que con LLM)
@@ -261,10 +346,13 @@ Responde con 2-3 preguntas de calificación: uso (hogar/industrial), presupuesto
 }
 
 export async function GET() {
+  const hasEmbeds = !!loadEmbeddingsFromFile();
   return NextResponse.json({ 
     ok: true, 
     hasOpenRouterKey: !!process.env.OPENROUTER_API_KEY,
     hasOpenAiKey: !!process.env.OPENAI_API_KEY,
+    hasEmbeddings: hasEmbeds,
+    embeddingsCount: hasEmbeds ? Object.keys(productEmbeddings||{}).length : 0,
     model: process.env.OPENROUTER_MODEL || process.env.OPENAI_MODEL || "qwen/qwen3-30b-a3b (default)",
     products: products.length,
     example: "POST { message: 'proyector LED bajo 50000 SEC' }"
