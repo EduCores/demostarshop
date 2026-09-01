@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { ArrowUp, Bot, X, Send, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAgent } from "@/store/agent";
+import { products } from "@/lib/mock-data";
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -24,6 +25,28 @@ export function FloatingButtons() {
 
   const ACS_URL = process.env.NEXT_PUBLIC_ACS_API_URL ?? "https://agentic-commerce-stack.vercel.app";
 
+  const getProductPath = (input: string): string | null => {
+    const t = input.toLowerCase().trim();
+    // SKU exacto
+    const bySku = products.find((p) => p.sku.toLowerCase() === t || p.sku.toLowerCase().replace(/-/g, "") === t.replace(/-/g, ""));
+    if (bySku) return `/producto/${bySku.slug}`;
+    // Nombre exacto o contiene 5+ caracteres
+    if (t.length >= 5) {
+      const byName = products.find((p) => p.name.toLowerCase().includes(t) || t.includes(p.name.toLowerCase().substring(0, 20)));
+      if (byName) return `/producto/${byName.slug}`;
+      // Búsqueda parcial por palabras clave del producto (ej: "Kit Electricista")
+      const words = t.split(" ").filter((w) => w.length > 3);
+      if (words.length >= 2) {
+        const scored = products
+          .map((p) => ({ p, score: words.filter((w) => p.name.toLowerCase().includes(w)).length }))
+          .filter((x) => x.score >= 2)
+          .sort((a, b) => b.score - a.score);
+        if (scored[0]?.score >= 2) return `/producto/${scored[0].p.slug}`;
+      }
+    }
+    return null;
+  };
+
   const getCategoryPath = (input: string): string | null => {
     const t = input.toLowerCase();
     if (t.includes("proyector") || t.includes("proyectores")) return "/categoria/iluminacion-led-neon?search=proyector";
@@ -32,6 +55,17 @@ export function FloatingButtons() {
     if (t.includes("tubo") || t.includes("uv") || t.includes("germicida")) return "/categoria/tubos-lamparas-especiales?search=uv";
     if (t.includes("pila") || t.includes("bateria") || t.includes("18650")) return "/categoria/pilas-baterias-cargadores?search=bateria";
     if (t.includes("panel") || t.includes("led") || t.includes("neon") || t.includes("iluminaci")) return "/categoria/iluminacion-led-neon?search=led";
+    return null;
+  };
+
+  const getAutoNavigatePath = (input: string): { path: string; label: string } | null => {
+    const prod = getProductPath(input);
+    if (prod) {
+      const p = products.find((x) => prod.includes(x.slug));
+      return { path: prod, label: p?.name ?? input };
+    }
+    const cat = getCategoryPath(input);
+    if (cat) return { path: cat, label: input };
     return null;
   };
 
@@ -85,15 +119,15 @@ export function FloatingButtons() {
     setAgentInput("");
     setAgentTyping(true);
 
-    // Navegación automática local por palabras clave (rápido, sin esperar al LLM)
-    const autoPath = getCategoryPath(t);
-    const wantsToSee = /ver|mostrar|llevame|muestrame|quiero ver|busco/i.test(t);
-    if (autoPath && (wantsToSee || t.split(" ").length <= 2)) {
-      const friendly = `¡Vamos! Te llevo a ${t} — abriendo la categoría...`;
+    // Navegación automática local: primero producto específico (SKU/nombre), luego categoría
+    const auto = getAutoNavigatePath(t);
+    const wantsToSee = /ver|mostrar|llevame|muestrame|quiero ver|busco|ir/i.test(t);
+    if (auto && (wantsToSee || t.length >= 5)) {
+      const isProduct = auto.path.startsWith("/producto/");
+      const friendly = isProduct ? `¡Perfecto! Te llevo a "${auto.label}" — abriendo la ficha...` : `¡Vamos! Te llevo a ${t} — abriendo la categoría...`;
       setAgentMessages((m) => [...m, { role: "agent", text: friendly }]);
       setAgentTyping(false);
-      setTimeout(() => { window.location.href = autoPath; }, 900);
-      // También avisa al agente en background para registrar
+      setTimeout(() => { window.location.href = auto.path; }, 900);
       getAgentReply(t).catch(() => {});
       return;
     }
@@ -101,7 +135,7 @@ export function FloatingButtons() {
     const { text, navigateTo } = await getAgentReply(t);
     setAgentMessages((m) => [...m, { role: "agent", text }]);
     setAgentTyping(false);
-    const finalNav = navigateTo ?? autoPath;
+    const finalNav = navigateTo ?? auto?.path;
     if (finalNav) {
       setTimeout(() => { window.location.href = finalNav.startsWith("http") ? finalNav : finalNav; }, 800);
     }
