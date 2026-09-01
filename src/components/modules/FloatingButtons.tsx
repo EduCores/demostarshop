@@ -22,15 +22,26 @@ export function FloatingButtons() {
   const [agentTyping, setAgentTyping] = useState(false);
   const [agentPulse, setAgentPulse] = useState(0);
 
-  const getAgentReply = (input: string) => {
-    const t = input.toLowerCase();
-    if (/(hola|buenas|hello|hey)/.test(t)) return "¡Hola! Qué bueno tenerte por aquí. ¿Qué proyecto tienes entre manos? ¿Es para oficina, obra o reposición de stock? ¿Buscas precio por unidad o por volumen?";
-    if (/(panel|led|iluminaci|neon|tubo)/.test(t)) return "Buena elección. Los paneles 36W 600x600 4000K son los más pedidos para oficina (3600lm). ¿Para cuántos m² necesitas iluminar y cuántas unidades estimas? ¿Buscas luz cálida, neutra o fría?";
-    if (/(herramienta|crimpadora|taladro|prensa|sierra)/.test(t)) return "Entiendo. ¿Qué tipo de faena harás — eléctrica, construcción o mantención? ¿Prefieres kit profesional o herramienta puntual? ¿Tienes alguna marca en mente?";
-    if (/(cotiz|cotizar|b2b|empresa|factura|volumen|mayorista)/.test(t)) return "Perfecto, te oriento en B2B. ¿Me cuentas el RUT y razón social? ¿Qué productos y cantidades necesitas? Puedes agregarlos al carrito y usar Cotizador Express en el header. ¿Quieres que te guíe?";
-    if (/(envio|despacho|region|comuna|retiro)/.test(t)) return "Hacemos envíos a todo Chile y despacho 24h en RM. ¿A qué región y comuna despachamos? En la ficha del producto puedes calcular costo y plazo. ¿Cuál es tu comuna?";
-    if (/(precio|cuanto|vale|costo|barato)/.test(t)) return "Los precios que ves son de catálogo de ejemplo. ¿Cuál es tu presupuesto aproximado y cuántas unidades necesitas? Así te sugiero la mejor opción por precio/volumen.";
-    return `Gracias por contarme. ¿Podrías darme un poco más de detalle? Por ejemplo: ¿es para empresa o particular, y qué uso le darás? ¿Quieres que te recomiende 2-3 opciones?`;
+  const ACS_URL = process.env.NEXT_PUBLIC_ACS_API_URL ?? "https://agentic-commerce-stack.vercel.app";
+
+  const getAgentReply = async (input: string): Promise<{ text: string; navigateTo?: string }> => {
+    try {
+      const r = await fetch(`${ACS_URL}/api/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input, agentSlug: "sales-assistant", storeId: "seed-store" }),
+      });
+      const data = await r.json();
+      const calls = data.toolCalls ?? [];
+      const nav = calls.find((t: any) => t.toolName === "navigateTo" || t.name === "navigateTo");
+      const chk = calls.find((t: any) => t.toolName === "checkout" || t.name === "checkout");
+      const navigateTo = chk?.args?.checkoutUrl ?? chk?.result?.checkoutUrl ?? nav?.args?.path ?? nav?.input?.path ?? nav?.result?.navigateTo;
+      if (data.text) return { text: data.text, navigateTo };
+      if (data.error) return { text: `Error ACS: ${data.error}` };
+      return { text: "Sin respuesta del agente. Verificá OPENROUTER_API_KEY en ACS." };
+    } catch {
+      return { text: "Error: no pude conectar con ACS. Verifica que agentic-commerce-stack esté en Producción." };
+    }
   };
 
   useEffect(() => {
@@ -56,17 +67,20 @@ export function FloatingButtons() {
     }
   }, [pendingProduct, setPendingProduct]);
 
-  const sendAgent = () => {
+  const sendAgent = async () => {
     const t = agentInput.trim();
     if (!t) return;
     setAgentMessages((m) => [...m, { role: "user", text: t }]);
     setAgentInput("");
     setAgentTyping(true);
-    setTimeout(() => {
-      const reply = getAgentReply(t);
-      setAgentMessages((m) => [...m, { role: "agent", text: reply }]);
-      setAgentTyping(false);
-    }, 600);
+    const { text, navigateTo } = await getAgentReply(t);
+    setAgentMessages((m) => [...m, { role: "agent", text }]);
+    setAgentTyping(false);
+    if (navigateTo) {
+      setTimeout(() => {
+        window.location.href = navigateTo.startsWith("http") ? navigateTo : navigateTo;
+      }, 800);
+    }
   };
 
   return (
@@ -132,7 +146,7 @@ export function FloatingButtons() {
               <div className="flex items-center gap-2 font-bold text-sm"><Bot className="h-5 w-5" /> Agente Starshop</div>
               <button onClick={() => setAgentOpen(false)} className="p-1 hover:bg-white/20 rounded" aria-label="Cerrar"><X className="h-4 w-4" /></button>
             </div>
-            <div className="text-[11px] bg-amber-50 border-b border-amber-200 text-amber-800 px-3 py-2">sin IA real. conectar API para habilitar.</div>
+            <div className="text-[11px] bg-emerald-50 border-b border-emerald-200 text-emerald-800 px-3 py-2 flex items-center gap-2"><span className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse" /> ACS activo</div>
             <div className="flex-1 max-h-[320px] overflow-auto p-3 space-y-2">
               {agentMessages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -154,7 +168,7 @@ export function FloatingButtons() {
                 value={agentInput}
                 onChange={(e) => setAgentInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendAgent()}
-                placeholder="Pregunta por un producto mockup..."
+                placeholder="Ej: busca proyector LED o panel 36W..."
                 className="flex-1 border rounded-full px-4 py-2 text-sm bg-white dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[rgb(255_216_20/var(--tw-bg-opacity,1))]"
               />
               <button onClick={sendAgent} className="h-9 w-9 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))]"><Send className="h-4 w-4" /></button>
