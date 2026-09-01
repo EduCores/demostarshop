@@ -24,6 +24,17 @@ export function FloatingButtons() {
 
   const ACS_URL = process.env.NEXT_PUBLIC_ACS_API_URL ?? "https://agentic-commerce-stack.vercel.app";
 
+  const getCategoryPath = (input: string): string | null => {
+    const t = input.toLowerCase();
+    if (t.includes("proyector") || t.includes("proyectores")) return "/categoria/iluminacion-led-neon?search=proyector";
+    if (t.includes("taladro") || t.includes("taladros") || t.includes("sierra") || t.includes("herramienta")) return "/categoria/herramientas-maquinarias?search=taladro";
+    if (t.includes("multimetro") || t.includes("pinza") || t.includes("pirometro") || t.includes("cámara term")) return "/categoria/instrumentos-medicion?search=multimetro";
+    if (t.includes("tubo") || t.includes("uv") || t.includes("germicida")) return "/categoria/tubos-lamparas-especiales?search=uv";
+    if (t.includes("pila") || t.includes("bateria") || t.includes("18650")) return "/categoria/pilas-baterias-cargadores?search=bateria";
+    if (t.includes("panel") || t.includes("led") || t.includes("neon") || t.includes("iluminaci")) return "/categoria/iluminacion-led-neon?search=led";
+    return null;
+  };
+
   const getAgentReply = async (input: string): Promise<{ text: string; navigateTo?: string }> => {
     try {
       const r = await fetch(`${ACS_URL}/api/chat`, {
@@ -73,15 +84,26 @@ export function FloatingButtons() {
     setAgentMessages((m) => [...m, { role: "user", text: t }]);
     setAgentInput("");
     setAgentTyping(true);
+
+    // Navegación automática local por palabras clave (rápido, sin esperar al LLM)
+    const autoPath = getCategoryPath(t);
+    const wantsToSee = /ver|mostrar|llevame|muestrame|quiero ver|busco/i.test(t);
+    if (autoPath && (wantsToSee || t.split(" ").length <= 2)) {
+      const friendly = `¡Vamos! Te llevo a ${t} — abriendo la categoría...`;
+      setAgentMessages((m) => [...m, { role: "agent", text: friendly }]);
+      setAgentTyping(false);
+      setTimeout(() => { window.location.href = autoPath; }, 900);
+      // También avisa al agente en background para registrar
+      getAgentReply(t).catch(() => {});
+      return;
+    }
+
     const { text, navigateTo } = await getAgentReply(t);
-    // Si el agente navega, preparamos un mensaje amable antes de irse
-    const textoAgente = navigateTo ? `Vamos a ver proyectores, un momento.` : text;
-    setAgentMessages((m) => [...m, { role: "agent", finalText: finalText }]);
+    setAgentMessages((m) => [...m, { role: "agent", text }]);
     setAgentTyping(false);
-    if (navigateTo) {
-      setTimeout(() => {
-        window.location.href = navigateTo.startsWith("http") ? navigateTo : navigateTo;
-      }, 800);
+    const finalNav = navigateTo ?? autoPath;
+    if (finalNav) {
+      setTimeout(() => { window.location.href = finalNav.startsWith("http") ? finalNav : finalNav; }, 800);
     }
   };
 
