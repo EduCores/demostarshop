@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ArrowUp, Bot, X, Send, Sparkles } from "lucide-react";
+import { ArrowUp, Bot, X, Send, Sparkles, Mic } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAgent } from "@/store/agent";
 import { products } from "@/lib/mock-data";
@@ -22,6 +22,7 @@ export function FloatingButtons() {
   ]);
   const [agentTyping, setAgentTyping] = useState(false);
   const [agentPulse, setAgentPulse] = useState(0);
+  const [isRecording, setIsRecording] = useState(false);
 
   const ACS_URL = process.env.NEXT_PUBLIC_ACS_API_URL ?? "https://agentic-commerce-stack.vercel.app";
 
@@ -66,6 +67,51 @@ export function FloatingButtons() {
     const cat = getCategoryPath(input);
     if (cat) return { path: cat, label: input };
     return null;
+  };
+
+  const toggleVoice = () => {
+    const SR = (typeof window !== "undefined" && ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition));
+    if (!SR) {
+      alert("Tu navegador no soporta reconocimiento de voz. Usa Chrome en Android/Desktop.");
+      return;
+    }
+    if (isRecording) return;
+    const rec = new SR();
+    rec.lang = "es-CL";
+    rec.interimResults = false;
+    rec.continuous = false;
+    setIsRecording(true);
+    rec.onresult = (e: any) => {
+      const transcript = e.results[0][0].transcript as string;
+      setAgentInput(transcript);
+      setTimeout(() => {
+        setAgentInput(transcript);
+        // auto-envía el texto transcrito
+        const t = transcript.trim();
+        if (!t) { setIsRecording(false); return; }
+        setAgentMessages((m) => [...m, { role: "user", text: t }]);
+        setIsRecording(false);
+        // llama directo sin pasar por input state
+        (async () => {
+          const auto = getAutoNavigatePath(t);
+          const wantsToSee = /ver|mostrar|llevame|muestrame|quiero ver|busco|ir/i.test(t);
+          if (auto && (wantsToSee || t.length >= 5)) {
+            const isProduct = auto.path.startsWith("/producto/");
+            const friendly = isProduct ? `¡Perfecto! Te llevo a "${auto.label}" — abriendo la ficha...` : `¡Vamos! Te llevo a ${t} — abriendo la categoría...`;
+            setAgentMessages((m) => [...m, { role: "agent", text: friendly }]);
+            setTimeout(() => { window.location.href = auto.path; }, 900);
+            return;
+          }
+          const { text, navigateTo } = await getAgentReply(t);
+          setAgentMessages((m) => [...m, { role: "agent", text }]);
+          const finalNav = navigateTo ?? auto?.path;
+          if (finalNav) setTimeout(() => { window.location.href = finalNav.startsWith("http") ? finalNav : finalNav; }, 800);
+        })();
+      }, 100);
+    };
+    rec.onerror = () => setIsRecording(false);
+    rec.onend = () => setIsRecording(false);
+    rec.start();
   };
 
   const getAgentReply = async (input: string): Promise<{ text: string; navigateTo?: string }> => {
@@ -220,7 +266,7 @@ export function FloatingButtons() {
                 </div>
               )}
             </div>
-            <div className="border-t p-2 flex gap-2">
+            <div className="border-t p-2 flex gap-2 items-end">
               <input
                 value={agentInput}
                 onChange={(e) => setAgentInput(e.target.value)}
@@ -228,7 +274,12 @@ export function FloatingButtons() {
                 placeholder="Ej: busca proyector LED o panel 36W..."
                 className="flex-1 border rounded-full px-4 py-2 text-sm bg-white dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[rgb(255_216_20/var(--tw-bg-opacity,1))]"
               />
-              <button onClick={sendAgent} className="h-9 w-9 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))]"><Send className="h-4 w-4" /></button>
+              <div className="flex flex-col gap-1.5">
+                <button onClick={toggleVoice} title={isRecording ? "Grabando..." : "Grabar audio"} aria-label="Grabar audio" className={`h-9 w-9 rounded-full flex items-center justify-center border ${isRecording ? "bg-red-500 text-white animate-pulse border-red-600" : "bg-white border-zinc-200 hover:bg-zinc-50 text-zinc-700"}`}>
+                  <Mic className="h-4 w-4" />
+                </button>
+                <button onClick={sendAgent} aria-label="Enviar" className="h-9 w-9 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))]"><Send className="h-4 w-4" /></button>
+              </div>
             </div>
           </motion.div>
         )}
