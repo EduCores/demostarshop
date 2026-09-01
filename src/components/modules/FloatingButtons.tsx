@@ -22,7 +22,7 @@ export function FloatingButtons() {
   const [agentTyping, setAgentTyping] = useState(false);
   const [agentPulse, setAgentPulse] = useState(0);
 
-  const ACS_URL = process.env.NEXT_PUBLIC_ACS_API_URL ?? "https://demostarshop.vercel.app";
+  const ACS_URL = process.env.NEXT_PUBLIC_ACS_API_URL ?? "https://agentic-commerce-stack.vercel.app";
 
   const getAgentReply = async (input: string): Promise<{ text: string; navigateTo?: string }> => {
     try {
@@ -32,13 +32,15 @@ export function FloatingButtons() {
         body: JSON.stringify({ message: input, agentSlug: "sales-assistant", storeId: "seed-store" }),
       });
       const data = await r.json();
-      const nav = data.toolCalls?.find((t: any) => t.toolName === "navigateTo" || t.name === "navigateTo");
-      const navigateTo = nav?.args?.path ?? nav?.input?.path ?? nav?.result?.navigateTo;
+      const calls = data.toolCalls ?? [];
+      const nav = calls.find((t: any) => t.toolName === "navigateTo" || t.name === "navigateTo");
+      const chk = calls.find((t: any) => t.toolName === "checkout" || t.name === "checkout");
+      const navigateTo = chk?.args?.checkoutUrl ?? chk?.result?.checkoutUrl ?? nav?.args?.path ?? nav?.input?.path ?? nav?.result?.navigateTo;
       if (data.text) return { text: data.text, navigateTo };
       if (data.error) return { text: `Error ACS: ${data.error}` };
       return { text: "Sin respuesta del agente. Verificá OPENROUTER_API_KEY en ACS." };
     } catch {
-      return { text: "Error: no pude conectar con demostarshop. Verifica que esté en Producción y OPENROUTER_API_KEY configurada en Vercel." };
+      return { text: "Error: no pude conectar con ACS. Verifica que agentic-commerce-stack esté en Producción." };
     }
   };
 
