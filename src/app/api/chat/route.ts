@@ -78,15 +78,71 @@ export async function POST(req: NextRequest) {
     const isOpenRouter = !!openRouterKey;
 
     if (!apiKey) {
-      const mockText = `Encontré ${top.length} productos para "${message}" (modo demo sin LLM, usando RAG sobre Excel):\n\n${top.map(({p})=>`• **${p.name}** — $${p.price.toLocaleString("es-CL")} ${p.discount?`(-${p.discount}%)`:``} | ${catMap[p.categoryId]} | ${p.secCertified?"SEC ✅":""} | Stock:${p.stock} → /producto/${p.slug}`).join("\n")}\n\n¿Quieres que te lleve al detalle del recomendado **${best?.name}**?`;
-      return NextResponse.json({ text: mockText, toolCalls: toolCalls.length?toolCalls:undefined, debug: { mode: "mock-rag", topIds: top.map(t=>t.p.id) } });
+      // Mock RAG con guía por categoría + persuasión (mismo comportamiento que con LLM)
+      const isVague = top.length===0 || scoreProduct(best||products[0], message) < 3 || /^(hola|buenas|qué tienen|que tienen|ayuda|hola!|buenas!)/i.test(message.trim());
+      if (isVague) {
+        const cats = superCategories.slice(0,5).map(c=>`• **${c.name}** (${c.slug}) — ${c.description}`).join("\n");
+        const guide = `¡Hola! Soy Star ⭐ ¿Qué categoría buscas hoy?\n\n${cats}\n\nCuéntame: ¿uso hogar o industrial? ¿presupuesto aprox? ¿necesitas SEC o precio mayorista? Con eso te muestro el match exacto y te llevo directo al producto.`;
+        return NextResponse.json({ text: guide, debug: { mode: "mock-rag-guide", topIds: [] } });
+      }
+      // Match específico -> persuasivo + assertivo
+      const p = best!;
+      const persuasion = `¡Perfecto! Para "${message}" mi recomendado es **${p.name}** — $${p.price.toLocaleString("es-CL")} ${p.discount?`(ahorras ${p.discount}% de $${p.originalPrice?.toLocaleString("es-CL")})`:``} | ${catMap[p.categoryId]} > ${p.subcategory} | ${p.secCertified?"**SEC ✅ certificado**":""} | Stock:${p.stock} | Garantía:${p.warranty}\n\nSpecs: ${Object.entries(p.specs||{}).map(([k,v])=>`${k}:${v}`).join(" | ")}\n\nEs el match con mejor relación precio/calidad y despacho 24h RM. ¿Te llevo al detalle para que pases por caja? 👉 /producto/${p.slug}`;
+      const others = top.slice(1,3).map(({p})=>`• ${p.name} — $${p.price.toLocaleString("es-CL")} → /producto/${p.slug}`).join("\n");
+      const full = others ? `${persuasion}\n\nAlternativas:\n${others}\n\n¿Buscamos por categoría /categoria/${p.categoryId} o cambiamos el filtro de precio/SEC?` : persuasion;
+      // Si el usuario pide ver, agregamos navigateTo
+      const finalTools = /ver|ir|mostrar|llevar|comprar|detalle/i.test(message) ? [{ toolName:"navigateTo", args:{ path:`/producto/${p.slug}`}}] : undefined;
+      return NextResponse.json({ text: full, toolCalls: finalTools, debug: { mode: "mock-rag-persuasive", topIds: top.map(t=>t.p.id) } });
     }
 
-    // --- Llamada LLM con contexto RAG ---
+    // --- Llamada LLM con contexto RAG + tools ---
     const model = process.env.OPENROUTER_MODEL || process.env.OPENAI_MODEL || (isOpenRouter ? "qwen/qwen3-30b-a3b" : "gpt-4o-mini");
-    const systemPrompt = `Eres Star, asistente de ventas de Starshop (tienda chilena de iluminación LED, herramientas, medición, seguridad). Responde en español de Chile, conciso y útil. Usa SOLO el contexto de productos provisto. Si el usuario pide ver/detalle, sugiere el URL. Incluye siempre SKU, precio CLP, SEC y URL. Si no hay stock, dilo. No inventes productos ni precios. Si la pregunta es fuera de catálogo, di que no está en el Excel.`;
 
-    const userPrompt = `Contexto de productos (Excel RAG - top ${top.length}):\n${context}\n\nPregunta del cliente: ${message}\n\nResponde usando solo el contexto. Si hay un producto claramente solicitado, recomienda 1-2 y da su URL /producto/[slug].`;
+    const categoriesList = superCategories.map(c => `- ${c.name} (${c.slug}): ${c.description} | sub: ${c.subcategories.map(s=>s.name).join(", ")}`).join("\n");
+
+    const systemPrompt = `Eres Star, asistente de ventas experto de Starshop Chile (iluminación LED, herramientas, medición, seguridad, energía).
+OBJETIVO: Guiar al cliente paso a paso hasta que elija una CATEGORÍA y luego un PRODUCTO concreto y pase por caja. Sé seductor y asertivo (venta consultiva), no agresivo.
+
+REGLAS DE ORO:
+1) PRIMERO CATEGORÍA: Si la pregunta es vaga ("hola", "qué tienen", "iluminación"), NO lances productos al azar. Guía: pregunta qué categoría busca. Usa esta taxonomía:
+${categoriesList}
+Responde con 2-3 preguntas de calificación: uso (hogar/industrial), presupuesto, necesidad SEC/mayorista.
+
+2) CUANDO HAY MATCH ESPECÍFICO (score alto y 1 producto claro): sé persuasivo, destaca beneficios, precio oferta vs original, SEC, garantía, stock y CTA a comprar. Usa specs del contexto. Ejemplo: "Este Proyector 200W IP66 te ahorra 34% ($45.990) y está certificado SEC — ideal para tu galpón. ¿Lo llevamos?"
+
+3) CAPACIDADES: puedes CAMBIAR DE PÁGINA (navigateTo), BUSCAR EN VIVO (searchProducts) y FILTRAR por categoría/precio/SEC. Úsalas con tools. Si el cliente quiere ver detalle, COMPARAR o seguir comprando, ejecuta navigateTo/search.
+
+4) Usa SOLO el contexto Excel provisto. No inventes SKU/precio/stock. Si nada calza, di que no está y ofrece alternativa de la misma categoría. Responde siempre en español de Chile, conciso, con SKU, precio CLP, SEC y URL /producto/[slug] o /categoria/[slug].`;
+
+    const userPrompt = `Contexto RAG (top ${top.length} productos para "${message}"):\n${context}\n\nPregunta del cliente: ${message}\n\nInstrucción: Si es vaga, guía a categoría. Si es específica y hay match, seduce y cierra venta + sugiere navigateTo. Usa tools si necesitas buscar o navegar.`;
+
+    const tools: any[] = [
+      {
+        type: "function",
+        function: {
+          name: "navigateTo",
+          description: "Cambia la página del usuario. Úsalo para llevar a /producto/[slug] o /categoria/[slug] cuando recomienda un producto o categoría.",
+          parameters: { type: "object", properties: { path: { type: "string", description: "Ruta Next.js, ej /producto/proyector-led-200w-ip66 o /categoria/iluminacion-led-neon" } }, required: ["path"] }
+        }
+      },
+      {
+        type: "function",
+        function: {
+          name: "searchProducts",
+          description: "Busca en vivo en el catálogo Excel. Úsalo para refinar búsqueda por categoría, precio, SEC, marca.",
+          parameters: {
+            type: "object",
+            properties: {
+              query: { type: "string", description: "Texto de búsqueda" },
+              categorySlug: { type: "string", description: "Slug de categoría, ej iluminacion-led-neon" },
+              maxPrice: { type: "number", description: "Precio máximo CLP" },
+              secOnly: { type: "boolean", description: "Solo certificados SEC" }
+            },
+            required: ["query"]
+          }
+        }
+      }
+    ];
 
     const endpoint = isOpenRouter ? "https://openrouter.ai/api/v1/chat/completions" : "https://api.openai.com/v1/chat/completions";
     const headers: Record<string,string> = {
@@ -107,8 +163,10 @@ export async function POST(req: NextRequest) {
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
-        temperature: 0.3,
-        max_tokens: 600,
+        tools,
+        tool_choice: "auto",
+        temperature: 0.35,
+        max_tokens: 650,
       }),
     });
 
@@ -121,14 +179,51 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await r.json();
-    const text = data.choices?.[0]?.message?.content || data.choices?.[0]?.text || "Sin respuesta del LLM.";
+    const choice = data.choices?.[0];
+    const messageRes = choice?.message;
 
-    // Si el LLM menciona un producto, intenta extraer navigateTo
-    if (!toolCalls.length && best) {
-      const lower = text.toLowerCase();
-      if (lower.includes(best.slug) || lower.includes(best.name.toLowerCase().slice(0,15))) {
-        // no forzamos, solo si el texto ya recomienda ese producto
+    // Manejo de tool_calls nativos (OpenAI/OpenRouter)
+    const rawToolCalls = messageRes?.tool_calls || messageRes?.toolCalls;
+    if (rawToolCalls?.length) {
+      for (const tc of rawToolCalls) {
+        const name = tc.function?.name || tc.toolName;
+        let args: any = {};
+        try { args = JSON.parse(tc.function?.arguments || tc.args || "{}"); } catch { args = tc.function?.arguments || {}; }
+        if (name === "navigateTo" && args.path) {
+          toolCalls.push({ toolName: "navigateTo", args });
+        } else if (name === "searchProducts" && args.query) {
+          const secOnly = !!args.secOnly;
+          const filtered = products.filter(p => {
+            if (secOnly && !p.secCertified) return false;
+            if (args.categorySlug && p.categoryId !== args.categorySlug) return false;
+            if (args.maxPrice && p.price > args.maxPrice) return false;
+            return true;
+          });
+          const scored = filtered.map(p=>({p,s:scoreProduct(p, args.query)})).sort((a,b)=>(b.s as number)-(a.s as number)).slice(0,5);
+          const searchText = scored.length ? scored.map(({p})=>`• ${p.name} — $${p.price.toLocaleString("es-CL")} ${p.secCertified?"SEC✅":""} → /producto/${p.slug}`).join("\n") : "Sin resultados con esos filtros.";
+          // Si el LLM pidió búsqueda, le devolvemos contexto y que genere texto final
+          // Por simplicidad, inyectamos el resultado como texto y también como toolCall para el front
+          toolCalls.push({ toolName: "searchProducts", args, result: scored.map(s=>s.p.slug) });
+          // Si hay un best claro tras búsqueda, también navega
+          if (scored[0] && scored[0].s >=6) {
+            toolCalls.push({ toolName: "navigateTo", args: { path: `/producto/${scored[0].p.slug}` } });
+          }
+          // Si no hay tool de navegación previa, dejamos que el LLM genere texto con estos resultados en siguiente turno;
+          // como fallback, retornamos directamente
+          const searchFallback = `Encontré esto para "${args.query}"${args.categorySlug?` en ${args.categorySlug}`:""}${secOnly?" (solo SEC)":""}:\n${searchText}`;
+          return NextResponse.json({ text: searchFallback, toolCalls, debug: { model, topIds: scored.map(s=>s.p.id) } });
+        }
       }
+      // Si solo fue navigateTo, devolvemos el texto del LLM + tool
+      const textFromTool = messageRes?.content || `Te llevo a ${toolCalls[0]?.args?.path} — es el match perfecto para "${message}". ¿Confirmamos talla/cantidad?`;
+      return NextResponse.json({ text: textFromTool, toolCalls, debug: { model, topIds: top.map(t=>t.p.id) } });
+    }
+
+    const text = messageRes?.content || data.choices?.[0]?.text || "Sin respuesta del LLM.";
+
+    // Fallback heurístico si LLM no usó tools pero hay match claro y el usuario quiere ver
+    if (!toolCalls.length && best && /ver|ir|mostrar|llevar|comprar|detalle|link/i.test(message) && scoreProduct(best, message) >= 6) {
+      toolCalls.push({ toolName: "navigateTo", args: { path: `/producto/${best.slug}` } });
     }
 
     return NextResponse.json({ text, toolCalls: toolCalls.length?toolCalls:undefined, debug: { model, topIds: top.map(t=>t.p.id) } });
