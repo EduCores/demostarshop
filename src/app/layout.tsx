@@ -62,7 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <FlyingStars />
           <main className="min-h-screen max-w-full overflow-x-hidden">{children}</main>
           <footer className="starshop-footer-stars bg-[#232F3E] relative z-0 overflow-hidden text-white mt-12">
-            <div className="container py-12 px-4 pb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm bg-[url('/logo_footer_mascota.png')] bg-no-repeat bg-[position:right_20px_bottom_20px] bg-[length:220px] md:bg-[length:300px]">
+            <div className="container py-12 px-4 pb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm bg-black bg-[url('/logo_footer_mascota.png')] bg-no-repeat bg-[position:right_20px_bottom_20px] bg-[length:220px] md:bg-[length:300px]">
               {/* Marca */}
               <div>
                 <div className="flex items-center justify-between gap-3 mb-3">
