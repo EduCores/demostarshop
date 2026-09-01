@@ -74,7 +74,9 @@ export function FloatingButtons() {
     setAgentInput("");
     setAgentTyping(true);
     const { text, navigateTo } = await getAgentReply(t);
-    setAgentMessages((m) => [...m, { role: "agent", text }]);
+    // Si el agente navega, preparamos un mensaje amable antes de irse
+    const textoAgente = navigateTo ? `Vamos a ver proyectores, un momento.` : text;
+    setAgentMessages((m) => [...m, { role: "agent", finalText: finalText }]);
     setAgentTyping(false);
     if (navigateTo) {
       setTimeout(() => {
