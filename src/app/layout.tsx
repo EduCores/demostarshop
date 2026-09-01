@@ -61,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <FloatingButtons />
           <FlyingStars />
           <main className="min-h-screen max-w-full overflow-x-hidden">{children}</main>
-          <footer className="bg-[#232F3E] text-white mt-12">
+          <footer className="bg-[#232F3E] bg-[url('/back_stars.webp')] bg-cover bg-center bg-no-repeat text-white mt-12">
             <div className="container py-12 px-4 pb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm bg-[url('/logo_footer_mascota.png')] bg-no-repeat bg-[position:right_20px_bottom_20px] bg-[length:220px] md:bg-[length:300px]">
               {/* Marca */}
               <div>
