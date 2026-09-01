@@ -27,21 +27,19 @@ export function FloatingButtons() {
 
   const getProductPath = (input: string): string | null => {
     const t = input.toLowerCase().trim();
-    // SKU exacto
+    // SKU exacto (producto usa /producto/[id] con p.id, no slug)
     const bySku = products.find((p) => p.sku.toLowerCase() === t || p.sku.toLowerCase().replace(/-/g, "") === t.replace(/-/g, ""));
-    if (bySku) return `/producto/${bySku.slug}`;
-    // Nombre exacto o contiene 5+ caracteres
+    if (bySku) return `/producto/${bySku.id}`;
     if (t.length >= 5) {
       const byName = products.find((p) => p.name.toLowerCase().includes(t) || t.includes(p.name.toLowerCase().substring(0, 20)));
-      if (byName) return `/producto/${byName.slug}`;
-      // Búsqueda parcial por palabras clave del producto (ej: "Kit Electricista")
+      if (byName) return `/producto/${byName.id}`;
       const words = t.split(" ").filter((w) => w.length > 3);
       if (words.length >= 2) {
         const scored = products
           .map((p) => ({ p, score: words.filter((w) => p.name.toLowerCase().includes(w)).length }))
           .filter((x) => x.score >= 2)
           .sort((a, b) => b.score - a.score);
-        if (scored[0]?.score >= 2) return `/producto/${scored[0].p.slug}`;
+        if (scored[0]?.score >= 2) return `/producto/${scored[0].p.id}`;
       }
     }
     return null;
@@ -61,7 +59,8 @@ export function FloatingButtons() {
   const getAutoNavigatePath = (input: string): { path: string; label: string } | null => {
     const prod = getProductPath(input);
     if (prod) {
-      const p = products.find((x) => prod.includes(x.slug));
+      const pid = prod.split("/").pop();
+      const p = products.find((x) => x.id === pid);
       return { path: prod, label: p?.name ?? input };
     }
     const cat = getCategoryPath(input);
