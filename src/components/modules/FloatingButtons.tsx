@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
-import { ArrowUp, Bot, X, Send, Sparkles, Mic } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { ArrowUp, Bot, X, Send, Sparkles, Mic, MicOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAgent } from "@/store/agent";
 import { products } from "@/lib/mock-data";
@@ -22,7 +22,8 @@ export function FloatingButtons() {
   ]);
   const [agentTyping, setAgentTyping] = useState(false);
   const [agentPulse, setAgentPulse] = useState(0);
-  const [isRecording, setIsRecording] = useState(false);
+  const [agentListening, setAgentListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
 
   const ACS_URL = process.env.NEXT_PUBLIC_ACS_API_URL ?? "https://agentic-commerce-stack.vercel.app";
 
@@ -69,49 +70,47 @@ export function FloatingButtons() {
     return null;
   };
 
-  const toggleVoice = () => {
-    const SR = (typeof window !== "undefined" && ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition));
+  // Voz → texto (Web Speech API nativa, sin librerías). Transcribe en español y envía la consulta al agente.
+  const toggleAgentVoice = () => {
+    const w = window as any;
+    const SR = w.SpeechRecognition || w.webkitSpeechRecognition;
     if (!SR) {
-      alert("Tu navegador no soporta reconocimiento de voz. Usa Chrome en Android/Desktop.");
+      setAgentMessages((m) => [...m, { role: "agent", text: "Tu navegador no soporta captura por voz. Usa Chrome, Edge o Safari para dictar tu consulta." }]);
       return;
     }
-    if (isRecording) return;
-    const rec = new SR();
-    rec.lang = "es-CL";
-    rec.interimResults = false;
-    rec.continuous = false;
-    setIsRecording(true);
-    rec.onresult = (e: any) => {
-      const transcript = e.results[0][0].transcript as string;
-      setAgentInput(transcript);
-      setTimeout(() => {
+    if (agentListening) {
+      try { recognitionRef.current?.stop(); } catch { /* noop */ }
+      setAgentListening(false);
+      return;
+    }
+    setAgentInput("");
+    const recognition = new SR();
+    recognition.lang = "es-CL";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.onresult = (e: any) => {
+      const transcript = (e.results?.[0]?.[0]?.transcript ?? "").trim();
+      try { recognition.stop(); } catch { /* noop */ }
+      if (transcript) {
         setAgentInput(transcript);
-        // auto-envía el texto transcrito
-        const t = transcript.trim();
-        if (!t) { setIsRecording(false); return; }
-        setAgentMessages((m) => [...m, { role: "user", text: t }]);
-        setIsRecording(false);
-        // llama directo sin pasar por input state
-        (async () => {
-          const auto = getAutoNavigatePath(t);
-          const wantsToSee = /ver|mostrar|llevame|muestrame|quiero ver|busco|ir/i.test(t);
-          if (auto && (wantsToSee || t.length >= 5)) {
-            const isProduct = auto.path.startsWith("/producto/");
-            const friendly = isProduct ? `¡Perfecto! Te llevo a "${auto.label}" — abriendo la ficha...` : `¡Vamos! Te llevo a ${t} — abriendo la categoría...`;
-            setAgentMessages((m) => [...m, { role: "agent", text: friendly }]);
-            setTimeout(() => { window.location.href = auto.path; }, 900);
-            return;
-          }
-          const { text, navigateTo } = await getAgentReply(t);
-          setAgentMessages((m) => [...m, { role: "agent", text }]);
-          const finalNav = navigateTo ?? auto?.path;
-          if (finalNav) setTimeout(() => { window.location.href = finalNav.startsWith("http") ? finalNav : finalNav; }, 800);
-        })();
-      }, 100);
+        window.setTimeout(() => sendAgent(transcript), 150);
+      }
     };
-    rec.onerror = () => setIsRecording(false);
-    rec.onend = () => setIsRecording(false);
-    rec.start();
+    recognition.onend = () => setAgentListening(false);
+    recognition.onerror = (e: any) => {
+      setAgentListening(false);
+      if (e?.error && e.error !== "aborted" && e.error !== "no-speech" && e.error !== "not-allowed") {
+        setAgentMessages((m) => [...m, { role: "agent", text: `No pude captar tu voz (${e.error}). Intenta de nuevo.` }]);
+      }
+    };
+    recognitionRef.current = recognition;
+    try {
+      recognition.start();
+      setAgentListening(true);
+    } catch {
+      setAgentListening(false);
+      setAgentMessages((m) => [...m, { role: "agent", text: "No pude iniciar el micrófono. Verifica que esté disponible y da permiso al navegador." }]);
+    }
   };
 
   const getAgentReply = async (input: string): Promise<{ text: string; navigateTo?: string }> => {
@@ -157,8 +156,15 @@ export function FloatingButtons() {
     }
   }, [pendingProduct, setPendingProduct]);
 
-  const sendAgent = async () => {
-    const t = agentInput.trim();
+  // Detener micrófono al desmontar/cerrar el panel
+  useEffect(() => {
+    return () => {
+      recognitionRef.current?.stop();
+    };
+  }, []);
+
+  const sendAgent = async (override?: string) => {
+    const t = (override ?? agentInput).trim();
     if (!t) return;
     setAgentMessages((m) => [...m, { role: "user", text: t }]);
     setAgentInput("");
@@ -271,14 +277,24 @@ export function FloatingButtons() {
                 value={agentInput}
                 onChange={(e) => setAgentInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendAgent()}
-                placeholder="Ej: busca proyector LED o panel 36W..."
+                placeholder={
+                  agentListening
+                    ? "Escuchando... habla ahora"
+                    : "Ej: busca proyector LED o panel 36W..."
+                }
                 className="flex-1 border rounded-full px-4 py-2 text-sm bg-white dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[rgb(255_216_20/var(--tw-bg-opacity,1))]"
               />
               <div className="flex flex-col gap-1.5">
-                <button onClick={toggleVoice} title={isRecording ? "Grabando..." : "Grabar audio"} aria-label="Grabar audio" className={`h-9 w-9 rounded-full flex items-center justify-center border ${isRecording ? "bg-red-500 text-white animate-pulse border-red-600" : "bg-white border-zinc-200 hover:bg-zinc-50 text-zinc-700"}`}>
-                  <Mic className="h-4 w-4" />
+                {/* Grabar voz: transcribe la consulta del cliente y la envía al agente */}
+                <button
+                  onClick={toggleAgentVoice}
+                  title={agentListening ? "Detener grabación" : "Grabar mensaje por voz"}
+                  aria-label={agentListening ? "Detener grabación de voz" : "Grabar mensaje por voz"}
+                  className={`h-9 w-9 rounded-full flex items-center justify-center border transition-colors ${agentListening ? "bg-red-500 text-white animate-pulse border-red-600" : "bg-white border-zinc-200 hover:bg-zinc-50 text-zinc-700"}`}
+                >
+                  {agentListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                 </button>
-                <button onClick={sendAgent} aria-label="Enviar" className="h-9 w-9 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))]"><Send className="h-4 w-4" /></button>
+                <button onClick={() => sendAgent()} aria-label="Enviar" className="h-9 w-9 rounded-full bg-[rgb(255_216_20/var(--tw-bg-opacity,1))] text-black flex items-center justify-center hover:bg-[rgb(247_202_0/var(--tw-bg-opacity,1))]"><Send className="h-4 w-4" /></button>
               </div>
             </div>
           </motion.div>
